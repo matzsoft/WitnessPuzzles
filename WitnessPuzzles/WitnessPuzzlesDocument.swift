@@ -30,7 +30,7 @@ struct WitnessPuzzlesDocument: FileDocument {
     let lineWidth = 4
     let blockWidth = 8
     let padding = 2
-    let scaleFactor = 25
+    let scaleFactor = CGFloat( 12.5 )
     
     let startRadius: Int
     let finishRadius: Int
@@ -62,10 +62,10 @@ struct WitnessPuzzlesDocument: FileDocument {
     
     var image: NSImage {
         let cornerRadius = CGFloat( lineWidth / 2 )
-        let userWidth = baseWidth + 2 * padding + extraLeft() + extraRight()
-        let userHeight = baseHeight + 2 * padding + extraBottom() + extraTop()
-        let imageWidth = userWidth * scaleFactor
-        let imageHeight = userHeight * scaleFactor
+        let userWidth = CGFloat( baseWidth + 2 * padding + extraLeft() + extraRight() )
+        let userHeight = CGFloat( baseHeight + 2 * padding + extraBottom() + extraTop() )
+        let imageWidth = Int( userWidth * scaleFactor )
+        let imageHeight = Int( userHeight * scaleFactor )
         
         let context = CGContext(
             data: nil, width: imageWidth, height: imageHeight, bitsPerComponent: 16, bytesPerRow: 0,
