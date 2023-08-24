@@ -12,12 +12,12 @@ struct ContentView: View {
     @Binding var document: WitnessPuzzlesDocument
 
     var body: some View {
-        TextEditor(text: $document.text)
+        Image( nsImage: document.image )
     }
 }
 
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
-        ContentView(document: .constant(WitnessPuzzlesDocument()))
+        ContentView( document: .constant( WitnessPuzzlesDocument() ) )
     }
 }
