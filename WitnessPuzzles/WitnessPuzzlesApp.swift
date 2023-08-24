@@ -10,9 +10,49 @@ import SwiftUI
 
 @main
 struct WitnessPuzzlesApp: App {
+    @State private var isExporting = false
+    @FocusedBinding( \.document ) var document
+
     var body: some Scene {
-        DocumentGroup(newDocument: WitnessPuzzlesDocument()) { file in
-            ContentView(document: file.$document)
+        DocumentGroup( newDocument: WitnessPuzzlesDocument() ) { file in
+            ContentView( document: file.$document )
+                .focusedSceneValue( \.document, file.$document )
+        }
+        .commands {
+            CommandGroup( replacing: .importExport ) {
+                Button( "Export" ) {
+                    isExporting = true
+                }
+                .disabled( document == nil )
+                .fileExporter(
+                    isPresented: $isExporting,
+                    document: document,
+                    contentType: .png
+                ) { result in
+                    switch result {
+                    case .success( let url ):
+                        print( "Saved to \(url)" )
+                    case .failure( let error ):
+                        print( error.localizedDescription )
+                    }
+                }
+            }
+        }
+    }
+}
+
+
+extension FocusedValues {
+    struct DocumentFocusedValues: FocusedValueKey {
+        typealias Value = Binding<WitnessPuzzlesDocument>
+    }
+
+    var document: Binding<WitnessPuzzlesDocument>? {
+        get {
+            self[DocumentFocusedValues.self]
+        }
+        set {
+            self[DocumentFocusedValues.self] = newValue
         }
     }
 }

@@ -45,6 +45,7 @@ struct WitnessPuzzlesDocument: FileDocument {
     }
 
     static var readableContentTypes: [UTType] { [.exampleText] }
+    static var writableContentTypes: [UTType] { [.png] }
 
     init( configuration: ReadConfiguration ) throws {
         guard let data = configuration.file.regularFileContents,
@@ -56,11 +57,22 @@ struct WitnessPuzzlesDocument: FileDocument {
     }
     
     func fileWrapper( configuration: WriteConfiguration ) throws -> FileWrapper {
-        let data = Data()
-        return .init( regularFileWithContents: data )
+        switch configuration.contentType {
+        case .png:
+            let cicontext = CIContext()
+            let ciimage = CIImage( cgImage: image )
+            guard let data = cicontext.pngRepresentation(
+                of: ciimage,
+                format: .RGBA16,
+                colorSpace: CGColorSpace( name: CGColorSpace.extendedLinearSRGB )!
+            ) else { return FileWrapper() }
+            return .init( regularFileWithContents: data )
+        default:
+            fatalError( "Unsopportd content type \(configuration.contentType)" )
+        }
     }
     
-    var image: NSImage {
+    var image: CGImage {
         let cornerRadius = CGFloat( lineWidth / 2 )
         let userWidth = CGFloat( baseWidth + 2 * padding + extraLeft() + extraRight() )
         let userHeight = CGFloat( baseHeight + 2 * padding + extraBottom() + extraTop() )
@@ -111,7 +123,11 @@ struct WitnessPuzzlesDocument: FileDocument {
         drawFinishes( context: context )
         context.fillPath()
 
-        let image = context.makeImage()!
+        return context.makeImage()!
+    }
+    
+    var nsImage: NSImage {
+        let image = image
         return NSImage( cgImage: image, size: NSSize( width: image.width, height: image.height ) )
     }
 

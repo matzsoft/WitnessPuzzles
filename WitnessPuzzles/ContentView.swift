@@ -12,7 +12,7 @@ struct ContentView: View {
     @Binding var document: WitnessPuzzlesDocument
 
     var body: some View {
-        Image( nsImage: document.image )
+        Image( nsImage: document.nsImage )
     }
 }
 
