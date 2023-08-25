@@ -24,7 +24,7 @@ struct WitnessPuzzlesDocument: FileDocument, Codable {
     var cylinder = false
     var starts = [ Point(2,2) ]
     var finishes = [ Point(64,64) ]
-    var background = Color( hex: "0x23180A" )
+    var background = Color( hex: "#23180A" )
     var foreground = Color( red: 1, green: 1, blue: 1, opacity: 1 )
 
     var lineWidth = 4
@@ -82,7 +82,6 @@ struct WitnessPuzzlesDocument: FileDocument, Codable {
         )!
 
         context.scaleBy( x: CGFloat( scaleFactor ), y: CGFloat( scaleFactor ) )
-        context.translateBy( x: CGFloat( padding + extraLeft() ), y: CGFloat( padding + extraBottom() ) )
         context.beginPath()
         context.addRect( CGRect(
             origin: CGPoint( x: 0, y: 0 ),
@@ -91,6 +90,7 @@ struct WitnessPuzzlesDocument: FileDocument, Codable {
         context.setFillColor( background.cgColor! )
         context.fillPath()
 
+        context.translateBy( x: CGFloat( padding + extraLeft() ), y: CGFloat( padding + extraBottom() ) )
         context.setFillColor( foreground.cgColor! )
         context.beginPath()
         for col in 0 ... width {
