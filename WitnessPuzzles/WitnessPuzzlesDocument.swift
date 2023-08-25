@@ -32,17 +32,12 @@ struct WitnessPuzzlesDocument: FileDocument {
     let padding = 2
     let scaleFactor = CGFloat( 12.5 )
     
-    let startRadius: Int
-    let finishRadius: Int
-    let baseWidth: Int
-    let baseHeight: Int
+    var startRadius: Int { lineWidth }
+    var finishRadius: Int { lineWidth / 2 }
+    var baseWidth: Int { ( width + 1 ) * lineWidth + width * blockWidth }
+    var baseHeight: Int { ( height + 1 ) * lineWidth + height * blockWidth }
 
-    init() {
-        startRadius = lineWidth
-        finishRadius = lineWidth / 2
-        baseWidth = ( width + 1 ) * lineWidth + width * blockWidth
-        baseHeight = ( height + 1 ) * lineWidth + height * blockWidth
-    }
+    init() { }
 
     static var readableContentTypes: [UTType] { [.exampleText] }
     static var writableContentTypes: [UTType] { [.png] }
