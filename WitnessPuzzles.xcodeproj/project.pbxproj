@@ -15,6 +15,8 @@
 		DDBECF4F2A955AE0005313E7 /* WitnessPuzzlesTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDBECF4E2A955AE0005313E7 /* WitnessPuzzlesTests.swift */; };
 		DDBECF592A955AE1005313E7 /* WitnessPuzzlesUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDBECF582A955AE1005313E7 /* WitnessPuzzlesUITests.swift */; };
 		DDBECF5B2A955AE1005313E7 /* WitnessPuzzlesUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDBECF5A2A955AE1005313E7 /* WitnessPuzzlesUITestsLaunchTests.swift */; };
+		DDBECF692A99349A005313E7 /* TemplateInfo.plist~ in Resources */ = {isa = PBXBuildFile; fileRef = DDBECF672A99349A005313E7 /* TemplateInfo.plist~ */; };
+		DDBECF6A2A99349A005313E7 /* CGExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDBECF682A99349A005313E7 /* CGExtensions.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -48,6 +50,8 @@
 		DDBECF542A955AE1005313E7 /* WitnessPuzzlesUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = WitnessPuzzlesUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		DDBECF582A955AE1005313E7 /* WitnessPuzzlesUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WitnessPuzzlesUITests.swift; sourceTree = "<group>"; };
 		DDBECF5A2A955AE1005313E7 /* WitnessPuzzlesUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WitnessPuzzlesUITestsLaunchTests.swift; sourceTree = "<group>"; };
+		DDBECF672A99349A005313E7 /* TemplateInfo.plist~ */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = "TemplateInfo.plist~"; sourceTree = "<group>"; };
+		DDBECF682A99349A005313E7 /* CGExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CGExtensions.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -105,6 +109,8 @@
 				DDBECF442A955AE0005313E7 /* Info.plist */,
 				DDBECF452A955AE0005313E7 /* WitnessPuzzles.entitlements */,
 				DDBECF412A955AE0005313E7 /* Preview Content */,
+				DDBECF672A99349A005313E7 /* TemplateInfo.plist~ */,
+				DDBECF682A99349A005313E7 /* CGExtensions.swift */,
 			);
 			path = WitnessPuzzles;
 			sourceTree = "<group>";
@@ -240,6 +246,7 @@
 			files = (
 				DDBECF432A955AE0005313E7 /* Preview Assets.xcassets in Resources */,
 				DDBECF402A955AE0005313E7 /* Assets.xcassets in Resources */,
+				DDBECF692A99349A005313E7 /* TemplateInfo.plist~ in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -267,6 +274,7 @@
 				DDBECF3C2A955AE0005313E7 /* WitnessPuzzlesDocument.swift in Sources */,
 				DDBECF3A2A955AE0005313E7 /* WitnessPuzzlesApp.swift in Sources */,
 				DDBECF3E2A955AE0005313E7 /* ContentView.swift in Sources */,
+				DDBECF6A2A99349A005313E7 /* CGExtensions.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

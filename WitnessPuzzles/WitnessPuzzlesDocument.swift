@@ -18,19 +18,19 @@ extension UTType {
     }
 }
 
-struct WitnessPuzzlesDocument: FileDocument {
-    let width = 5
-    let height = 5
-    let cylinder = false
-    let starts = [ (2,2) ]
-    let finishes = [ (64,64) ]
-    let background = color( from: 0x23180A )
-    let foreground = CGColor( red: 1, green: 1, blue: 1, alpha: 1 )
+struct WitnessPuzzlesDocument: FileDocument, Codable {
+    var width = 5
+    var height = 5
+    var cylinder = false
+    var starts = [ Point( x: 2, y: 2 ) ]
+    var finishes = [ Point( x: 64, y: 64 ) ]
+    var background = color( from: 0x23180A )
+    var foreground = Color( red: 1, green: 1, blue: 1, opacity: 1 )
 
-    let lineWidth = 4
-    let blockWidth = 8
-    let padding = 2
-    let scaleFactor = CGFloat( 12.5 )
+    var lineWidth = 4
+    var blockWidth = 8
+    var padding = 2
+    var scaleFactor = CGFloat( 12.5 )
     
     var startRadius: Int { lineWidth }
     var finishRadius: Int { lineWidth / 2 }
@@ -39,20 +39,22 @@ struct WitnessPuzzlesDocument: FileDocument {
 
     init() { }
 
-    static var readableContentTypes: [UTType] { [.exampleText] }
-    static var writableContentTypes: [UTType] { [.png] }
+    static var readableContentTypes: [UTType] { [ .json ] }
+    static var writableContentTypes: [UTType] { [ .json, .png ] }
 
     init( configuration: ReadConfiguration ) throws {
-        guard let data = configuration.file.regularFileContents,
-              let _ = String(data: data, encoding: .utf8)
+        guard let data = configuration.file.regularFileContents
         else {
             throw CocoaError(.fileReadCorruptFile)
         }
-        self.init()
+        self = try JSONDecoder().decode( WitnessPuzzlesDocument.self, from: data )
     }
     
     func fileWrapper( configuration: WriteConfiguration ) throws -> FileWrapper {
         switch configuration.contentType {
+        case .json:
+            let data = try JSONEncoder().encode( self )
+            return .init( regularFileWithContents: data )
         case .png:
             let cicontext = CIContext()
             let ciimage = CIImage( cgImage: image )
@@ -87,10 +89,10 @@ struct WitnessPuzzlesDocument: FileDocument {
             origin: CGPoint( x: 0, y: 0 ),
             size: CGSize( width: userWidth, height: userWidth ) )
         )
-        context.setFillColor( background )
+        context.setFillColor( background.cgColor! )
         context.fillPath()
 
-        context.setFillColor( foreground )
+        context.setFillColor( foreground.cgColor! )
         context.beginPath()
         for col in 0 ... width {
             context.addPath(
@@ -127,29 +129,29 @@ struct WitnessPuzzlesDocument: FileDocument {
     }
 
     func extraLeft() -> Int {
-        let startExtra = max( starts.map { startRadius - $0.0 }.max() ?? 0, 0 )
-        let finishExtra = max( finishes.map { finishRadius - $0.0 }.max() ?? 0, 0 )
+        let startExtra = max( starts.map { startRadius - $0.x }.max() ?? 0, 0 )
+        let finishExtra = max( finishes.map { finishRadius - $0.x }.max() ?? 0, 0 )
         
         return startExtra + finishExtra
     }
 
     func extraBottom() -> Int {
-        let startExtra = max( starts.map { startRadius - $0.1 }.max() ?? 0, 0 )
-        let finishExtra = max( finishes.map { finishRadius - $0.1 }.max() ?? 0, 0 )
+        let startExtra = max( starts.map { startRadius - $0.y }.max() ?? 0, 0 )
+        let finishExtra = max( finishes.map { finishRadius - $0.y }.max() ?? 0, 0 )
         
         return startExtra + finishExtra
     }
 
     func extraRight() -> Int {
-        let startExtra = max( ( starts.map { $0.0 + startRadius }.max() ?? 0 ) - baseWidth, 0 )
-        let finishExtra = max( ( finishes.map { $0.0 + finishRadius }.max() ?? 0 ) - baseWidth, 0 )
+        let startExtra = max( ( starts.map { $0.x + startRadius }.max() ?? 0 ) - baseWidth, 0 )
+        let finishExtra = max( ( finishes.map { $0.x + finishRadius }.max() ?? 0 ) - baseWidth, 0 )
         
         return startExtra + finishExtra
     }
 
     func extraTop() -> Int {
-        let startExtra = max( ( starts.map { $0.1 + startRadius }.max() ?? 0 ) - baseHeight, 0 )
-        let finishExtra = max( ( finishes.map { $0.1 + finishRadius }.max() ?? 0 ) - baseHeight, 0 )
+        let startExtra = max( ( starts.map { $0.y + startRadius }.max() ?? 0 ) - baseHeight, 0 )
+        let finishExtra = max( ( finishes.map { $0.y + finishRadius }.max() ?? 0 ) - baseHeight, 0 )
         
         return startExtra + finishExtra
     }
@@ -157,7 +159,7 @@ struct WitnessPuzzlesDocument: FileDocument {
     func drawStarts( context: CGContext ) -> Void {
         for start in starts {
             context.addEllipse( in: CGRect(
-                x: start.0 - startRadius, y: start.1 - startRadius,
+                x: start.x - startRadius, y: start.y - startRadius,
                 width: 2 * startRadius, height: 2 * startRadius
             ) )
         }
@@ -166,14 +168,14 @@ struct WitnessPuzzlesDocument: FileDocument {
     func drawFinishes( context: CGContext ) -> Void {
         for finish in finishes {
             context.saveGState()
-            context.translateBy( x: CGFloat( finish.0 ), y: CGFloat( finish.1 ) )
+            context.translateBy( x: CGFloat( finish.x ), y: CGFloat( finish.y ) )
             context.addEllipse( in: CGRect(
                 x: -finishRadius, y: -finishRadius,
                 width: 2 * finishRadius, height: 2 * finishRadius
             ) )
             
             let angle = {
-                switch ( finish ) {
+                switch ( ( finish.x, finish.y ) ) {
                 case ( 0, 0 ):
                     return 3 * Double.pi / 4
                 case ( 0, baseHeight ):
@@ -191,7 +193,7 @@ struct WitnessPuzzlesDocument: FileDocument {
                 case ( 1 ..< baseWidth, -1 ):
                     return 4 * Double.pi / 4
                 default:
-                    fatalError( "Unsopported finish location (\(finish.0),\(finish.1))")
+                    fatalError( "Unsopported finish location (\(finish.x),\(finish.y))")
                 }
             }()
             context.rotate( by: angle )
@@ -205,10 +207,10 @@ struct WitnessPuzzlesDocument: FileDocument {
 }
 
 
-func color( from hex: Int ) -> CGColor {
+func color( from hex: Int ) -> Color {
     let red = CGFloat( ( hex >> 16 ) & 0xFF )
     let green = CGFloat( ( hex >> 8 ) & 0xFF )
     let blue = CGFloat( hex & 0xFF )
     
-    return CGColor( red: red / 255.0, green: green / 255.0, blue: blue / 255.0, alpha: 1 )
+    return Color( red: red / 255.0, green: green / 255.0, blue: blue / 255.0, opacity: 1 )
 }
