@@ -22,9 +22,9 @@ struct WitnessPuzzlesDocument: FileDocument, Codable {
     var width = 5
     var height = 5
     var cylinder = false
-    var starts = [ Point( x: 2, y: 2 ) ]
-    var finishes = [ Point( x: 64, y: 64 ) ]
-    var background = color( from: 0x23180A )
+    var starts = [ Point(2,2) ]
+    var finishes = [ Point(64,64) ]
+    var background = Color( hex: "0x23180A" )
     var foreground = Color( red: 1, green: 1, blue: 1, opacity: 1 )
 
     var lineWidth = 4
@@ -43,8 +43,7 @@ struct WitnessPuzzlesDocument: FileDocument, Codable {
     static var writableContentTypes: [UTType] { [ .json, .png ] }
 
     init( configuration: ReadConfiguration ) throws {
-        guard let data = configuration.file.regularFileContents
-        else {
+        guard let data = configuration.file.regularFileContents else {
             throw CocoaError(.fileReadCorruptFile)
         }
         self = try JSONDecoder().decode( WitnessPuzzlesDocument.self, from: data )
@@ -204,13 +203,4 @@ struct WitnessPuzzlesDocument: FileDocument, Codable {
             context.restoreGState()
         }
     }
-}
-
-
-func color( from hex: Int ) -> Color {
-    let red = CGFloat( ( hex >> 16 ) & 0xFF )
-    let green = CGFloat( ( hex >> 8 ) & 0xFF )
-    let blue = CGFloat( hex & 0xFF )
-    
-    return Color( red: red / 255.0, green: green / 255.0, blue: blue / 255.0, opacity: 1 )
 }

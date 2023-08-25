@@ -102,15 +102,15 @@
 		DDBECF382A955AE0005313E7 /* WitnessPuzzles */ = {
 			isa = PBXGroup;
 			children = (
+				DDBECF682A99349A005313E7 /* CGExtensions.swift */,
+				DDBECF3D2A955AE0005313E7 /* ContentView.swift */,
 				DDBECF392A955AE0005313E7 /* WitnessPuzzlesApp.swift */,
 				DDBECF3B2A955AE0005313E7 /* WitnessPuzzlesDocument.swift */,
-				DDBECF3D2A955AE0005313E7 /* ContentView.swift */,
 				DDBECF3F2A955AE0005313E7 /* Assets.xcassets */,
 				DDBECF442A955AE0005313E7 /* Info.plist */,
 				DDBECF452A955AE0005313E7 /* WitnessPuzzles.entitlements */,
 				DDBECF412A955AE0005313E7 /* Preview Content */,
 				DDBECF672A99349A005313E7 /* TemplateInfo.plist~ */,
-				DDBECF682A99349A005313E7 /* CGExtensions.swift */,
 			);
 			path = WitnessPuzzles;
 			sourceTree = "<group>";
