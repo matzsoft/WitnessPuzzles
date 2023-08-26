@@ -77,7 +77,7 @@ struct WitnessPuzzlesDocument: FileDocument, Codable {
         
         let context = CGContext(
             data: nil, width: imageWidth, height: imageHeight, bitsPerComponent: 16, bytesPerRow: 0,
-            space: CGColorSpaceCreateDeviceRGB(),
+            space: CGColorSpace( name: CGColorSpace.sRGB )!,
             bitmapInfo: CGBitmapInfo( rawValue: CGImageAlphaInfo.noneSkipLast.rawValue ).rawValue
         )!
 

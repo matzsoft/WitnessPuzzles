@@ -17,6 +17,7 @@
 		DDBECF5B2A955AE1005313E7 /* WitnessPuzzlesUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDBECF5A2A955AE1005313E7 /* WitnessPuzzlesUITestsLaunchTests.swift */; };
 		DDBECF692A99349A005313E7 /* TemplateInfo.plist~ in Resources */ = {isa = PBXBuildFile; fileRef = DDBECF672A99349A005313E7 /* TemplateInfo.plist~ */; };
 		DDBECF6A2A99349A005313E7 /* CGExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDBECF682A99349A005313E7 /* CGExtensions.swift */; };
+		DDBECF6C2A9ABCE4005313E7 /* Color+Codable.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDBECF6B2A9ABCE4005313E7 /* Color+Codable.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -52,6 +53,7 @@
 		DDBECF5A2A955AE1005313E7 /* WitnessPuzzlesUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WitnessPuzzlesUITestsLaunchTests.swift; sourceTree = "<group>"; };
 		DDBECF672A99349A005313E7 /* TemplateInfo.plist~ */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = "TemplateInfo.plist~"; sourceTree = "<group>"; };
 		DDBECF682A99349A005313E7 /* CGExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CGExtensions.swift; sourceTree = "<group>"; };
+		DDBECF6B2A9ABCE4005313E7 /* Color+Codable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Color+Codable.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -103,6 +105,7 @@
 			isa = PBXGroup;
 			children = (
 				DDBECF682A99349A005313E7 /* CGExtensions.swift */,
+				DDBECF6B2A9ABCE4005313E7 /* Color+Codable.swift */,
 				DDBECF3D2A955AE0005313E7 /* ContentView.swift */,
 				DDBECF392A955AE0005313E7 /* WitnessPuzzlesApp.swift */,
 				DDBECF3B2A955AE0005313E7 /* WitnessPuzzlesDocument.swift */,
@@ -274,6 +277,7 @@
 				DDBECF3C2A955AE0005313E7 /* WitnessPuzzlesDocument.swift in Sources */,
 				DDBECF3A2A955AE0005313E7 /* WitnessPuzzlesApp.swift in Sources */,
 				DDBECF3E2A955AE0005313E7 /* ContentView.swift in Sources */,
+				DDBECF6C2A9ABCE4005313E7 /* Color+Codable.swift in Sources */,
 				DDBECF6A2A99349A005313E7 /* CGExtensions.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
