@@ -19,9 +19,11 @@ extension UTType {
 }
 
 struct WitnessPuzzlesDocument: FileDocument, Codable {
+    enum PuzzleType: Codable { case rectangle, cylinder }
+    
     var width = 5
     var height = 5
-    var cylinder = false
+    var type = PuzzleType.rectangle
     var starts = [ Point(2,2) ]
     var finishes = [ Point(64,64) ]
     var background = Color( hex: "#23180A" )
