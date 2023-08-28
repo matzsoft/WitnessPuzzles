@@ -36,8 +36,13 @@ struct WitnessPuzzlesDocument: FileDocument, Codable {
     
     var startRadius: Int { lineWidth }
     var finishRadius: Int { lineWidth / 2 }
-    var baseWidth: Int { ( width + 1 ) * lineWidth + width * blockWidth }
     var baseHeight: Int { ( height + 1 ) * lineWidth + height * blockWidth }
+    var baseWidth: Int {
+        switch type {
+        case .rectangle: return ( width + 1 ) * lineWidth + width * blockWidth
+        case .cylinder:  return width * ( lineWidth + blockWidth )
+        }
+    }
 
     init() { }
 
@@ -71,8 +76,12 @@ struct WitnessPuzzlesDocument: FileDocument, Codable {
     }
     
     var image: CGImage {
-        let cornerRadius = CGFloat( lineWidth / 2 )
-        let userWidth = CGFloat( baseWidth + 2 * padding + extraLeft() + extraRight() )
+        let userWidth = {
+            switch type {
+            case .rectangle: return CGFloat( baseWidth + 2 * padding + extraLeft() + extraRight() )
+            case .cylinder:  return CGFloat( baseWidth )
+            }
+        }()
         let userHeight = CGFloat( baseHeight + 2 * padding + extraBottom() + extraTop() )
         let imageWidth = Int( userWidth * scaleFactor )
         let imageHeight = Int( userHeight * scaleFactor )
@@ -92,29 +101,11 @@ struct WitnessPuzzlesDocument: FileDocument, Codable {
         context.setFillColor( background.cgColor! )
         context.fillPath()
 
-        context.translateBy( x: CGFloat( padding + extraLeft() ), y: CGFloat( padding + extraBottom() ) )
         context.setFillColor( foreground.cgColor! )
         context.beginPath()
-        for col in 0 ... width {
-            context.addPath(
-                CGPath(
-                    roundedRect: CGRect(
-                        origin: CGPoint( x: ( lineWidth + blockWidth ) * col, y: 0 ),
-                        size: CGSize( width: lineWidth, height: baseHeight )
-                    ),
-                    cornerWidth: cornerRadius, cornerHeight: cornerRadius, transform: nil )
-            )
-        }
-
-        for row in 0 ... height {
-            context.addPath(
-                CGPath(
-                    roundedRect: CGRect(
-                        origin: CGPoint( x: 0, y: ( lineWidth + blockWidth ) * row ),
-                        size: CGSize( width: baseWidth, height: lineWidth )
-                    ),
-                    cornerWidth: cornerRadius, cornerHeight: cornerRadius, transform: nil )
-            )
+        switch type {
+        case .rectangle: drawRectangle( context: context )
+        case .cylinder:  drawCylinder( context: context )
         }
 
         drawStarts( context: context )
@@ -157,6 +148,56 @@ struct WitnessPuzzlesDocument: FileDocument, Codable {
         return startExtra + finishExtra
     }
 
+    func drawRectangle( context: CGContext ) -> Void {
+        let cornerRadius = CGFloat( lineWidth / 2 )
+        context.translateBy( x: CGFloat( padding + extraLeft() ), y: CGFloat( padding + extraBottom() ) )
+
+        for col in 0 ... width {
+            context.addPath(
+                CGPath(
+                    roundedRect: CGRect(
+                        origin: CGPoint( x: ( lineWidth + blockWidth ) * col, y: 0 ),
+                        size: CGSize( width: lineWidth, height: baseHeight )
+                    ),
+                    cornerWidth: cornerRadius, cornerHeight: cornerRadius, transform: nil )
+            )
+        }
+
+        for row in 0 ... height {
+            context.addPath(
+                CGPath(
+                    roundedRect: CGRect(
+                        origin: CGPoint( x: 0, y: ( lineWidth + blockWidth ) * row ),
+                        size: CGSize( width: baseWidth, height: lineWidth )
+                    ),
+                    cornerWidth: cornerRadius, cornerHeight: cornerRadius, transform: nil )
+            )
+        }
+    }
+    
+    func drawCylinder( context: CGContext ) -> Void {
+        let leftWidth = 3 * lineWidth / 4
+        let rightWidth = lineWidth / 4
+        
+        context.translateBy( x: CGFloat( -rightWidth ), y: CGFloat( padding + extraBottom() ) )
+        context.setFillColor( foreground.cgColor! )
+        context.beginPath()
+        
+        context.addRect( CGRect( x: rightWidth, y: 0, width: leftWidth, height: baseHeight ) )
+        context.addRect( CGRect(
+            x: ( lineWidth + blockWidth ) * width, y: 0, width: rightWidth, height: baseHeight ) )
+
+        for col in 1 ..< width {
+            context.addRect( CGRect(
+                x: ( lineWidth + blockWidth ) * col, y: 0, width: lineWidth, height: baseHeight ) )
+        }
+
+        for row in 0 ... height {
+            context.addRect( CGRect(
+                x: 0, y: ( lineWidth + blockWidth ) * row, width: baseWidth, height: lineWidth ) )
+        }
+    }
+    
     func drawStarts( context: CGContext ) -> Void {
         for start in starts {
             context.addEllipse( in: CGRect(
