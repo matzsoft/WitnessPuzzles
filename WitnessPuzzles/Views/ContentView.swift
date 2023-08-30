@@ -19,8 +19,6 @@ struct ContentView: View {
                     Button( action: { isPresentingProperties = true } ) {
                         Label( "Properties", systemImage: "ruler" )
                     }.labelStyle( VerticalLabelStyle() )
-                    Button( action: {}, label: { Label( "Drawing", systemImage: "photo" ) } )
-                        .labelStyle( VerticalLabelStyle() )
                     Button( action: {}, label: { Label( "Starts", systemImage: "play" ) } )
                         .labelStyle( VerticalLabelStyle() )
                     Button( action: {}, label: { Label( "Finishes", systemImage: "stop" ) } )

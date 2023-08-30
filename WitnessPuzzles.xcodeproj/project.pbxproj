@@ -15,7 +15,6 @@
 		DDBECF4F2A955AE0005313E7 /* WitnessPuzzlesTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDBECF4E2A955AE0005313E7 /* WitnessPuzzlesTests.swift */; };
 		DDBECF592A955AE1005313E7 /* WitnessPuzzlesUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDBECF582A955AE1005313E7 /* WitnessPuzzlesUITests.swift */; };
 		DDBECF5B2A955AE1005313E7 /* WitnessPuzzlesUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDBECF5A2A955AE1005313E7 /* WitnessPuzzlesUITestsLaunchTests.swift */; };
-		DDBECF692A99349A005313E7 /* TemplateInfo.plist~ in Resources */ = {isa = PBXBuildFile; fileRef = DDBECF672A99349A005313E7 /* TemplateInfo.plist~ */; };
 		DDBECF6A2A99349A005313E7 /* CGExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDBECF682A99349A005313E7 /* CGExtensions.swift */; };
 		DDBECF6C2A9ABCE4005313E7 /* Color+Codable.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDBECF6B2A9ABCE4005313E7 /* Color+Codable.swift */; };
 		DDBECF712A9EFA5C005313E7 /* PropertiesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDBECF6F2A9EFA5C005313E7 /* PropertiesView.swift */; };
@@ -52,7 +51,6 @@
 		DDBECF542A955AE1005313E7 /* WitnessPuzzlesUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = WitnessPuzzlesUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		DDBECF582A955AE1005313E7 /* WitnessPuzzlesUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WitnessPuzzlesUITests.swift; sourceTree = "<group>"; };
 		DDBECF5A2A955AE1005313E7 /* WitnessPuzzlesUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WitnessPuzzlesUITestsLaunchTests.swift; sourceTree = "<group>"; };
-		DDBECF672A99349A005313E7 /* TemplateInfo.plist~ */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = "TemplateInfo.plist~"; sourceTree = "<group>"; };
 		DDBECF682A99349A005313E7 /* CGExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CGExtensions.swift; sourceTree = "<group>"; };
 		DDBECF6B2A9ABCE4005313E7 /* Color+Codable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Color+Codable.swift"; sourceTree = "<group>"; };
 		DDBECF6F2A9EFA5C005313E7 /* PropertiesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PropertiesView.swift; sourceTree = "<group>"; };
@@ -115,7 +113,6 @@
 				DDBECF442A955AE0005313E7 /* Info.plist */,
 				DDBECF452A955AE0005313E7 /* WitnessPuzzles.entitlements */,
 				DDBECF412A955AE0005313E7 /* Preview Content */,
-				DDBECF672A99349A005313E7 /* TemplateInfo.plist~ */,
 			);
 			path = WitnessPuzzles;
 			sourceTree = "<group>";
@@ -260,7 +257,6 @@
 			files = (
 				DDBECF432A955AE0005313E7 /* Preview Assets.xcassets in Resources */,
 				DDBECF402A955AE0005313E7 /* Assets.xcassets in Resources */,
-				DDBECF692A99349A005313E7 /* TemplateInfo.plist~ in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

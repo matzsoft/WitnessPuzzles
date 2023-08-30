@@ -19,7 +19,7 @@ extension UTType {
 }
 
 struct WitnessPuzzlesDocument: FileDocument, Codable {
-    enum PuzzleType: Codable { case rectangle, cylinder }
+    enum PuzzleType: String, CaseIterable, Codable { case rectangle = "Rectangle", cylinder = "Cylinder" }
     
     var width = 5
     var height = 5

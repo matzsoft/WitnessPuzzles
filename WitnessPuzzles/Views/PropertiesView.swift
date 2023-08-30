@@ -11,17 +11,38 @@ import SwiftUI
 struct PropertiesView: View {
     @Environment( \.presentationMode ) var presentationMode
     @Binding var document: WitnessPuzzlesDocument
+    @State var type: WitnessPuzzlesDocument.PuzzleType
     @State var width: Double
+    @State var height: Double
+    @State var background: Color
+    @State var foreground: Color
+    @State var scaleFactor: Double
+    @State var lineWidth: Double
+    @State var blockWidth: Double
+    @State var padding: Double
 
     init( document: Binding<WitnessPuzzlesDocument> ) {
         self._document = document
+        _type = State( initialValue: document.wrappedValue.type )
         _width = State( initialValue: Double( document.wrappedValue.width ) )
+        _height = State( initialValue: Double( document.wrappedValue.height ) )
+        _background = State( initialValue: document.wrappedValue.background )
+        _foreground = State( initialValue: document.wrappedValue.foreground )
+        _scaleFactor = State( initialValue: document.wrappedValue.scaleFactor )
+        _lineWidth = State( initialValue: Double( document.wrappedValue.lineWidth ) )
+        _blockWidth = State( initialValue: Double( document.wrappedValue.blockWidth ) )
+        _padding = State( initialValue: Double( document.wrappedValue.padding ) )
     }
     
     var body: some View {
         return NavigationView {
             VStack {
                 Text( "Properties Page" )
+                Picker( "Puzzle Type", selection: $type ) {
+                    ForEach( WitnessPuzzlesDocument.PuzzleType.allCases, id: \.self ) {
+                        Text( $0.rawValue )
+                    }
+                }.pickerStyle( .menu )
                 HStack {
                     VStack {
                         Slider( value: $width, in: 1 ... 20, step: 1 ) {
@@ -33,12 +54,74 @@ struct PropertiesView: View {
                         }
                         Text( String( format: "%.0f", width ) )
                     }
+                    VStack {
+                        Slider( value: $height, in: 1 ... 20, step: 1 ) {
+                            Text( "Height" )
+                        } minimumValueLabel: {
+                            Text( "1" )
+                        } maximumValueLabel: {
+                            Text( "20" )
+                        }
+                        Text( String( format: "%.0f", height ) )
+                    }
+                }
+                VStack {
+                    Slider( value: $scaleFactor, in: 1 ... 50, step: 0.5 ) {
+                        Text( "Scale Factor" )
+                    } minimumValueLabel: {
+                        Text( "1" )
+                    } maximumValueLabel: {
+                        Text( "50" )
+                    }
+                    Text( String( format: "%.1f", scaleFactor ) )
+                }
+                HStack {
+                    ColorPicker( "Background", selection: $background )
+                    ColorPicker( "Foreground", selection: $foreground )
+                }
+                VStack {
+                    Slider( value: $lineWidth, in: 1 ... 10, step: 1 ) {
+                        Text( "Line Width" )
+                    } minimumValueLabel: {
+                        Text( "1" )
+                    } maximumValueLabel: {
+                        Text( "10" )
+                    }
+                    Text( String( format: "%.0f", lineWidth ) )
+                }
+                VStack {
+                    Slider( value: $blockWidth, in: 4 ... 20, step: 1 ) {
+                        Text( "Block Width" )
+                    } minimumValueLabel: {
+                        Text( "4" )
+                    } maximumValueLabel: {
+                        Text( "20" )
+                    }
+                    Text( String( format: "%.0f", blockWidth ) )
+                }
+                VStack {
+                    Slider( value: $padding, in: 0 ... 10, step: 1 ) {
+                        Text( "Padding" )
+                    } minimumValueLabel: {
+                        Text( "0" )
+                    } maximumValueLabel: {
+                        Text( "10" )
+                    }
+                    Text( String( format: "%.0f", lineWidth ) )
                 }
                 HStack {
                     Button( "Cancel", role: .cancel, action: { presentationMode.wrappedValue.dismiss() } )
                     Button( "Done", role: .destructive ) {
+                        document.type = type
                         document.width = Int( width )
+                        document.height = Int( height )
+                        document.background = background
+                        document.foreground = foreground
+                        document.scaleFactor = scaleFactor
                         presentationMode.wrappedValue.dismiss()
+                        document.lineWidth = Int( lineWidth )
+                        document.blockWidth = Int( blockWidth )
+                        document.padding = Int( padding )
                     }
                 }
             }
