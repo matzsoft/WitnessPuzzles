@@ -18,6 +18,7 @@
 		DDBECF692A99349A005313E7 /* TemplateInfo.plist~ in Resources */ = {isa = PBXBuildFile; fileRef = DDBECF672A99349A005313E7 /* TemplateInfo.plist~ */; };
 		DDBECF6A2A99349A005313E7 /* CGExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDBECF682A99349A005313E7 /* CGExtensions.swift */; };
 		DDBECF6C2A9ABCE4005313E7 /* Color+Codable.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDBECF6B2A9ABCE4005313E7 /* Color+Codable.swift */; };
+		DDBECF712A9EFA5C005313E7 /* PropertiesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDBECF6F2A9EFA5C005313E7 /* PropertiesView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -54,6 +55,7 @@
 		DDBECF672A99349A005313E7 /* TemplateInfo.plist~ */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = "TemplateInfo.plist~"; sourceTree = "<group>"; };
 		DDBECF682A99349A005313E7 /* CGExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CGExtensions.swift; sourceTree = "<group>"; };
 		DDBECF6B2A9ABCE4005313E7 /* Color+Codable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Color+Codable.swift"; sourceTree = "<group>"; };
+		DDBECF6F2A9EFA5C005313E7 /* PropertiesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PropertiesView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -106,9 +108,9 @@
 			children = (
 				DDBECF682A99349A005313E7 /* CGExtensions.swift */,
 				DDBECF6B2A9ABCE4005313E7 /* Color+Codable.swift */,
-				DDBECF3D2A955AE0005313E7 /* ContentView.swift */,
 				DDBECF392A955AE0005313E7 /* WitnessPuzzlesApp.swift */,
 				DDBECF3B2A955AE0005313E7 /* WitnessPuzzlesDocument.swift */,
+				DDBECF6D2A9EFA2D005313E7 /* Views */,
 				DDBECF3F2A955AE0005313E7 /* Assets.xcassets */,
 				DDBECF442A955AE0005313E7 /* Info.plist */,
 				DDBECF452A955AE0005313E7 /* WitnessPuzzles.entitlements */,
@@ -141,6 +143,15 @@
 				DDBECF5A2A955AE1005313E7 /* WitnessPuzzlesUITestsLaunchTests.swift */,
 			);
 			path = WitnessPuzzlesUITests;
+			sourceTree = "<group>";
+		};
+		DDBECF6D2A9EFA2D005313E7 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				DDBECF3D2A955AE0005313E7 /* ContentView.swift */,
+				DDBECF6F2A9EFA5C005313E7 /* PropertiesView.swift */,
+			);
+			path = Views;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -277,6 +288,7 @@
 				DDBECF3C2A955AE0005313E7 /* WitnessPuzzlesDocument.swift in Sources */,
 				DDBECF3A2A955AE0005313E7 /* WitnessPuzzlesApp.swift in Sources */,
 				DDBECF3E2A955AE0005313E7 /* ContentView.swift in Sources */,
+				DDBECF712A9EFA5C005313E7 /* PropertiesView.swift in Sources */,
 				DDBECF6C2A9ABCE4005313E7 /* Color+Codable.swift in Sources */,
 				DDBECF6A2A99349A005313E7 /* CGExtensions.swift in Sources */,
 			);

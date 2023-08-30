@@ -49,45 +49,6 @@ struct ContentView_Previews: PreviewProvider {
 }
 
 
-struct PropertiesView: View {
-    @Environment( \.presentationMode ) var presentationMode
-    @Binding var document: WitnessPuzzlesDocument
-    @State var width: Double
-
-    init( document: Binding<WitnessPuzzlesDocument> ) {
-        self._document = document
-        _width = State(initialValue: Double( document.wrappedValue.width ) )
-    }
-    
-    var body: some View {
-        return NavigationView {
-            VStack {
-                Text( "Properties Page" )
-                HStack {
-                    VStack {
-                        Slider( value: $width, in: 1 ... 20, step: 1 ) {
-                            Text( "Width" )
-                        } minimumValueLabel: {
-                            Text( "1" )
-                        } maximumValueLabel: {
-                            Text( "20" )
-                        }
-                        Text( String( format: "%.0f", width ) )
-                    }
-                }
-                HStack {
-                    Button( "Cancel", role: .cancel, action: { presentationMode.wrappedValue.dismiss() } )
-                    Button( "Done", role: .destructive ) {
-                        document.width = Int( width )
-                        presentationMode.wrappedValue.dismiss()
-                    }
-                }
-            }
-        }
-    }
-}
-
-
 struct VerticalLabelStyle: LabelStyle {
     func makeBody( configuration: Configuration ) -> some View {
         VStack {
