@@ -10,13 +10,15 @@ import SwiftUI
 
 struct ContentView: View {
     @Binding var document: WitnessPuzzlesDocument
+    @State var isPresentingProperties = false
 
     var body: some View {
         Image( nsImage: document.nsImage )
             .toolbar {
                 ToolbarItemGroup( placement: .automatic ) {
-                    Button( action: {}, label: { Label( "Properties", systemImage: "ruler" ) } )
-                        .labelStyle( VerticalLabelStyle() )
+                    Button( action: { isPresentingProperties = true } ) {
+                        Label( "Properties", systemImage: "ruler" )
+                    }.labelStyle( VerticalLabelStyle() )
                     Button( action: {}, label: { Label( "Drawing", systemImage: "photo" ) } )
                         .labelStyle( VerticalLabelStyle() )
                     Button( action: {}, label: { Label( "Starts", systemImage: "play" ) } )
@@ -33,12 +35,55 @@ struct ContentView: View {
                         .labelStyle( VerticalLabelStyle() )
                 }
             }
+            .sheet( isPresented: $isPresentingProperties, onDismiss: { isPresentingProperties = false } ) {
+                PropertiesView( document: $document )
+            }
     }
 }
+
 
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
         ContentView( document: .constant( WitnessPuzzlesDocument() ) )
+    }
+}
+
+
+struct PropertiesView: View {
+    @Environment( \.presentationMode ) var presentationMode
+    @Binding var document: WitnessPuzzlesDocument
+    @State var width: Double
+
+    init( document: Binding<WitnessPuzzlesDocument> ) {
+        self._document = document
+        _width = State(initialValue: Double( document.wrappedValue.width ) )
+    }
+    
+    var body: some View {
+        return NavigationView {
+            VStack {
+                Text( "Properties Page" )
+                HStack {
+                    VStack {
+                        Slider( value: $width, in: 1 ... 20, step: 1 ) {
+                            Text( "Width" )
+                        } minimumValueLabel: {
+                            Text( "1" )
+                        } maximumValueLabel: {
+                            Text( "20" )
+                        }
+                        Text( String( format: "%.0f", width ) )
+                    }
+                }
+                HStack {
+                    Button( "Cancel", role: .cancel, action: { presentationMode.wrappedValue.dismiss() } )
+                    Button( "Done", role: .destructive ) {
+                        document.width = Int( width )
+                        presentationMode.wrappedValue.dismiss()
+                    }
+                }
+            }
+        }
     }
 }
 
