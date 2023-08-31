@@ -11,29 +11,56 @@ import SwiftUI
 struct ContentView: View {
     @Binding var document: WitnessPuzzlesDocument
     @State var isPresentingProperties = false
+    @State var isStartsSelected = false
+    @State var isFinishesSelected = false
+    @State var isGapsSelected = false
+    @State var isMissingSelected = false
+    @State var isHexagonsSelected = false
+    @State var isIconsSelected = false
+
+    func select( tool: Binding<Bool> ) -> Void {
+        let saved = tool.wrappedValue
+        
+        isPresentingProperties = false
+        isStartsSelected = false
+        isFinishesSelected = false
+        isGapsSelected = false
+        isMissingSelected = false
+        isHexagonsSelected = false
+        isIconsSelected = false
+
+        tool.wrappedValue = saved
+        tool.wrappedValue.toggle()
+    }
 
     var body: some View {
         Image( nsImage: document.nsImage )
             .toolbar {
                 ToolbarItemGroup( placement: .automatic ) {
-                    Button( action: { isPresentingProperties = true } ) {
+                    Button( action: { select( tool: $isPresentingProperties ) } ) {
                         Label( "Properties", systemImage: "ruler" )
-                    }.labelStyle( VerticalLabelStyle() )
-                    Button( action: {}, label: { Label( "Starts", systemImage: "play" ) } )
-                        .labelStyle( VerticalLabelStyle() )
-                    Button( action: {}, label: { Label( "Finishes", systemImage: "stop" ) } )
-                        .labelStyle( VerticalLabelStyle() )
-                    Button( action: {}, label: { Label( "Gaps", systemImage: "pause" ) } )
-                        .labelStyle( VerticalLabelStyle() )
-                    Button( action: {}, label: { Label( "Missing", systemImage: "cloud" ) } )
-                        .labelStyle( VerticalLabelStyle() )
-                    Button( action: {}, label: { Label( "Hexagons", systemImage: "hexagon.fill" ) } )
-                        .labelStyle( VerticalLabelStyle() )
-                    Button( action: {}, label: { Label( "Icons", systemImage: "seal" ) } )
-                        .labelStyle( VerticalLabelStyle() )
+                    }.labelStyle( VerticalLabelStyle( isSelected: isPresentingProperties ) )
+                    Button( action: { select( tool: $isStartsSelected ) } ) {
+                        Label( "Starts", systemImage: "play" )
+                    }.labelStyle( VerticalLabelStyle( isSelected: isStartsSelected ) )
+                    Button( action: { select( tool: $isFinishesSelected ) } ) {
+                        Label( "Finishes", systemImage: "stop" )
+                    }.labelStyle( VerticalLabelStyle( isSelected: isFinishesSelected ) )
+                    Button( action: { select( tool: $isGapsSelected ) } ) {
+                        Label( "Gaps", systemImage: "pause" )
+                    }.labelStyle( VerticalLabelStyle( isSelected: isGapsSelected ) )
+                    Button( action: { select( tool: $isMissingSelected ) } ) {
+                        Label( "Missing", systemImage: "cloud" )
+                    }.labelStyle( VerticalLabelStyle( isSelected: isMissingSelected ) )
+                    Button( action: { select( tool: $isHexagonsSelected ) } ) {
+                        Label( "Hexagons", systemImage: "hexagon.fill" )
+                    }.labelStyle( VerticalLabelStyle( isSelected: isHexagonsSelected ) )
+                    Button( action: { select( tool: $isIconsSelected ) } ) {
+                        Label( "Icons", systemImage: "seal" )
+                    }.labelStyle( VerticalLabelStyle( isSelected: isIconsSelected ) )
                 }
             }
-            .sheet( isPresented: $isPresentingProperties, onDismiss: { isPresentingProperties = false } ) {
+            .sheet( isPresented: $isPresentingProperties, onDismiss: {} ) {
                 PropertiesView( document: $document )
             }
     }
@@ -48,10 +75,14 @@ struct ContentView_Previews: PreviewProvider {
 
 
 struct VerticalLabelStyle: LabelStyle {
+    var isSelected: Bool
+    
     func makeBody( configuration: Configuration ) -> some View {
         VStack {
             configuration.icon.font( .headline )
             configuration.title.font( .subheadline )
         }
+        .scaleEffect( isSelected ? 1.2 : 1 )
+        .background( isSelected ? .green : .white )
     }
 }
