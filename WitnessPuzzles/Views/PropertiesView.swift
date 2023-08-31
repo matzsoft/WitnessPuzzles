@@ -35,35 +35,39 @@ struct PropertiesView: View {
     }
     
     var body: some View {
-        return NavigationView {
-            VStack {
-                Text( "Properties" )
+        VStack {
+            Text( "Properties" )
+            Divider()
+            Group {
+                Spacer( minLength: 10 )
                 Picker( "Puzzle Type", selection: $type ) {
                     ForEach( WitnessPuzzlesDocument.PuzzleType.allCases, id: \.self ) {
                         Text( $0.rawValue )
                     }
                 }.pickerStyle( .menu )
+                VStack {
+                    Slider( value: $width, in: 1 ... 20, step: 1 ) {
+                        Text( "Width" )
+                    } minimumValueLabel: {
+                        Text( "1" )
+                    } maximumValueLabel: {
+                        Text( "20" )
+                    }
+                    Text( String( format: "%.0f", width ) )
+                }
+                VStack {
+                    Slider( value: $height, in: 1 ... 20, step: 1 ) {
+                        Text( "Height" )
+                    } minimumValueLabel: {
+                        Text( "1" )
+                    } maximumValueLabel: {
+                        Text( "20" )
+                    }
+                    Text( String( format: "%.0f", height ) )
+                }
                 HStack {
-                    VStack {
-                        Slider( value: $width, in: 1 ... 20, step: 1 ) {
-                            Text( "Width" )
-                        } minimumValueLabel: {
-                            Text( "1" )
-                        } maximumValueLabel: {
-                            Text( "20" )
-                        }
-                        Text( String( format: "%.0f", width ) )
-                    }
-                    VStack {
-                        Slider( value: $height, in: 1 ... 20, step: 1 ) {
-                            Text( "Height" )
-                        } minimumValueLabel: {
-                            Text( "1" )
-                        } maximumValueLabel: {
-                            Text( "20" )
-                        }
-                        Text( String( format: "%.0f", height ) )
-                    }
+                    ColorPicker( "Background", selection: $background )
+                    ColorPicker( "Foreground", selection: $foreground )
                 }
                 VStack {
                     Slider( value: $scaleFactor, in: 1 ... 50, step: 0.5 ) {
@@ -75,30 +79,6 @@ struct PropertiesView: View {
                     }
                     Text( String( format: "%.1f", scaleFactor ) )
                 }
-                HStack {
-                    ColorPicker( "Background", selection: $background )
-                    ColorPicker( "Foreground", selection: $foreground )
-                }
-                VStack {
-                    Slider( value: $lineWidth, in: 1 ... 10, step: 1 ) {
-                        Text( "Line Width" )
-                    } minimumValueLabel: {
-                        Text( "1" )
-                    } maximumValueLabel: {
-                        Text( "10" )
-                    }
-                    Text( String( format: "%.0f", lineWidth ) )
-                }
-                VStack {
-                    Slider( value: $blockWidth, in: 4 ... 20, step: 1 ) {
-                        Text( "Block Width" )
-                    } minimumValueLabel: {
-                        Text( "4" )
-                    } maximumValueLabel: {
-                        Text( "20" )
-                    }
-                    Text( String( format: "%.0f", blockWidth ) )
-                }
                 VStack {
                     Slider( value: $padding, in: 0 ... 10, step: 1 ) {
                         Text( "Padding" )
@@ -109,19 +89,43 @@ struct PropertiesView: View {
                     }
                     Text( String( format: "%.0f", lineWidth ) )
                 }
-                HStack {
-                    Button( "Cancel", role: .cancel, action: { presentationMode.wrappedValue.dismiss() } )
-                    Button( "Done", role: .destructive ) {
-                        document.adjustDimensions( type: type, width: Int( width ), height: Int( height ) )
-                        document.background = background
-                        document.foreground = foreground
-                        document.scaleFactor = scaleFactor
-                        document.adjustDrawing( lineWidth: Int( lineWidth ), blockWidth: Int( blockWidth ) )
-                        document.padding = Int( padding )
-                        presentationMode.wrappedValue.dismiss()
-                    }
+            }
+            Divider()
+            VStack {
+                Slider( value: $lineWidth, in: 1 ... 10, step: 1 ) {
+                    Text( "Line Width" )
+                } minimumValueLabel: {
+                    Text( "1" )
+                } maximumValueLabel: {
+                    Text( "10" )
+                }
+                Text( String( format: "%.0f", lineWidth ) )
+            }
+            VStack {
+                Slider( value: $blockWidth, in: 4 ... 20, step: 1 ) {
+                    Text( "Block Width" )
+                } minimumValueLabel: {
+                    Text( "4" )
+                } maximumValueLabel: {
+                    Text( "20" )
+                }
+                Text( String( format: "%.0f", blockWidth ) )
+            }
+            Divider()
+            HStack {
+                Button( "Cancel", role: .cancel, action: { presentationMode.wrappedValue.dismiss() } )
+                Button( "Done", role: .destructive ) {
+                    document.adjustDimensions( type: type, width: Int( width ), height: Int( height ) )
+                    document.background = background
+                    document.foreground = foreground
+                    document.scaleFactor = scaleFactor
+                    document.adjustDrawing( lineWidth: Int( lineWidth ), blockWidth: Int( blockWidth ) )
+                    document.padding = Int( padding )
+                    presentationMode.wrappedValue.dismiss()
                 }
             }
         }
+        .frame( alignment: .center )
+        .padding( 20 )
     }
 }
