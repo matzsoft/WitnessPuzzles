@@ -246,4 +246,68 @@ struct WitnessPuzzlesDocument: FileDocument, Codable {
             context.restoreGState()
         }
     }
+    
+    func isValid( start: Point ) -> Bool {
+        let begin = lineWidth / 2
+        let endx  = width * ( lineWidth + blockWidth ) + lineWidth / 2
+        let endy  = height * ( lineWidth + blockWidth ) + lineWidth / 2
+        let increment = lineWidth + blockWidth
+        
+        let validX = {
+            switch type {
+            case .rectangle: return Set( stride( from: begin, through: endx, by: increment ) )
+            case .cylinder:  return Set( stride( from: begin, to: endx, by: increment ) )
+            }
+        }()
+        let validY = Set( stride( from: begin, through: endy, by: increment ) )
+        
+        return validX.contains( start.x ) && validY.contains( start.y )
+    }
+    
+    func isValid( finish: Point ) -> Bool {
+        switch ( finish.x, finish.y ) {
+        case ( 0, 0 ), ( 0, baseHeight ), ( baseWidth, baseHeight ), ( baseWidth, 0 ): return true
+        default: break
+        }
+        
+        let begin = lineWidth / 2
+        let endx  = width * ( lineWidth + blockWidth ) + lineWidth / 2
+        let endy  = height * ( lineWidth + blockWidth ) + lineWidth / 2
+        let increment = lineWidth + blockWidth
+        
+        let validX = {
+            switch type {
+            case .rectangle: return Set( stride( from: begin, through: endx, by: increment ) )
+            case .cylinder:  return Set( stride( from: begin, to: endx, by: increment ) )
+            }
+        }()
+        let validY = Set( stride( from: begin, through: endy, by: increment ) )
+        
+        if ( finish.y == -1 || finish.y == baseHeight + 1 ) {
+            return validX.contains( finish.x )
+        }
+        
+        if ( type == .rectangle && ( finish.x == -1 || finish.x == baseWidth + 1 ) ) {
+            return validY.contains( finish.y )
+        }
+        
+        return false
+    }
+    
+    mutating func adjustDimensions( type: PuzzleType, width: Int, height: Int ) -> Void {
+        self.type = type
+        self.width = width
+        self.height = height
+        
+        starts = starts.filter { isValid( start: $0 ) }
+        finishes = finishes.filter { isValid( finish: $0 ) }
+    }
+    
+    mutating func adjustDrawing( lineWidth: Int, blockWidth: Int ) -> Void {
+        self.lineWidth = lineWidth
+        self.blockWidth = blockWidth
+        
+        starts = starts.filter { isValid( start: $0 ) }
+        finishes = finishes.filter { isValid( finish: $0 ) }
+    }
 }

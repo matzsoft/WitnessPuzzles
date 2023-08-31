@@ -37,7 +37,7 @@ struct PropertiesView: View {
     var body: some View {
         return NavigationView {
             VStack {
-                Text( "Properties Page" )
+                Text( "Properties" )
                 Picker( "Puzzle Type", selection: $type ) {
                     ForEach( WitnessPuzzlesDocument.PuzzleType.allCases, id: \.self ) {
                         Text( $0.rawValue )
@@ -112,16 +112,13 @@ struct PropertiesView: View {
                 HStack {
                     Button( "Cancel", role: .cancel, action: { presentationMode.wrappedValue.dismiss() } )
                     Button( "Done", role: .destructive ) {
-                        document.type = type
-                        document.width = Int( width )
-                        document.height = Int( height )
+                        document.adjustDimensions( type: type, width: Int( width ), height: Int( height ) )
                         document.background = background
                         document.foreground = foreground
                         document.scaleFactor = scaleFactor
-                        presentationMode.wrappedValue.dismiss()
-                        document.lineWidth = Int( lineWidth )
-                        document.blockWidth = Int( blockWidth )
+                        document.adjustDrawing( lineWidth: Int( lineWidth ), blockWidth: Int( blockWidth ) )
                         document.padding = Int( padding )
+                        presentationMode.wrappedValue.dismiss()
                     }
                 }
             }
