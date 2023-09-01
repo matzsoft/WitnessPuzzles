@@ -21,11 +21,22 @@ extension UTType {
 struct WitnessPuzzlesDocument: FileDocument, Codable {
     enum PuzzleType: String, CaseIterable, Codable { case rectangle = "Rectangle", cylinder = "Cylinder" }
     
+    struct Finish: Codable {
+        let location: Point
+        let direction: Direction
+        
+        func convertedLocation( puzzle: WitnessPuzzlesDocument ) -> Point {
+            let converted = puzzle.convert( symbol: location )
+            let offset = direction.finishOffset( distance: puzzle.lineWidth / 2, extra: 1 )
+            return Point( converted.x + offset.x, converted.y + offset.y )
+        }
+    }
+    
     var width = 5
     var height = 5
     var type = PuzzleType.rectangle
     var starts = [ Point(0,0) ]
-    var finishes = [ Point(64,64) ]
+    var finishes = [ Finish( location: Point( 10, 10 ), direction: .northeast ) ]
     var background = Color( hex: "#23180A" )
     var foreground = Color( red: 1, green: 1, blue: 1, opacity: 1 )
 
@@ -44,6 +55,14 @@ struct WitnessPuzzlesDocument: FileDocument, Codable {
         }
     }
 
+    var validSymbolX: Range<Int> {
+        switch type {
+        case .rectangle: return 0 ..< ( 2 * width + 1 )
+        case .cylinder:  return 0 ..< ( 2 * width )
+        }
+    }
+    var validSymbolY: Range<Int> { 0 ..< ( 2 * height ) }
+    
     init() { }
 
     static var readableContentTypes: [UTType] { [ .json ] }
@@ -121,29 +140,35 @@ struct WitnessPuzzlesDocument: FileDocument, Codable {
     }
 
     func extraLeft() -> Int {
-        let startExtra = max( starts.map { startRadius - $0.x }.max() ?? 0, 0 )
-        let finishExtra = max( finishes.map { finishRadius - $0.x }.max() ?? 0, 0 )
+        let startExtra = max( starts.map { startRadius - convert( symbol: $0 ).x }.max() ?? 0, 0 )
+        let finishMax = finishes.map { finishRadius - $0.convertedLocation( puzzle: self ).x }.max() ?? 0
+        let finishExtra = max( finishMax, 0 )
         
         return startExtra + finishExtra
     }
 
     func extraBottom() -> Int {
-        let startExtra = max( starts.map { startRadius - $0.y }.max() ?? 0, 0 )
-        let finishExtra = max( finishes.map { finishRadius - $0.y }.max() ?? 0, 0 )
+        let startExtra = max( starts.map { startRadius - convert( symbol: $0 ).y }.max() ?? 0, 0 )
+        let finishMax = finishes.map { finishRadius - $0.convertedLocation( puzzle: self ).y }.max() ?? 0
+        let finishExtra = max( finishMax, 0 )
         
         return startExtra + finishExtra
     }
 
     func extraRight() -> Int {
-        let startExtra = max( ( starts.map { $0.x + startRadius }.max() ?? 0 ) - baseWidth, 0 )
-        let finishExtra = max( ( finishes.map { $0.x + finishRadius }.max() ?? 0 ) - baseWidth, 0 )
+        let startsMax = starts.map { convert( symbol: $0 ).x + startRadius }.max() ?? 0
+        let startExtra = max( startsMax - baseWidth, 0 )
+        let finishMax = finishes.map { $0.convertedLocation( puzzle: self ).x + finishRadius }.max() ?? 0
+        let finishExtra = max( finishMax - baseWidth, 0 )
         
         return startExtra + finishExtra
     }
 
     func extraTop() -> Int {
-        let startExtra = max( ( starts.map { $0.y + startRadius }.max() ?? 0 ) - baseHeight, 0 )
-        let finishExtra = max( ( finishes.map { $0.y + finishRadius }.max() ?? 0 ) - baseHeight, 0 )
+        let startsMax = starts.map { convert( symbol: $0 ).y + startRadius }.max() ?? 0
+        let startExtra = max( startsMax - baseHeight, 0 )
+        let finishMax = finishes.map { $0.convertedLocation( puzzle: self ).y + finishRadius }.max() ?? 0
+        let finishExtra = max( finishMax - baseHeight, 0 )
         
         return startExtra + finishExtra
     }
@@ -223,35 +248,15 @@ struct WitnessPuzzlesDocument: FileDocument, Codable {
 
     func drawFinishes( context: CGContext ) -> Void {
         for finish in finishes {
+            let user = finish.convertedLocation( puzzle: self )
             context.saveGState()
-            context.translateBy( x: CGFloat( finish.x ), y: CGFloat( finish.y ) )
+            context.translateBy( x: CGFloat( user.x ), y: CGFloat( user.y ) )
             context.addEllipse( in: CGRect(
                 x: -finishRadius, y: -finishRadius,
                 width: 2 * finishRadius, height: 2 * finishRadius
             ) )
             
-            let angle = {
-                switch ( ( finish.x, finish.y ) ) {
-                case ( 0, 0 ):
-                    return 3 * Double.pi / 4
-                case ( 0, baseHeight ):
-                    return 1 * Double.pi / 4
-                case ( baseWidth, baseHeight ):
-                    return 7 * Double.pi / 4
-                case ( baseWidth, 0 ):
-                    return 5 * Double.pi / 4
-                case ( -1, 1 ..< baseHeight ):
-                    return 2 * Double.pi / 4
-                case ( 1 ..< baseWidth, baseHeight + 1 ):
-                    return 0 * Double.pi / 4
-                case ( baseWidth + 1, 1 ..< baseHeight ):
-                    return 6 * Double.pi / 4
-                case ( 1 ..< baseWidth, -1 ):
-                    return 4 * Double.pi / 4
-                default:
-                    fatalError( "Unsopported finish location (\(finish.x),\(finish.y))")
-                }
-            }()
+            let angle = finish.direction.finishAngle
             context.rotate( by: angle )
             context.addRect( CGRect(
                 x: -finishRadius, y: -2 * finishRadius,
@@ -262,45 +267,20 @@ struct WitnessPuzzlesDocument: FileDocument, Codable {
     }
     
     func isValid( start: Point ) -> Bool {
-        let validX = {
-            switch type {
-            case .rectangle: return 0 ..< ( 2 * width + 1 )
-            case .cylinder:  return 0 ..< ( 2 * width )
-            }
-        }()
-        let validY = 0 ..< ( 2 * height )
-        
-        return validX.contains( start.x ) && validY.contains( start.y )
+        validSymbolX.contains( start.x ) && validSymbolY.contains( start.y )
     }
     
-    func isValid( finish: Point ) -> Bool {
-        switch ( finish.x, finish.y ) {
-        case ( 0, 0 ), ( 0, baseHeight ), ( baseWidth, baseHeight ), ( baseWidth, 0 ): return true
-        default: break
+    func isValid( finish: Finish ) -> Bool {
+        let validX = validSymbolX
+        let validY = validSymbolY
+        
+        switch ( finish.location.x, finish.location.y ) {
+        case ( validX.lowerBound, validY ): return true
+        case ( validX.upperBound, validY ): return true
+        case ( validX, validY.lowerBound ): return true
+        case ( validX, validY.upperBound ): return true
+        default: return false
         }
-        
-        let begin = lineWidth / 2
-        let endx  = width * ( lineWidth + blockWidth ) + lineWidth / 2
-        let endy  = height * ( lineWidth + blockWidth ) + lineWidth / 2
-        let increment = lineWidth + blockWidth
-        
-        let validX = {
-            switch type {
-            case .rectangle: return Set( stride( from: begin, through: endx, by: increment ) )
-            case .cylinder:  return Set( stride( from: begin, to: endx, by: increment ) )
-            }
-        }()
-        let validY = Set( stride( from: begin, through: endy, by: increment ) )
-        
-        if ( finish.y == -1 || finish.y == baseHeight + 1 ) {
-            return validX.contains( finish.x )
-        }
-        
-        if ( type == .rectangle && ( finish.x == -1 || finish.x == baseWidth + 1 ) ) {
-            return validY.contains( finish.y )
-        }
-        
-        return false
     }
     
     mutating func adjustDimensions( type: PuzzleType, width: Int, height: Int ) -> Void {
