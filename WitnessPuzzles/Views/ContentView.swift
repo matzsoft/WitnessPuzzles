@@ -35,6 +35,7 @@ struct ContentView: View {
 
     var body: some View {
         Image( nsImage: document.nsImage )
+            .onTapGesture { location in print( location ) }
             .toolbar {
                 ToolbarItemGroup( placement: .automatic ) {
                     Button( action: { select( tool: $isPresentingProperties ) } ) {
@@ -82,6 +83,8 @@ struct VerticalLabelStyle: LabelStyle {
             configuration.icon.font( .headline )
             configuration.title.font( .subheadline )
         }
+        .frame( alignment: .top )
+        .padding( 5 )
         .scaleEffect( isSelected ? 1.2 : 1 )
         .background( isSelected ? .green : .white )
     }

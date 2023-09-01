@@ -96,7 +96,7 @@ struct WitnessPuzzlesDocument: FileDocument, Codable {
         context.beginPath()
         context.addRect( CGRect(
             origin: CGPoint( x: 0, y: 0 ),
-            size: CGSize( width: userWidth, height: userWidth ) )
+            size: CGSize( width: userWidth, height: userHeight ) )
         )
         context.setFillColor( background.cgColor! )
         context.fillPath()
