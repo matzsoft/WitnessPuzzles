@@ -18,6 +18,7 @@
 		DDBECF6A2A99349A005313E7 /* CGExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDBECF682A99349A005313E7 /* CGExtensions.swift */; };
 		DDBECF6C2A9ABCE4005313E7 /* Color+Codable.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDBECF6B2A9ABCE4005313E7 /* Color+Codable.swift */; };
 		DDBECF712A9EFA5C005313E7 /* PropertiesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDBECF6F2A9EFA5C005313E7 /* PropertiesView.swift */; };
+		DDBECF762AA261DD005313E7 /* Finish.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDBECF742AA261DD005313E7 /* Finish.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -54,6 +55,7 @@
 		DDBECF682A99349A005313E7 /* CGExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CGExtensions.swift; sourceTree = "<group>"; };
 		DDBECF6B2A9ABCE4005313E7 /* Color+Codable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Color+Codable.swift"; sourceTree = "<group>"; };
 		DDBECF6F2A9EFA5C005313E7 /* PropertiesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PropertiesView.swift; sourceTree = "<group>"; };
+		DDBECF742AA261DD005313E7 /* Finish.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Finish.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -104,10 +106,9 @@
 		DDBECF382A955AE0005313E7 /* WitnessPuzzles */ = {
 			isa = PBXGroup;
 			children = (
-				DDBECF682A99349A005313E7 /* CGExtensions.swift */,
+				DDBECF722AA261A5005313E7 /* Document */,
 				DDBECF6B2A9ABCE4005313E7 /* Color+Codable.swift */,
 				DDBECF392A955AE0005313E7 /* WitnessPuzzlesApp.swift */,
-				DDBECF3B2A955AE0005313E7 /* WitnessPuzzlesDocument.swift */,
 				DDBECF6D2A9EFA2D005313E7 /* Views */,
 				DDBECF3F2A955AE0005313E7 /* Assets.xcassets */,
 				DDBECF442A955AE0005313E7 /* Info.plist */,
@@ -149,6 +150,16 @@
 				DDBECF6F2A9EFA5C005313E7 /* PropertiesView.swift */,
 			);
 			path = Views;
+			sourceTree = "<group>";
+		};
+		DDBECF722AA261A5005313E7 /* Document */ = {
+			isa = PBXGroup;
+			children = (
+				DDBECF682A99349A005313E7 /* CGExtensions.swift */,
+				DDBECF742AA261DD005313E7 /* Finish.swift */,
+				DDBECF3B2A955AE0005313E7 /* WitnessPuzzlesDocument.swift */,
+			);
+			path = Document;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -284,6 +295,7 @@
 				DDBECF3C2A955AE0005313E7 /* WitnessPuzzlesDocument.swift in Sources */,
 				DDBECF3A2A955AE0005313E7 /* WitnessPuzzlesApp.swift in Sources */,
 				DDBECF3E2A955AE0005313E7 /* ContentView.swift in Sources */,
+				DDBECF762AA261DD005313E7 /* Finish.swift in Sources */,
 				DDBECF712A9EFA5C005313E7 /* PropertiesView.swift in Sources */,
 				DDBECF6C2A9ABCE4005313E7 /* Color+Codable.swift in Sources */,
 				DDBECF6A2A99349A005313E7 /* CGExtensions.swift in Sources */,
