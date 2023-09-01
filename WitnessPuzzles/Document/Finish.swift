@@ -8,13 +8,51 @@
 
 import Foundation
 
-struct Finish: Codable {
-    let location: Point
-    let direction: Direction
-    
-    func convertedLocation( puzzle: WitnessPuzzlesDocument ) -> Point {
-        let converted = puzzle.convert( symbol: location )
-        let offset = direction.finishOffset( distance: puzzle.lineWidth / 2, extra: 1 )
-        return Point( converted.x + offset.x, converted.y + offset.y )
+extension WitnessPuzzlesDocument {
+    struct Finish: Codable {
+        let position: Point
+        let direction: Direction
+        
+        func location( puzzle: WitnessPuzzlesDocument ) -> Point {
+            let converted = puzzle.convert( symbol: position )
+            let offset = offset( distance: puzzle.lineWidth / 2, extra: 1 )
+            return Point( converted.x + offset.x, converted.y + offset.y )
+        }
+        
+        var angle: Double {
+            switch direction {
+            case .north:     return 0 * Double.pi / 4
+            case .northeast: return 7 * Double.pi / 4
+            case .east:      return 6 * Double.pi / 4
+            case .southeast: return 5 * Double.pi / 4
+            case .south:     return 4 * Double.pi / 4
+            case .southwest: return 3 * Double.pi / 4
+            case .west:      return 2 * Double.pi / 4
+            case .northwest: return 1 * Double.pi / 4
+            }
+        }
+        
+        func offset( distance: Int, extra: Int ) -> Point {
+            let vector = direction.vector
+            switch direction {
+            case .north, .east, .south, .west:
+                return Point( vector.x * ( distance + extra ), vector.y * ( distance + extra ) )
+            case .northeast, .southeast, .southwest, .northwest:
+                return Point( vector.x * distance, vector.y * distance )
+            }
+        }
+        
+        func isValid( puzzle: WitnessPuzzlesDocument ) -> Bool {
+            let validX = puzzle.validSymbolX
+            let validY = puzzle.validSymbolY
+            
+            switch ( position.x, position.y ) {
+            case ( validX.lowerBound, validY ): return true
+            case ( validX.upperBound, validY ): return true
+            case ( validX, validY.lowerBound ): return true
+            case ( validX, validY.upperBound ): return true
+            default: return false
+            }
+        }
     }
 }

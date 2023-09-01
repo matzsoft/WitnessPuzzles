@@ -25,7 +25,7 @@ struct WitnessPuzzlesDocument: FileDocument, Codable {
     var height = 5
     var type = PuzzleType.rectangle
     var starts = [ Point(0,0) ]
-    var finishes = [ Finish( location: Point( 10, 10 ), direction: .northeast ) ]
+    var finishes = [ Finish( position: Point( 10, 10 ), direction: .northeast ) ]
     var background = Color( hex: "#23180A" )
     var foreground = Color( red: 1, green: 1, blue: 1, opacity: 1 )
 
@@ -130,7 +130,7 @@ struct WitnessPuzzlesDocument: FileDocument, Codable {
 
     func extraLeft() -> Int {
         let startExtra = max( starts.map { startRadius - convert( symbol: $0 ).x }.max() ?? 0, 0 )
-        let finishMax = finishes.map { finishRadius - $0.convertedLocation( puzzle: self ).x }.max() ?? 0
+        let finishMax = finishes.map { finishRadius - $0.location( puzzle: self ).x }.max() ?? 0
         let finishExtra = max( finishMax, 0 )
         
         return startExtra + finishExtra
@@ -138,7 +138,7 @@ struct WitnessPuzzlesDocument: FileDocument, Codable {
 
     func extraBottom() -> Int {
         let startExtra = max( starts.map { startRadius - convert( symbol: $0 ).y }.max() ?? 0, 0 )
-        let finishMax = finishes.map { finishRadius - $0.convertedLocation( puzzle: self ).y }.max() ?? 0
+        let finishMax = finishes.map { finishRadius - $0.location( puzzle: self ).y }.max() ?? 0
         let finishExtra = max( finishMax, 0 )
         
         return startExtra + finishExtra
@@ -147,7 +147,7 @@ struct WitnessPuzzlesDocument: FileDocument, Codable {
     func extraRight() -> Int {
         let startsMax = starts.map { convert( symbol: $0 ).x + startRadius }.max() ?? 0
         let startExtra = max( startsMax - baseWidth, 0 )
-        let finishMax = finishes.map { $0.convertedLocation( puzzle: self ).x + finishRadius }.max() ?? 0
+        let finishMax = finishes.map { $0.location( puzzle: self ).x + finishRadius }.max() ?? 0
         let finishExtra = max( finishMax - baseWidth, 0 )
         
         return startExtra + finishExtra
@@ -156,7 +156,7 @@ struct WitnessPuzzlesDocument: FileDocument, Codable {
     func extraTop() -> Int {
         let startsMax = starts.map { convert( symbol: $0 ).y + startRadius }.max() ?? 0
         let startExtra = max( startsMax - baseHeight, 0 )
-        let finishMax = finishes.map { $0.convertedLocation( puzzle: self ).y + finishRadius }.max() ?? 0
+        let finishMax = finishes.map { $0.location( puzzle: self ).y + finishRadius }.max() ?? 0
         let finishExtra = max( finishMax - baseHeight, 0 )
         
         return startExtra + finishExtra
@@ -237,7 +237,7 @@ struct WitnessPuzzlesDocument: FileDocument, Codable {
 
     func drawFinishes( context: CGContext ) -> Void {
         for finish in finishes {
-            let user = finish.convertedLocation( puzzle: self )
+            let user = finish.location( puzzle: self )
             context.saveGState()
             context.translateBy( x: CGFloat( user.x ), y: CGFloat( user.y ) )
             context.addEllipse( in: CGRect(
@@ -245,8 +245,7 @@ struct WitnessPuzzlesDocument: FileDocument, Codable {
                 width: 2 * finishRadius, height: 2 * finishRadius
             ) )
             
-            let angle = finish.direction.finishAngle
-            context.rotate( by: angle )
+            context.rotate( by: finish.angle )
             context.addRect( CGRect(
                 x: -finishRadius, y: -2 * finishRadius,
                 width: 2 * finishRadius, height: 2 * finishRadius
@@ -259,26 +258,13 @@ struct WitnessPuzzlesDocument: FileDocument, Codable {
         validSymbolX.contains( start.x ) && validSymbolY.contains( start.y )
     }
     
-    func isValid( finish: Finish ) -> Bool {
-        let validX = validSymbolX
-        let validY = validSymbolY
-        
-        switch ( finish.location.x, finish.location.y ) {
-        case ( validX.lowerBound, validY ): return true
-        case ( validX.upperBound, validY ): return true
-        case ( validX, validY.lowerBound ): return true
-        case ( validX, validY.upperBound ): return true
-        default: return false
-        }
-    }
-    
     mutating func adjustDimensions( type: PuzzleType, width: Int, height: Int ) -> Void {
         self.type = type
         self.width = width
         self.height = height
         
         starts = starts.filter { isValid( start: $0 ) }
-        finishes = finishes.filter { isValid( finish: $0 ) }
+        finishes = finishes.filter { $0.isValid( puzzle: self ) }
     }
     
     mutating func adjustDrawing( lineWidth: Int, blockWidth: Int ) -> Void {
@@ -286,6 +272,6 @@ struct WitnessPuzzlesDocument: FileDocument, Codable {
         self.blockWidth = blockWidth
         
         starts = starts.filter { isValid( start: $0 ) }
-        finishes = finishes.filter { isValid( finish: $0 ) }
+        finishes = finishes.filter { $0.isValid( puzzle: self ) }
     }
 }
