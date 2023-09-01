@@ -47,10 +47,14 @@ extension WitnessPuzzlesDocument {
             let validY = puzzle.validSymbolY
             
             switch ( position.x, position.y ) {
-            case ( validX.lowerBound, validY ): return true
-            case ( validX.upperBound, validY ): return true
-            case ( validX, validY.lowerBound ): return true
-            case ( validX, validY.upperBound ): return true
+            case ( validX.lowerBound, validY.lowerBound ): return direction == .southwest
+            case ( validX.lowerBound, validY.upperBound ): return direction == .northwest
+            case ( validX.upperBound, validY.upperBound ): return direction == .northeast
+            case ( validX.upperBound, validY.lowerBound ): return direction == .southeast
+            case ( validX.lowerBound, validY ):            return direction == .west
+            case ( validX.upperBound, validY ):            return direction == .east
+            case ( validX, validY.lowerBound ):            return direction == .south
+            case ( validX, validY.upperBound ):            return direction == .north
             default: return false
             }
         }
