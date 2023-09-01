@@ -24,7 +24,7 @@ struct WitnessPuzzlesDocument: FileDocument, Codable {
     var width = 5
     var height = 5
     var type = PuzzleType.rectangle
-    var starts = [ Point(2,2) ]
+    var starts = [ Point(0,0) ]
     var finishes = [ Point(64,64) ]
     var background = Color( hex: "#23180A" )
     var foreground = Color( red: 1, green: 1, blue: 1, opacity: 1 )
@@ -198,12 +198,26 @@ struct WitnessPuzzlesDocument: FileDocument, Codable {
         }
     }
     
+    func convert( symbol: Point ) -> Point {
+        let x = symbol.x * ( lineWidth + blockWidth ) / 2 + lineWidth / 2
+        let y = symbol.y * ( lineWidth + blockWidth ) / 2 + lineWidth / 2
+        return Point( x, y )
+    }
+    
     func drawStarts( context: CGContext ) -> Void {
         for start in starts {
+            let drawing = convert( symbol: start )
             context.addEllipse( in: CGRect(
-                x: start.x - startRadius, y: start.y - startRadius,
+                x: drawing.x - startRadius, y: drawing.y - startRadius,
                 width: 2 * startRadius, height: 2 * startRadius
             ) )
+            if start.x == 0 && type == .cylinder {
+                let drawing = convert(symbol: Point( 2 * width, start.y ) )
+                context.addEllipse( in: CGRect(
+                    x: drawing.x - startRadius, y: drawing.y - startRadius,
+                    width: 2 * startRadius, height: 2 * startRadius
+                ) )
+            }
         }
     }
 
@@ -248,18 +262,13 @@ struct WitnessPuzzlesDocument: FileDocument, Codable {
     }
     
     func isValid( start: Point ) -> Bool {
-        let begin = lineWidth / 2
-        let endx  = width * ( lineWidth + blockWidth ) + lineWidth / 2
-        let endy  = height * ( lineWidth + blockWidth ) + lineWidth / 2
-        let increment = lineWidth + blockWidth
-        
         let validX = {
             switch type {
-            case .rectangle: return Set( stride( from: begin, through: endx, by: increment ) )
-            case .cylinder:  return Set( stride( from: begin, to: endx, by: increment ) )
+            case .rectangle: return 0 ..< ( 2 * width + 1 )
+            case .cylinder:  return 0 ..< ( 2 * width )
             }
         }()
-        let validY = Set( stride( from: begin, through: endy, by: increment ) )
+        let validY = 0 ..< ( 2 * height )
         
         return validX.contains( start.x ) && validY.contains( start.y )
     }
