@@ -43,6 +43,15 @@ struct WitnessPuzzlesDocument: FileDocument, Codable {
         case .cylinder:  return width * ( lineWidth + blockWidth )
         }
     }
+    var userHeight: CGFloat { CGFloat( baseHeight + 2 * padding + extraBottom() + extraTop() ) }
+    var userWidth: CGFloat {
+        switch type {
+        case .rectangle: return CGFloat( baseWidth + 2 * padding + extraLeft() + extraRight() )
+        case .cylinder:  return CGFloat( baseWidth )
+        }
+    }
+    var cylinderLeft: Int { 3 * lineWidth / 4 }
+    var cylinderRight: Int { lineWidth / 4 }
 
     var validSymbolX: Range<Int> {
         switch type {
@@ -83,14 +92,7 @@ struct WitnessPuzzlesDocument: FileDocument, Codable {
         }
     }
     
-    var image: CGImage {
-        let userWidth = {
-            switch type {
-            case .rectangle: return CGFloat( baseWidth + 2 * padding + extraLeft() + extraRight() )
-            case .cylinder:  return CGFloat( baseWidth )
-            }
-        }()
-        let userHeight = CGFloat( baseHeight + 2 * padding + extraBottom() + extraTop() )
+    func getContext() -> CGContext {
         let imageWidth = Int( userWidth * scaleFactor )
         let imageHeight = Int( userHeight * scaleFactor )
         
@@ -101,6 +103,21 @@ struct WitnessPuzzlesDocument: FileDocument, Codable {
         )!
 
         context.scaleBy( x: CGFloat( scaleFactor ), y: CGFloat( scaleFactor ) )
+        return context
+    }
+    
+    func setOrigin( context: CGContext ) -> Void {
+        switch type {
+        case .rectangle:
+            context.translateBy( x: CGFloat( padding + extraLeft() ), y: CGFloat( padding + extraBottom() ) )
+        case .cylinder:
+            context.translateBy( x: CGFloat( -cylinderRight ), y: CGFloat( padding + extraBottom() ) )
+        }
+    }
+    
+    var image: CGImage {
+        let context = getContext()
+
         context.beginPath()
         context.addRect( CGRect(
             origin: CGPoint( x: 0, y: 0 ),
@@ -109,6 +126,7 @@ struct WitnessPuzzlesDocument: FileDocument, Codable {
         context.setFillColor( background.cgColor! )
         context.fillPath()
 
+        setOrigin( context: context )
         context.setFillColor( foreground.cgColor! )
         context.beginPath()
         switch type {
@@ -164,7 +182,6 @@ struct WitnessPuzzlesDocument: FileDocument, Codable {
 
     func drawRectangle( context: CGContext ) -> Void {
         let cornerRadius = CGFloat( lineWidth / 2 )
-        context.translateBy( x: CGFloat( padding + extraLeft() ), y: CGFloat( padding + extraBottom() ) )
 
         for col in 0 ... width {
             context.addPath(
@@ -190,16 +207,9 @@ struct WitnessPuzzlesDocument: FileDocument, Codable {
     }
     
     func drawCylinder( context: CGContext ) -> Void {
-        let leftWidth = 3 * lineWidth / 4
-        let rightWidth = lineWidth / 4
-        
-        context.translateBy( x: CGFloat( -rightWidth ), y: CGFloat( padding + extraBottom() ) )
-        context.setFillColor( foreground.cgColor! )
-        context.beginPath()
-        
-        context.addRect( CGRect( x: rightWidth, y: 0, width: leftWidth, height: baseHeight ) )
+        context.addRect( CGRect( x: cylinderRight, y: 0, width: cylinderLeft, height: baseHeight ) )
         context.addRect( CGRect(
-            x: ( lineWidth + blockWidth ) * width, y: 0, width: rightWidth, height: baseHeight ) )
+            x: ( lineWidth + blockWidth ) * width, y: 0, width: cylinderRight, height: baseHeight ) )
 
         for col in 1 ..< width {
             context.addRect( CGRect(
@@ -274,4 +284,8 @@ struct WitnessPuzzlesDocument: FileDocument, Codable {
         starts = starts.filter { isValid( start: $0 ) }
         finishes = finishes.filter { $0.isValid( puzzle: self ) }
     }
+    
+//    func gotMouse( viewPoint: CGPoint ) -> Void {
+//        <#function body#>
+//    }
 }
