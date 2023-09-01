@@ -35,7 +35,9 @@ struct ContentView: View {
 
     var body: some View {
         Image( nsImage: document.nsImage )
-            .onTapGesture { location in print( location ) }
+            .onTapGesture { location in
+                if isStartsSelected { document.toggleStart( viewPoint: location ) }
+            }
             .toolbar {
                 ToolbarItemGroup( placement: .automatic ) {
                     Button( action: { select( tool: $isPresentingProperties ) } ) {

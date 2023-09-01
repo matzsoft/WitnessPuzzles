@@ -59,7 +59,7 @@ struct WitnessPuzzlesDocument: FileDocument, Codable {
         case .cylinder:  return 0 ..< ( 2 * width )
         }
     }
-    var validSymbolY: Range<Int> { 0 ..< ( 2 * height ) }
+    var validSymbolY: Range<Int> { 0 ..< ( 2 * height + 1 ) }
     
     init() { }
 
@@ -228,6 +228,15 @@ struct WitnessPuzzlesDocument: FileDocument, Codable {
         return Point( x, y )
     }
     
+    func convert( user: CGPoint ) -> Point {
+        let resolution = Double( lineWidth + blockWidth ) / 2
+        let offset = Double( lineWidth ) / 2
+        let x = Int( ( ( user.x - offset ) / resolution ).rounded() )
+        let y = Int( ( ( user.y - offset ) / resolution ).rounded() )
+        
+        return Point( x, y )
+    }
+    
     func drawStarts( context: CGContext ) -> Void {
         for start in starts {
             let drawing = convert( symbol: start )
@@ -266,6 +275,7 @@ struct WitnessPuzzlesDocument: FileDocument, Codable {
     
     func isValid( start: Point ) -> Bool {
         validSymbolX.contains( start.x ) && validSymbolY.contains( start.y )
+            && ( ( start.x & start.y & 1 ) == 0 )
     }
     
     mutating func adjustDimensions( type: PuzzleType, width: Int, height: Int ) -> Void {
@@ -285,7 +295,20 @@ struct WitnessPuzzlesDocument: FileDocument, Codable {
         finishes = finishes.filter { $0.isValid( puzzle: self ) }
     }
     
-//    func gotMouse( viewPoint: CGPoint ) -> Void {
-//        <#function body#>
-//    }
+    mutating func toggleStart( viewPoint: CGPoint ) -> Void {
+        let context = getContext()
+        setOrigin( context: context )
+        let userPoint = convert( user: context.convertToUserSpace( viewPoint ) )
+        
+        guard isValid( start: userPoint ) else {
+            NSSound.beep();
+            return
+        }
+
+        if starts.contains( where: { $0 == userPoint } ) {
+            starts = starts.filter { $0 != userPoint }
+        } else {
+            starts.append( userPoint )
+        }
+    }
 }

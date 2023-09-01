@@ -10,7 +10,7 @@ import SwiftUI
 import Foundation
 import CoreGraphics
 
-struct Point: Codable {
+struct Point: Equatable, Codable {
     let x: Int
     let y: Int
     
