@@ -36,7 +36,14 @@ struct ContentView: View {
     var body: some View {
         Image( nsImage: document.nsImage )
             .onTapGesture { location in
-                if isStartsSelected { document.toggleStart( viewPoint: location ) }
+                switch true {
+                case isStartsSelected:
+                    document.toggleStart( viewPoint: location )
+                case isFinishesSelected:
+                    document.toggleFinish( viewPoint: location )
+                default:
+                    break
+                }
             }
             .toolbar {
                 ToolbarItemGroup( placement: .automatic ) {

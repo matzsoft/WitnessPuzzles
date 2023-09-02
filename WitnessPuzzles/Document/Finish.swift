@@ -42,21 +42,29 @@ extension WitnessPuzzlesDocument {
             }
         }
         
-        func isValid( puzzle: WitnessPuzzlesDocument ) -> Bool {
+        static func validDirection( for point: Point, in puzzle: WitnessPuzzlesDocument ) -> Direction? {
             let validX = puzzle.validSymbolX
             let validY = puzzle.validSymbolY
             
-            switch ( position.x, position.y ) {
-            case ( validX.lowerBound, validY.lowerBound ): return direction == .southwest
-            case ( validX.lowerBound, validY.upperBound ): return direction == .northwest
-            case ( validX.upperBound, validY.upperBound ): return direction == .northeast
-            case ( validX.upperBound, validY.lowerBound ): return direction == .southeast
-            case ( validX.lowerBound, validY ):            return direction == .west
-            case ( validX.upperBound, validY ):            return direction == .east
-            case ( validX, validY.lowerBound ):            return direction == .south
-            case ( validX, validY.upperBound ):            return direction == .north
-            default: return false
+            switch ( point.x, point.y ) {
+            case ( validX.lowerBound, validY.lowerBound ): return .southwest
+            case ( validX.lowerBound, validY.upperBound ): return .northwest
+            case ( validX.upperBound, validY.upperBound ): return .northeast
+            case ( validX.upperBound, validY.lowerBound ): return .southeast
+            case ( validX.lowerBound, validY ):            return .west
+            case ( validX.upperBound, validY ):            return .east
+            case ( validX, validY.lowerBound ):            return .south
+            case ( validX, validY.upperBound ):            return .north
+            default: return nil
             }
+        }
+        
+        func isValid( puzzle: WitnessPuzzlesDocument ) -> Bool {
+            guard let goodDirection = Finish.validDirection( for: position, in: puzzle ) else {
+                return false
+            }
+            
+            return direction == goodDirection
         }
     }
 }

@@ -53,13 +53,13 @@ struct WitnessPuzzlesDocument: FileDocument, Codable {
     var cylinderLeft: Int { 3 * lineWidth / 4 }
     var cylinderRight: Int { lineWidth / 4 }
 
-    var validSymbolX: Range<Int> {
+    var validSymbolX: ClosedRange<Int> {
         switch type {
-        case .rectangle: return 0 ..< ( 2 * width + 1 )
-        case .cylinder:  return 0 ..< ( 2 * width )
+        case .rectangle: return 0 ... ( 2 * width )
+        case .cylinder:  return 0 ... ( 2 * width - 1 )
         }
     }
-    var validSymbolY: Range<Int> { 0 ..< ( 2 * height + 1 ) }
+    var validSymbolY: ClosedRange<Int> { 0 ... ( 2 * height ) }
     
     init() { }
 
@@ -309,6 +309,23 @@ struct WitnessPuzzlesDocument: FileDocument, Codable {
             starts = starts.filter { $0 != userPoint }
         } else {
             starts.append( userPoint )
+        }
+    }
+    
+    mutating func toggleFinish( viewPoint: CGPoint ) -> Void {
+        let context = getContext()
+        setOrigin( context: context )
+        let userPoint = convert( user: context.convertToUserSpace( viewPoint ) )
+        
+        guard let goodDirection = Finish.validDirection( for: userPoint, in: self ) else {
+            NSSound.beep();
+            return
+        }
+
+        if finishes.contains( where: { $0.position == userPoint } ) {
+            finishes = finishes.filter { $0.position != userPoint }
+        } else {
+            finishes.append( Finish( position: userPoint, direction: goodDirection ) )
         }
     }
 }
