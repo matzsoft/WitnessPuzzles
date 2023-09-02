@@ -37,10 +37,7 @@ extension WitnessPuzzlesDocument {
             context.beginPath()
             context.translateBy( x: CGFloat( user.x ), y: CGFloat( user.y ) )
             context.scaleBy( x: CGFloat( lineWidth ) / 2, y: CGFloat( lineWidth ) / 2 )
-            context.move( to: hexPoints[0] )
-            for point in hexPoints[1...] {
-                context.addLine( to: point )
-            }
+            context.addLines( between: hexPoints )
             context.setFillColor( hexagon.color.cgColor! )
             context.fillPath()
             context.restoreGState()
