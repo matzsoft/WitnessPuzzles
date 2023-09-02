@@ -19,6 +19,7 @@
 		DDBECF6C2A9ABCE4005313E7 /* Color+Codable.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDBECF6B2A9ABCE4005313E7 /* Color+Codable.swift */; };
 		DDBECF712A9EFA5C005313E7 /* PropertiesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDBECF6F2A9EFA5C005313E7 /* PropertiesView.swift */; };
 		DDBECF762AA261DD005313E7 /* Finish.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDBECF742AA261DD005313E7 /* Finish.swift */; };
+		DDBECF7A2AA3B20C005313E7 /* Hexagon.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDBECF782AA3B20C005313E7 /* Hexagon.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -56,6 +57,7 @@
 		DDBECF6B2A9ABCE4005313E7 /* Color+Codable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Color+Codable.swift"; sourceTree = "<group>"; };
 		DDBECF6F2A9EFA5C005313E7 /* PropertiesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PropertiesView.swift; sourceTree = "<group>"; };
 		DDBECF742AA261DD005313E7 /* Finish.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Finish.swift; sourceTree = "<group>"; };
+		DDBECF782AA3B20C005313E7 /* Hexagon.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Hexagon.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -157,6 +159,7 @@
 			children = (
 				DDBECF682A99349A005313E7 /* CGExtensions.swift */,
 				DDBECF742AA261DD005313E7 /* Finish.swift */,
+				DDBECF782AA3B20C005313E7 /* Hexagon.swift */,
 				DDBECF3B2A955AE0005313E7 /* WitnessPuzzlesDocument.swift */,
 			);
 			path = Document;
@@ -294,6 +297,7 @@
 			files = (
 				DDBECF3C2A955AE0005313E7 /* WitnessPuzzlesDocument.swift in Sources */,
 				DDBECF3A2A955AE0005313E7 /* WitnessPuzzlesApp.swift in Sources */,
+				DDBECF7A2AA3B20C005313E7 /* Hexagon.swift in Sources */,
 				DDBECF3E2A955AE0005313E7 /* ContentView.swift in Sources */,
 				DDBECF762AA261DD005313E7 /* Finish.swift in Sources */,
 				DDBECF712A9EFA5C005313E7 /* PropertiesView.swift in Sources */,

@@ -24,10 +24,11 @@ struct WitnessPuzzlesDocument: FileDocument, Codable {
     var width = 5
     var height = 5
     var type = PuzzleType.rectangle
-    var starts = [ Point(0,0) ]
-    var finishes = [ Finish( position: Point( 10, 10 ), direction: .northeast ) ]
     var background = Color( hex: "#23180A" )
     var foreground = Color( red: 1, green: 1, blue: 1, opacity: 1 )
+    var starts = [ Point(0,0) ]
+    var finishes = [ Finish( position: Point( 10, 10 ), direction: .northeast ) ]
+    var hexagons = Array<Hexagon>()
 
     var lineWidth = 4
     var blockWidth = 8
@@ -137,6 +138,7 @@ struct WitnessPuzzlesDocument: FileDocument, Codable {
         drawStarts( context: context )
         drawFinishes( context: context )
         context.fillPath()
+        drawHexagons( context: context )
 
         return context.makeImage()!
     }
@@ -266,6 +268,7 @@ struct WitnessPuzzlesDocument: FileDocument, Codable {
         
         starts = starts.filter { isValid( start: $0 ) }
         finishes = finishes.filter { $0.isValid( puzzle: self ) }
+        hexagons = hexagons.filter { $0.isValid( puzzle: self ) }
     }
     
     mutating func toggleStart( viewPoint: CGPoint ) -> Void {

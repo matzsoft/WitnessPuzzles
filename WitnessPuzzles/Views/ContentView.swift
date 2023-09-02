@@ -41,6 +41,8 @@ struct ContentView: View {
                     document.toggleStart( viewPoint: location )
                 case isFinishesSelected:
                     document.toggleFinish( viewPoint: location )
+                case isHexagonsSelected:
+                    document.toggleHexagon( viewPoint: location )
                 default:
                     break
                 }
