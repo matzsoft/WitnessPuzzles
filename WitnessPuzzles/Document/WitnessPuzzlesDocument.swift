@@ -253,25 +253,6 @@ struct WitnessPuzzlesDocument: FileDocument, Codable {
             }
         }
     }
-
-    func drawFinishes( context: CGContext ) -> Void {
-        for finish in finishes {
-            let user = finish.location( puzzle: self )
-            context.saveGState()
-            context.translateBy( x: CGFloat( user.x ), y: CGFloat( user.y ) )
-            context.addEllipse( in: CGRect(
-                x: -finishRadius, y: -finishRadius,
-                width: 2 * finishRadius, height: 2 * finishRadius
-            ) )
-            
-            context.rotate( by: finish.angle )
-            context.addRect( CGRect(
-                x: -finishRadius, y: -2 * finishRadius,
-                width: 2 * finishRadius, height: 2 * finishRadius
-            ) )
-            context.restoreGState()
-        }
-    }
     
     func isValid( start: Point ) -> Bool {
         validSymbolX.contains( start.x ) && validSymbolY.contains( start.y )
@@ -282,14 +263,6 @@ struct WitnessPuzzlesDocument: FileDocument, Codable {
         self.type = type
         self.width = width
         self.height = height
-        
-        starts = starts.filter { isValid( start: $0 ) }
-        finishes = finishes.filter { $0.isValid( puzzle: self ) }
-    }
-    
-    mutating func adjustDrawing( lineWidth: Int, blockWidth: Int ) -> Void {
-        self.lineWidth = lineWidth
-        self.blockWidth = blockWidth
         
         starts = starts.filter { isValid( start: $0 ) }
         finishes = finishes.filter { $0.isValid( puzzle: self ) }
@@ -309,23 +282,6 @@ struct WitnessPuzzlesDocument: FileDocument, Codable {
             starts = starts.filter { $0 != userPoint }
         } else {
             starts.append( userPoint )
-        }
-    }
-    
-    mutating func toggleFinish( viewPoint: CGPoint ) -> Void {
-        let context = getContext()
-        setOrigin( context: context )
-        let userPoint = convert( user: context.convertToUserSpace( viewPoint ) )
-        
-        guard let goodDirection = Finish.validDirection( for: userPoint, in: self ) else {
-            NSSound.beep();
-            return
-        }
-
-        if finishes.contains( where: { $0.position == userPoint } ) {
-            finishes = finishes.filter { $0.position != userPoint }
-        } else {
-            finishes.append( Finish( position: userPoint, direction: goodDirection ) )
         }
     }
 }

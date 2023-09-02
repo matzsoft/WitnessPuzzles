@@ -119,7 +119,8 @@ struct PropertiesView: View {
                     document.background = background
                     document.foreground = foreground
                     document.scaleFactor = scaleFactor
-                    document.adjustDrawing( lineWidth: Int( lineWidth ), blockWidth: Int( blockWidth ) )
+                    document.lineWidth = Int( lineWidth )
+                    document.blockWidth = Int( blockWidth )
                     document.padding = Int( padding )
                     presentationMode.wrappedValue.dismiss()
                 }

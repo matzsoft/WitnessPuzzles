@@ -7,6 +7,7 @@
 //      CREATED: 9/1/23 11:15 AM
 
 import Foundation
+import SwiftUI
 
 extension WitnessPuzzlesDocument {
     struct Finish: Codable {
@@ -65,6 +66,42 @@ extension WitnessPuzzlesDocument {
             }
             
             return direction == goodDirection
+        }
+    }
+
+    func drawFinishes( context: CGContext ) -> Void {
+        for finish in finishes {
+            let user = finish.location( puzzle: self )
+            context.saveGState()
+            context.translateBy( x: CGFloat( user.x ), y: CGFloat( user.y ) )
+            context.addEllipse( in: CGRect(
+                x: -finishRadius, y: -finishRadius,
+                width: 2 * finishRadius, height: 2 * finishRadius
+            ) )
+            
+            context.rotate( by: finish.angle )
+            context.addRect( CGRect(
+                x: -finishRadius, y: -2 * finishRadius,
+                width: 2 * finishRadius, height: 2 * finishRadius
+            ) )
+            context.restoreGState()
+        }
+    }
+
+    mutating func toggleFinish( viewPoint: CGPoint ) -> Void {
+        let context = getContext()
+        setOrigin( context: context )
+        let userPoint = convert( user: context.convertToUserSpace( viewPoint ) )
+        
+        guard let goodDirection = Finish.validDirection( for: userPoint, in: self ) else {
+            NSSound.beep();
+            return
+        }
+
+        if finishes.contains( where: { $0.position == userPoint } ) {
+            finishes = finishes.filter { $0.position != userPoint }
+        } else {
+            finishes.append( Finish( position: userPoint, direction: goodDirection ) )
         }
     }
 }
