@@ -113,7 +113,10 @@ struct PropertiesView: View {
             }
             Divider()
             HStack {
-                Button( "Cancel", role: .cancel, action: { presentationMode.wrappedValue.dismiss() } )
+                Button( "Cancel", role: .cancel ) {
+                    if NSColorPanel.shared.isVisible { NSColorPanel.shared.orderOut( nil ) }
+                    presentationMode.wrappedValue.dismiss()
+                }
                 Button( "Done", role: .destructive ) {
                     document.adjustDimensions( type: type, width: Int( width ), height: Int( height ) )
                     document.background = background
@@ -122,6 +125,7 @@ struct PropertiesView: View {
                     document.lineWidth = Int( lineWidth )
                     document.blockWidth = Int( blockWidth )
                     document.padding = Int( padding )
+                    if NSColorPanel.shared.isVisible { NSColorPanel.shared.orderOut( nil ) }
                     presentationMode.wrappedValue.dismiss()
                 }
             }

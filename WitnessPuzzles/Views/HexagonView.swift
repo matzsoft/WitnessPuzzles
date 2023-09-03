@@ -24,12 +24,16 @@ struct HexagonView: View {
         VStack {
             Text( "Select a color for the new hexagon" )
             Divider()
-            ColorPicker( "Background", selection: $color )
+            ColorPicker( "", selection: $color )
             Divider()
             HStack {
-                Button( "Cancel", role: .cancel, action: { presentationMode.wrappedValue.dismiss() } )
+                Button( "Cancel", role: .cancel ) {
+                    if NSColorPanel.shared.isVisible { NSColorPanel.shared.orderOut( nil ) }
+                    presentationMode.wrappedValue.dismiss()
+                }
                 Button( "Done", role: .destructive ) {
                     document.addHexagon( viewPoint: location, color: color )
+                    if NSColorPanel.shared.isVisible { NSColorPanel.shared.orderOut( nil ) }
                     presentationMode.wrappedValue.dismiss()
                 }
             }
