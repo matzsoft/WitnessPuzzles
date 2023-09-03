@@ -17,6 +17,9 @@ struct ContentView: View {
     @State var isMissingSelected = false
     @State var isHexagonsSelected = false
     @State var isIconsSelected = false
+    
+    @State var isConfiguringHexagon = false
+    @State var lastLocation = CGPoint( x: 0, y: 0 )
 
     func select( tool: Binding<Bool> ) -> Void {
         let saved = tool.wrappedValue
@@ -42,7 +45,10 @@ struct ContentView: View {
                 case isFinishesSelected:
                     document.toggleFinish( viewPoint: location )
                 case isHexagonsSelected:
-                    document.toggleHexagon( viewPoint: location )
+                    if !document.removeHexagon( viewPoint: location ) {
+                        isConfiguringHexagon = true
+                        lastLocation = location
+                    }
                 default:
                     break
                 }
@@ -74,6 +80,9 @@ struct ContentView: View {
             }
             .sheet( isPresented: $isPresentingProperties, onDismiss: {} ) {
                 PropertiesView( document: $document )
+            }
+            .sheet( isPresented: $isConfiguringHexagon, onDismiss: {} ) {
+                HexagonView(document: $document, location: lastLocation )
             }
     }
 }

@@ -24,6 +24,10 @@ extension WitnessPuzzlesDocument {
         }
     }
 
+    var lastHexagonColor: Color {
+        hexagons.last?.color ?? .black
+    }
+    
     func drawHexagons( context: CGContext ) -> Void {
         let hexHeight = CGFloat( sqrt( 3 ) / 2 )
         let hexPoints = [
@@ -44,7 +48,7 @@ extension WitnessPuzzlesDocument {
         }
     }
 
-    mutating func toggleHexagon( viewPoint: CGPoint ) -> Void {
+    mutating func removeHexagon( viewPoint: CGPoint ) -> Bool {
         let context = getContext()
         setOrigin( context: context )
         let userPoint = convert( user: context.convertToUserSpace( viewPoint ) )
@@ -52,11 +56,30 @@ extension WitnessPuzzlesDocument {
         
         guard newHexagon.isValid( puzzle: self ) else {
             NSSound.beep();
-            return
+            return true
         }
 
         if hexagons.contains( where: { $0.position == userPoint } ) {
             hexagons = hexagons.filter { $0.position != userPoint }
+            return true
+        }
+        
+        return false
+    }
+
+    mutating func addHexagon( viewPoint: CGPoint, color: Color ) -> Void {
+        let context = getContext()
+        setOrigin( context: context )
+        let userPoint = convert( user: context.convertToUserSpace( viewPoint ) )
+        let newHexagon = Hexagon( position: userPoint, color: color )
+        
+        guard newHexagon.isValid( puzzle: self ) else {
+            NSSound.beep();
+            return
+        }
+
+        if hexagons.contains( where: { $0.position == userPoint } ) {
+            NSSound.beep();
         } else {
             hexagons.append( newHexagon )
         }
