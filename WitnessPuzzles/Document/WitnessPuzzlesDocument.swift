@@ -29,6 +29,7 @@ struct WitnessPuzzlesDocument: FileDocument, Codable {
     var starts = [ Point(0,0) ]
     var finishes = [ Finish( position: Point( 10, 10 ), direction: .northeast ) ]
     var hexagons = Array<Hexagon>()
+    var gaps = Array<Gap>()
 
     var lineWidth = 4
     var blockWidth = 8
@@ -138,6 +139,7 @@ struct WitnessPuzzlesDocument: FileDocument, Codable {
         drawStarts( context: context )
         drawFinishes( context: context )
         context.fillPath()
+        drawGaps( context: context )
         drawHexagons( context: context )
 
         return context.makeImage()!
@@ -269,6 +271,7 @@ struct WitnessPuzzlesDocument: FileDocument, Codable {
         starts = starts.filter { isValid( start: $0 ) }
         finishes = finishes.filter { $0.isValid( puzzle: self ) }
         hexagons = hexagons.filter { $0.isValid( puzzle: self ) }
+        gaps = gaps.filter { $0.isValid( puzzle: self ) }
     }
     
     mutating func toggleStart( viewPoint: CGPoint ) -> Void {

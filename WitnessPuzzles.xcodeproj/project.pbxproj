@@ -22,6 +22,7 @@
 		DDBECF7A2AA3B20C005313E7 /* Hexagon.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDBECF782AA3B20C005313E7 /* Hexagon.swift */; };
 		DDBECF7D2AA42150005313E7 /* TemplateInfo.plist~ in Resources */ = {isa = PBXBuildFile; fileRef = DDBECF7B2AA42150005313E7 /* TemplateInfo.plist~ */; };
 		DDBECF7E2AA42150005313E7 /* HexagonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDBECF7C2AA42150005313E7 /* HexagonView.swift */; };
+		DDBECF822AA44B9E005313E7 /* Gap.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDBECF802AA44B9E005313E7 /* Gap.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -62,6 +63,7 @@
 		DDBECF782AA3B20C005313E7 /* Hexagon.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Hexagon.swift; sourceTree = "<group>"; };
 		DDBECF7B2AA42150005313E7 /* TemplateInfo.plist~ */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = "TemplateInfo.plist~"; sourceTree = "<group>"; };
 		DDBECF7C2AA42150005313E7 /* HexagonView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HexagonView.swift; sourceTree = "<group>"; };
+		DDBECF802AA44B9E005313E7 /* Gap.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Gap.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -165,6 +167,7 @@
 			children = (
 				DDBECF682A99349A005313E7 /* CGExtensions.swift */,
 				DDBECF742AA261DD005313E7 /* Finish.swift */,
+				DDBECF802AA44B9E005313E7 /* Gap.swift */,
 				DDBECF782AA3B20C005313E7 /* Hexagon.swift */,
 				DDBECF3B2A955AE0005313E7 /* WitnessPuzzlesDocument.swift */,
 			);
@@ -306,6 +309,7 @@
 				DDBECF3A2A955AE0005313E7 /* WitnessPuzzlesApp.swift in Sources */,
 				DDBECF7A2AA3B20C005313E7 /* Hexagon.swift in Sources */,
 				DDBECF3E2A955AE0005313E7 /* ContentView.swift in Sources */,
+				DDBECF822AA44B9E005313E7 /* Gap.swift in Sources */,
 				DDBECF762AA261DD005313E7 /* Finish.swift in Sources */,
 				DDBECF712A9EFA5C005313E7 /* PropertiesView.swift in Sources */,
 				DDBECF6C2A9ABCE4005313E7 /* Color+Codable.swift in Sources */,
