@@ -10,7 +10,7 @@ import SwiftUI
 import Foundation
 import CoreGraphics
 
-struct Point: Equatable, Codable {
+struct Point: Equatable, Hashable, Codable {
     let x: Int
     let y: Int
     
@@ -21,7 +21,7 @@ struct Point: Equatable, Codable {
 }
 
 
-enum Direction: Codable {
+enum Direction: String, Codable {
     case north, northeast, east, southeast, south, southwest, west, northwest
     
     var vector: Point {

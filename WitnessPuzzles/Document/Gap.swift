@@ -10,7 +10,7 @@ import Foundation
 import SwiftUI
 
 extension WitnessPuzzlesDocument {
-    struct Gap: Codable {
+    struct Gap: Codable, Hashable {
         let position: Point
         
         func location( puzzle: WitnessPuzzlesDocument ) -> Point {
@@ -29,9 +29,13 @@ extension WitnessPuzzlesDocument {
             context.saveGState()
             context.beginPath()
             context.translateBy( x: CGFloat( user.x ), y: CGFloat( user.y ) )
-            context.scaleBy( x: CGFloat( lineWidth ) / 2, y: CGFloat( lineWidth ) / 2 )
+            context.scaleBy( x: CGFloat( lineWidth ) / 6, y: CGFloat( lineWidth ) / 6 )
             context.setFillColor( background.cgColor! )
-            context.fill( [ CGRect( x: -1, y: -1, width: 2, height: 2 ) ] )
+            if gap.position.x.isMultiple( of: 2 ) {
+                context.fill( [ CGRect( x: -3, y: -2, width: 6, height: 4 ) ] )
+            } else {
+                context.fill( [ CGRect( x: -2, y: -3, width: 4, height: 6 ) ] )
+            }
             context.restoreGState()
         }
     }
@@ -47,10 +51,10 @@ extension WitnessPuzzlesDocument {
             return
         }
 
-        if gaps.contains( where: { $0.position == userPoint } ) {
+        if gaps.contains( newGap ) {
             gaps = gaps.filter { $0.position != userPoint }
         } else {
-            gaps.append( newGap )
+            gaps.insert( newGap )
         }
     }
 }

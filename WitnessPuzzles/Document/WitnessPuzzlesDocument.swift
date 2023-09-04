@@ -29,7 +29,7 @@ struct WitnessPuzzlesDocument: FileDocument, Codable {
     var starts = [ Point(0,0) ]
     var finishes = [ Finish( position: Point( 10, 10 ), direction: .northeast ) ]
     var hexagons = Array<Hexagon>()
-    var gaps = Array<Gap>()
+    var gaps = Set<Gap>()
 
     var lineWidth = 4
     var blockWidth = 8
