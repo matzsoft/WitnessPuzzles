@@ -46,6 +46,8 @@ struct ContentView: View {
                     document.toggleFinish( viewPoint: location )
                 case isGapsSelected:
                     document.toggleGap( viewPoint: location )
+                case isMissingSelected:
+                    document.toggleMissing( viewPoint: location )
                 case isHexagonsSelected:
                     if !document.removeHexagon( viewPoint: location ) {
                         isConfiguringHexagon = true

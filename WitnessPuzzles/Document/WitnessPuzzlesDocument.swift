@@ -30,6 +30,7 @@ struct WitnessPuzzlesDocument: FileDocument, Codable {
     var finishes = [ Finish( position: Point( 10, 10 ), direction: .northeast ) ]
     var hexagons = Array<Hexagon>()
     var gaps = Set<Gap>()
+    var missings = Set<Missing>()
 
     var lineWidth = 4
     var blockWidth = 8
@@ -141,6 +142,7 @@ struct WitnessPuzzlesDocument: FileDocument, Codable {
         context.fillPath()
         drawGaps( context: context )
         drawHexagons( context: context )
+        drawMissings( context: context )
 
         return context.makeImage()!
     }
@@ -185,7 +187,7 @@ struct WitnessPuzzlesDocument: FileDocument, Codable {
     }
 
     func drawRectangle( context: CGContext ) -> Void {
-        let cornerRadius = CGFloat( lineWidth / 2 )
+        let cornerRadius = CGFloat( lineWidth ) / 2
 
         for col in 0 ... width {
             context.addPath(
@@ -272,6 +274,7 @@ struct WitnessPuzzlesDocument: FileDocument, Codable {
         finishes = finishes.filter { $0.isValid( puzzle: self ) }
         hexagons = hexagons.filter { $0.isValid( puzzle: self ) }
         gaps = gaps.filter { $0.isValid( puzzle: self ) }
+        missings = missings.filter { $0.isValid( puzzle: self ) }
     }
     
     mutating func toggleStart( viewPoint: CGPoint ) -> Void {
