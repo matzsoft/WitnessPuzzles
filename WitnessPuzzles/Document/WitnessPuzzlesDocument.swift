@@ -26,7 +26,7 @@ struct WitnessPuzzlesDocument: FileDocument, Codable {
     var type = PuzzleType.rectangle
     var background = Color( hex: "#23180A" )
     var foreground = Color( red: 1, green: 1, blue: 1, opacity: 1 )
-    var starts = [ Point(0,0) ]
+    var starts = Set<Start>( [ Start( position: Point(0,0) ) ] )
     var finishes = [ Finish( position: Point( 10, 10 ), direction: .northeast ) ]
     var hexagons = Array<Hexagon>()
     var gaps = Set<Gap>()
@@ -153,7 +153,7 @@ struct WitnessPuzzlesDocument: FileDocument, Codable {
     }
 
     func extraLeft() -> Int {
-        let startExtra = max( starts.map { startRadius - convert( symbol: $0 ).x }.max() ?? 0, 0 )
+        let startExtra = max( starts.map { startRadius - $0.location( puzzle: self ).x }.max() ?? 0, 0 )
         let finishMax = finishes.map { finishRadius - $0.location( puzzle: self ).x }.max() ?? 0
         let finishExtra = max( finishMax, 0 )
         
@@ -161,7 +161,7 @@ struct WitnessPuzzlesDocument: FileDocument, Codable {
     }
 
     func extraBottom() -> Int {
-        let startExtra = max( starts.map { startRadius - convert( symbol: $0 ).y }.max() ?? 0, 0 )
+        let startExtra = max( starts.map { startRadius - $0.location( puzzle: self ).y }.max() ?? 0, 0 )
         let finishMax = finishes.map { finishRadius - $0.location( puzzle: self ).y }.max() ?? 0
         let finishExtra = max( finishMax, 0 )
         
@@ -169,7 +169,7 @@ struct WitnessPuzzlesDocument: FileDocument, Codable {
     }
 
     func extraRight() -> Int {
-        let startsMax = starts.map { convert( symbol: $0 ).x + startRadius }.max() ?? 0
+        let startsMax = starts.map { $0.location( puzzle: self ).x + startRadius }.max() ?? 0
         let startExtra = max( startsMax - baseWidth, 0 )
         let finishMax = finishes.map { $0.location( puzzle: self ).x + finishRadius }.max() ?? 0
         let finishExtra = max( finishMax - baseWidth, 0 )
@@ -178,7 +178,7 @@ struct WitnessPuzzlesDocument: FileDocument, Codable {
     }
 
     func extraTop() -> Int {
-        let startsMax = starts.map { convert( symbol: $0 ).y + startRadius }.max() ?? 0
+        let startsMax = starts.map { $0.location( puzzle: self ).y + startRadius }.max() ?? 0
         let startExtra = max( startsMax - baseHeight, 0 )
         let finishMax = finishes.map { $0.location( puzzle: self ).y + finishRadius }.max() ?? 0
         let finishExtra = max( finishMax - baseHeight, 0 )
@@ -243,54 +243,15 @@ struct WitnessPuzzlesDocument: FileDocument, Codable {
         return Point( x, y )
     }
     
-    func drawStarts( context: CGContext ) -> Void {
-        for start in starts {
-            let drawing = convert( symbol: start )
-            context.addEllipse( in: CGRect(
-                x: drawing.x - startRadius, y: drawing.y - startRadius,
-                width: 2 * startRadius, height: 2 * startRadius
-            ) )
-            if start.x == 0 && type == .cylinder {
-                let drawing = convert(symbol: Point( 2 * width, start.y ) )
-                context.addEllipse( in: CGRect(
-                    x: drawing.x - startRadius, y: drawing.y - startRadius,
-                    width: 2 * startRadius, height: 2 * startRadius
-                ) )
-            }
-        }
-    }
-    
-    func isValid( start: Point ) -> Bool {
-        validSymbolX.contains( start.x ) && validSymbolY.contains( start.y )
-            && ( ( start.x & start.y & 1 ) == 0 )
-    }
-    
     mutating func adjustDimensions( type: PuzzleType, width: Int, height: Int ) -> Void {
         self.type = type
         self.width = width
         self.height = height
         
-        starts = starts.filter { isValid( start: $0 ) }
+        starts = starts.filter { $0.isValid( puzzle: self ) }
         finishes = finishes.filter { $0.isValid( puzzle: self ) }
         hexagons = hexagons.filter { $0.isValid( puzzle: self ) }
         gaps = gaps.filter { $0.isValid( puzzle: self ) }
         missings = missings.filter { $0.isValid( puzzle: self ) }
-    }
-    
-    mutating func toggleStart( viewPoint: CGPoint ) -> Void {
-        let context = getContext()
-        setOrigin( context: context )
-        let userPoint = convert( user: context.convertToUserSpace( viewPoint ) )
-        
-        guard isValid( start: userPoint ) else {
-            NSSound.beep();
-            return
-        }
-
-        if starts.contains( where: { $0 == userPoint } ) {
-            starts = starts.filter { $0 != userPoint }
-        } else {
-            starts.append( userPoint )
-        }
     }
 }

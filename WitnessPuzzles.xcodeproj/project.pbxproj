@@ -24,6 +24,7 @@
 		DDBECF7E2AA42150005313E7 /* HexagonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDBECF7C2AA42150005313E7 /* HexagonView.swift */; };
 		DDBECF822AA44B9E005313E7 /* Gap.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDBECF802AA44B9E005313E7 /* Gap.swift */; };
 		DDBECF862AA65A74005313E7 /* Missing.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDBECF842AA65A74005313E7 /* Missing.swift */; };
+		DDBECF8A2AA68CA6005313E7 /* Start.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDBECF882AA68CA6005313E7 /* Start.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -66,6 +67,7 @@
 		DDBECF7C2AA42150005313E7 /* HexagonView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HexagonView.swift; sourceTree = "<group>"; };
 		DDBECF802AA44B9E005313E7 /* Gap.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Gap.swift; sourceTree = "<group>"; };
 		DDBECF842AA65A74005313E7 /* Missing.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Missing.swift; sourceTree = "<group>"; };
+		DDBECF882AA68CA6005313E7 /* Start.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Start.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -172,6 +174,7 @@
 				DDBECF802AA44B9E005313E7 /* Gap.swift */,
 				DDBECF782AA3B20C005313E7 /* Hexagon.swift */,
 				DDBECF842AA65A74005313E7 /* Missing.swift */,
+				DDBECF882AA68CA6005313E7 /* Start.swift */,
 				DDBECF3B2A955AE0005313E7 /* WitnessPuzzlesDocument.swift */,
 			);
 			path = Document;
@@ -312,6 +315,7 @@
 				DDBECF3C2A955AE0005313E7 /* WitnessPuzzlesDocument.swift in Sources */,
 				DDBECF3A2A955AE0005313E7 /* WitnessPuzzlesApp.swift in Sources */,
 				DDBECF7A2AA3B20C005313E7 /* Hexagon.swift in Sources */,
+				DDBECF8A2AA68CA6005313E7 /* Start.swift in Sources */,
 				DDBECF3E2A955AE0005313E7 /* ContentView.swift in Sources */,
 				DDBECF822AA44B9E005313E7 /* Gap.swift in Sources */,
 				DDBECF762AA261DD005313E7 /* Finish.swift in Sources */,
