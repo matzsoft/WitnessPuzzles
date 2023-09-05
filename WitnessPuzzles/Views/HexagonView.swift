@@ -11,15 +11,9 @@ import SwiftUI
 struct HexagonView: View {
     @Environment( \.presentationMode ) var presentationMode
     @Binding var document: WitnessPuzzlesDocument
-    @State var color: Color
     let location: CGPoint
-    
-    init( document: Binding<WitnessPuzzlesDocument>, location: CGPoint ) {
-        self._document = document
-        _color = State( initialValue: document.wrappedValue.lastHexagonColor )
-        self.location = location
-    }
-    
+    @Binding var color: Color
+
     var body: some View {
         VStack {
             Text( "Select a color for the new hexagon" )

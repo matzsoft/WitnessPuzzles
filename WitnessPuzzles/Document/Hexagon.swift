@@ -10,7 +10,7 @@ import Foundation
 import SwiftUI
 
 extension WitnessPuzzlesDocument {
-    struct Hexagon: Codable {
+    struct Hexagon: Codable, Hashable {
         let position: Point
         let color: Color
         
@@ -24,10 +24,6 @@ extension WitnessPuzzlesDocument {
         }
     }
 
-    var lastHexagonColor: Color {
-        hexagons.last?.color ?? .black
-    }
-    
     func drawHexagons( context: CGContext ) -> Void {
         let hexHeight = CGFloat( sqrt( 3 ) / 2 )
         let hexPoints = [
@@ -81,7 +77,7 @@ extension WitnessPuzzlesDocument {
         if hexagons.contains( where: { $0.position == userPoint } ) {
             NSSound.beep();
         } else {
-            hexagons.append( newHexagon )
+            hexagons.insert( newHexagon )
         }
     }
 }

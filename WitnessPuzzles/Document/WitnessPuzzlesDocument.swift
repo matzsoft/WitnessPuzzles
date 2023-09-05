@@ -28,7 +28,7 @@ struct WitnessPuzzlesDocument: FileDocument, Codable {
     var foreground = Color( red: 1, green: 1, blue: 1, opacity: 1 )
     var starts = Set<Start>( [ Start( position: Point(0,0) ) ] )
     var finishes = [ Finish( position: Point( 10, 10 ), direction: .northeast ) ]
-    var hexagons = Array<Hexagon>()
+    var hexagons = Set<Hexagon>()
     var gaps = Set<Gap>()
     var missings = Set<Missing>()
 

@@ -20,6 +20,7 @@ struct ContentView: View {
     
     @State var isConfiguringHexagon = false
     @State var lastLocation = CGPoint( x: 0, y: 0 )
+    @State var lastColor = Color.black
 
     func select( tool: Binding<Bool> ) -> Void {
         let saved = tool.wrappedValue
@@ -86,7 +87,7 @@ struct ContentView: View {
                 PropertiesView( document: $document )
             }
             .sheet( isPresented: $isConfiguringHexagon, onDismiss: {} ) {
-                HexagonView(document: $document, location: lastLocation )
+                HexagonView(document: $document, location: lastLocation, color: $lastColor )
             }
     }
 }
