@@ -20,7 +20,6 @@
 		DDBECF712A9EFA5C005313E7 /* PropertiesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDBECF6F2A9EFA5C005313E7 /* PropertiesView.swift */; };
 		DDBECF762AA261DD005313E7 /* Finish.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDBECF742AA261DD005313E7 /* Finish.swift */; };
 		DDBECF7A2AA3B20C005313E7 /* Hexagon.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDBECF782AA3B20C005313E7 /* Hexagon.swift */; };
-		DDBECF7D2AA42150005313E7 /* TemplateInfo.plist~ in Resources */ = {isa = PBXBuildFile; fileRef = DDBECF7B2AA42150005313E7 /* TemplateInfo.plist~ */; };
 		DDBECF7E2AA42150005313E7 /* HexagonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDBECF7C2AA42150005313E7 /* HexagonView.swift */; };
 		DDBECF822AA44B9E005313E7 /* Gap.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDBECF802AA44B9E005313E7 /* Gap.swift */; };
 		DDBECF862AA65A74005313E7 /* Missing.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDBECF842AA65A74005313E7 /* Missing.swift */; };
@@ -63,7 +62,6 @@
 		DDBECF6F2A9EFA5C005313E7 /* PropertiesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PropertiesView.swift; sourceTree = "<group>"; };
 		DDBECF742AA261DD005313E7 /* Finish.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Finish.swift; sourceTree = "<group>"; };
 		DDBECF782AA3B20C005313E7 /* Hexagon.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Hexagon.swift; sourceTree = "<group>"; };
-		DDBECF7B2AA42150005313E7 /* TemplateInfo.plist~ */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = "TemplateInfo.plist~"; sourceTree = "<group>"; };
 		DDBECF7C2AA42150005313E7 /* HexagonView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HexagonView.swift; sourceTree = "<group>"; };
 		DDBECF802AA44B9E005313E7 /* Gap.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Gap.swift; sourceTree = "<group>"; };
 		DDBECF842AA65A74005313E7 /* Missing.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Missing.swift; sourceTree = "<group>"; };
@@ -161,7 +159,6 @@
 				DDBECF3D2A955AE0005313E7 /* ContentView.swift */,
 				DDBECF7C2AA42150005313E7 /* HexagonView.swift */,
 				DDBECF6F2A9EFA5C005313E7 /* PropertiesView.swift */,
-				DDBECF7B2AA42150005313E7 /* TemplateInfo.plist~ */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -286,7 +283,6 @@
 			files = (
 				DDBECF432A955AE0005313E7 /* Preview Assets.xcassets in Resources */,
 				DDBECF402A955AE0005313E7 /* Assets.xcassets in Resources */,
-				DDBECF7D2AA42150005313E7 /* TemplateInfo.plist~ in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

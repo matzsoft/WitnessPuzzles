@@ -117,6 +117,8 @@ struct PropertiesView: View {
                     if NSColorPanel.shared.isVisible { NSColorPanel.shared.orderOut( nil ) }
                     presentationMode.wrappedValue.dismiss()
                 }
+                .keyboardShortcut( .cancelAction )
+                Spacer()
                 Button( "Done", role: .destructive ) {
                     document.adjustDimensions( type: type, width: Int( width ), height: Int( height ) )
                     document.background = background
@@ -128,6 +130,7 @@ struct PropertiesView: View {
                     if NSColorPanel.shared.isVisible { NSColorPanel.shared.orderOut( nil ) }
                     presentationMode.wrappedValue.dismiss()
                 }
+                .keyboardShortcut( .defaultAction )
             }
         }
         .frame( alignment: .center )
