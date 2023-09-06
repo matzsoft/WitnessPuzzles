@@ -53,6 +53,7 @@ struct PropertiesView: View {
                     } maximumValueLabel: {
                         Text( "20" )
                     }
+                    .tint( .black )
                     Text( String( format: "%.0f", width ) )
                 }
                 VStack {
@@ -63,6 +64,7 @@ struct PropertiesView: View {
                     } maximumValueLabel: {
                         Text( "20" )
                     }
+                    .tint( .black )
                     Text( String( format: "%.0f", height ) )
                 }
                 HStack {
@@ -77,6 +79,7 @@ struct PropertiesView: View {
                     } maximumValueLabel: {
                         Text( "50" )
                     }
+                    .tint( .black )
                     Text( String( format: "%.1f", scaleFactor ) )
                 }
                 VStack {
@@ -87,6 +90,7 @@ struct PropertiesView: View {
                     } maximumValueLabel: {
                         Text( "10" )
                     }
+                    .tint( .black )
                     Text( String( format: "%.0f", lineWidth ) )
                 }
             }
@@ -99,6 +103,7 @@ struct PropertiesView: View {
                 } maximumValueLabel: {
                     Text( "10" )
                 }
+                .tint( .black )
                 Text( String( format: "%.0f", lineWidth ) )
             }
             VStack {
@@ -109,6 +114,7 @@ struct PropertiesView: View {
                 } maximumValueLabel: {
                     Text( "20" )
                 }
+                .tint( .black )
                 Text( String( format: "%.0f", blockWidth ) )
             }
             Divider()
