@@ -19,8 +19,6 @@ extension UTType {
 }
 
 struct WitnessPuzzlesDocument: FileDocument, Codable {
-    enum PuzzleType: String, CaseIterable, Codable { case rectangle = "Rectangle", cylinder = "Cylinder" }
-    
     var width = 5
     var height = 5
     var type = PuzzleType.rectangle
@@ -40,28 +38,12 @@ struct WitnessPuzzlesDocument: FileDocument, Codable {
     var startRadius: Int { lineWidth }
     var finishRadius: Int { lineWidth / 2 }
     var baseHeight: Int { ( height + 1 ) * lineWidth + height * blockWidth }
-    var baseWidth: Int {
-        switch type {
-        case .rectangle: return ( width + 1 ) * lineWidth + width * blockWidth
-        case .cylinder:  return width * ( lineWidth + blockWidth )
-        }
-    }
+    var baseWidth: Int { type.baseWidth( puzzle: self ) }
     var userHeight: CGFloat { CGFloat( baseHeight + 2 * padding + extraBottom() + extraTop() ) }
-    var userWidth: CGFloat {
-        switch type {
-        case .rectangle: return CGFloat( baseWidth + 2 * padding + extraLeft() + extraRight() )
-        case .cylinder:  return CGFloat( baseWidth )
-        }
-    }
+    var userWidth: CGFloat { type.userWidth( puzzle: self ) }
     var cylinderLeft: Int { 3 * lineWidth / 4 }
     var cylinderRight: Int { lineWidth / 4 }
-
-    var validSymbolX: ClosedRange<Int> {
-        switch type {
-        case .rectangle: return 0 ... ( 2 * width )
-        case .cylinder:  return 0 ... ( 2 * width - 1 )
-        }
-    }
+    var validSymbolX: ClosedRange<Int> { type.validPuzzleX( puzzle: self ) }
     var validSymbolY: ClosedRange<Int> { 0 ... ( 2 * height ) }
     
     init() { }
@@ -110,12 +92,7 @@ struct WitnessPuzzlesDocument: FileDocument, Codable {
     }
     
     func setOrigin( context: CGContext ) -> Void {
-        switch type {
-        case .rectangle:
-            context.translateBy( x: CGFloat( padding + extraLeft() ), y: CGFloat( padding + extraBottom() ) )
-        case .cylinder:
-            context.translateBy( x: CGFloat( -cylinderRight ), y: CGFloat( padding + extraBottom() ) )
-        }
+        context.translateBy( x: type.xOriginOffset( puzzle: self ), y: CGFloat( padding + extraBottom() ) )
     }
     
     var image: CGImage {
@@ -132,10 +109,7 @@ struct WitnessPuzzlesDocument: FileDocument, Codable {
         setOrigin( context: context )
         context.setFillColor( foreground.cgColor! )
         context.beginPath()
-        switch type {
-        case .rectangle: drawRectangle( context: context )
-        case .cylinder:  drawCylinder( context: context )
-        }
+        type.draw( puzzle: self, context: context )
 
         drawStarts( context: context )
         drawFinishes( context: context )
@@ -184,48 +158,6 @@ struct WitnessPuzzlesDocument: FileDocument, Codable {
         let finishExtra = max( finishMax - baseHeight, 0 )
         
         return startExtra + finishExtra
-    }
-
-    func drawRectangle( context: CGContext ) -> Void {
-        let cornerRadius = CGFloat( lineWidth ) / 2
-
-        for col in 0 ... width {
-            context.addPath(
-                CGPath(
-                    roundedRect: CGRect(
-                        origin: CGPoint( x: ( lineWidth + blockWidth ) * col, y: 0 ),
-                        size: CGSize( width: lineWidth, height: baseHeight )
-                    ),
-                    cornerWidth: cornerRadius, cornerHeight: cornerRadius, transform: nil )
-            )
-        }
-
-        for row in 0 ... height {
-            context.addPath(
-                CGPath(
-                    roundedRect: CGRect(
-                        origin: CGPoint( x: 0, y: ( lineWidth + blockWidth ) * row ),
-                        size: CGSize( width: baseWidth, height: lineWidth )
-                    ),
-                    cornerWidth: cornerRadius, cornerHeight: cornerRadius, transform: nil )
-            )
-        }
-    }
-    
-    func drawCylinder( context: CGContext ) -> Void {
-        context.addRect( CGRect( x: cylinderRight, y: 0, width: cylinderLeft, height: baseHeight ) )
-        context.addRect( CGRect(
-            x: ( lineWidth + blockWidth ) * width, y: 0, width: cylinderRight, height: baseHeight ) )
-
-        for col in 1 ..< width {
-            context.addRect( CGRect(
-                x: ( lineWidth + blockWidth ) * col, y: 0, width: lineWidth, height: baseHeight ) )
-        }
-
-        for row in 0 ... height {
-            context.addRect( CGRect(
-                x: 0, y: ( lineWidth + blockWidth ) * row, width: baseWidth, height: lineWidth ) )
-        }
     }
         
     mutating func adjustDimensions( type: PuzzleType, width: Int, height: Int ) -> Void {
