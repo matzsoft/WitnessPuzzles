@@ -18,16 +18,8 @@ extension WitnessPuzzlesDocument {
         }
         
         func isValid( puzzle: WitnessPuzzlesDocument ) -> Bool {
-            let validX = puzzle.validSymbolX
-            let validY = puzzle.validSymbolY
-            
-            switch ( position.x, position.y ) {
-            case ( validX.lowerBound, _ ): return !position.y.isMultiple( of: 2 )
-            case ( validX.upperBound, _ ): return !position.y.isMultiple( of: 2 )
-            case ( _, validY.lowerBound ): return !position.x.isMultiple( of: 2 )
-            case ( _, validY.upperBound ): return !position.x.isMultiple( of: 2 )
-            default:                       return false
-            }
+            puzzle.validSymbolX.contains( position.x ) && puzzle.validSymbolY.contains( position.y )
+                && ( ( ( position.x ^ position.y ) & 1 ) == 1 )
         }
     }
     
