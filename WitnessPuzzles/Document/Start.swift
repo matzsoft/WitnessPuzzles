@@ -10,7 +10,7 @@ import Foundation
 import SwiftUI
 
 extension WitnessPuzzlesDocument {
-    struct Start: Codable, Hashable {
+    struct Start: PuzzleItem, Codable, Hashable {
         let position: Point
         
         func location( puzzle: WitnessPuzzlesDocument ) -> Point {

@@ -10,7 +10,7 @@ import Foundation
 import SwiftUI
 
 extension WitnessPuzzlesDocument {
-    struct Finish: Codable {
+    struct Finish: PuzzleItem, Codable, Hashable {
         let position: Point
         let direction: Direction
         
@@ -99,7 +99,7 @@ extension WitnessPuzzlesDocument {
         if finishes.contains( where: { $0.position == userPoint } ) {
             finishes = finishes.filter { $0.position != userPoint }
         } else {
-            finishes.append( Finish( position: userPoint, direction: goodDirection ) )
+            finishes.insert( Finish( position: userPoint, direction: goodDirection ) )
         }
     }
 }

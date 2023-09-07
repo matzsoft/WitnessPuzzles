@@ -25,6 +25,7 @@
 		DDBECF862AA65A74005313E7 /* Missing.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDBECF842AA65A74005313E7 /* Missing.swift */; };
 		DDBECF8A2AA68CA6005313E7 /* Start.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDBECF882AA68CA6005313E7 /* Start.swift */; };
 		DDBECF8E2AA97372005313E7 /* PuzzleType.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDBECF8C2AA97372005313E7 /* PuzzleType.swift */; };
+		DDBECF922AAA484B005313E7 /* PuzzleItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDBECF902AAA484B005313E7 /* PuzzleItem.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -68,6 +69,7 @@
 		DDBECF842AA65A74005313E7 /* Missing.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Missing.swift; sourceTree = "<group>"; };
 		DDBECF882AA68CA6005313E7 /* Start.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Start.swift; sourceTree = "<group>"; };
 		DDBECF8C2AA97372005313E7 /* PuzzleType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PuzzleType.swift; sourceTree = "<group>"; };
+		DDBECF902AAA484B005313E7 /* PuzzleItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PuzzleItem.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -173,6 +175,7 @@
 				DDBECF802AA44B9E005313E7 /* Gap.swift */,
 				DDBECF782AA3B20C005313E7 /* Hexagon.swift */,
 				DDBECF842AA65A74005313E7 /* Missing.swift */,
+				DDBECF902AAA484B005313E7 /* PuzzleItem.swift */,
 				DDBECF8C2AA97372005313E7 /* PuzzleType.swift */,
 				DDBECF882AA68CA6005313E7 /* Start.swift */,
 				DDBECF3B2A955AE0005313E7 /* WitnessPuzzlesDocument.swift */,
@@ -322,6 +325,7 @@
 				DDBECF712A9EFA5C005313E7 /* PropertiesView.swift in Sources */,
 				DDBECF6C2A9ABCE4005313E7 /* Color+Codable.swift in Sources */,
 				DDBECF6A2A99349A005313E7 /* CGExtensions.swift in Sources */,
+				DDBECF922AAA484B005313E7 /* PuzzleItem.swift in Sources */,
 				DDBECF7E2AA42150005313E7 /* HexagonView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
