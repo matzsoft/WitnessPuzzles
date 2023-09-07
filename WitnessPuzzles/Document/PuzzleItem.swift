@@ -8,7 +8,7 @@
 
 import Foundation
 
-protocol PuzzleItem {
+protocol PuzzleItem: Codable, Hashable {
     var position: WitnessPuzzlesDocument.Point { get }
     func location( puzzle: WitnessPuzzlesDocument ) -> WitnessPuzzlesDocument.Point
     func isValid( puzzle: WitnessPuzzlesDocument ) -> Bool

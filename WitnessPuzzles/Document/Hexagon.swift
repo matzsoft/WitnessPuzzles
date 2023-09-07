@@ -10,7 +10,7 @@ import Foundation
 import SwiftUI
 
 extension WitnessPuzzlesDocument {
-    struct Hexagon: PuzzleItem, Codable, Hashable {
+    struct Hexagon: PuzzleItem {
         let position: Point
         let color: Color
         
