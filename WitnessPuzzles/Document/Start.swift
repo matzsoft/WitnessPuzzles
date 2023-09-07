@@ -14,7 +14,7 @@ extension WitnessPuzzlesDocument {
         let position: Point
         
         func location( puzzle: WitnessPuzzlesDocument ) -> Point {
-            puzzle.convert( symbol: position )
+            position.user2puzzle( puzzle: puzzle )
         }
         
         func isValid( puzzle: WitnessPuzzlesDocument ) -> Bool {
@@ -31,7 +31,7 @@ extension WitnessPuzzlesDocument {
                 width: 2 * startRadius, height: 2 * startRadius
             ) )
             if start.position.x == 0 && type == .cylinder {
-                let drawing = convert( symbol: Point( 2 * width, start.position.y ) )
+                let drawing = Point( 2 * width, start.position.y ).user2puzzle( puzzle: self )
                 context.addEllipse( in: CGRect(
                     x: drawing.x - startRadius, y: drawing.y - startRadius,
                     width: 2 * startRadius, height: 2 * startRadius
@@ -41,9 +41,7 @@ extension WitnessPuzzlesDocument {
     }
     
     mutating func toggleStart( viewPoint: CGPoint ) -> Void {
-        let context = getContext()
-        setOrigin( context: context )
-        let userPoint = convert( user: context.convertToUserSpace( viewPoint ) )
+        let userPoint = Point.fromView2puzzle( from: viewPoint, puzzle: self )
         let newStart = Start( position: userPoint )
         
         guard newStart.isValid( puzzle: self ) else {

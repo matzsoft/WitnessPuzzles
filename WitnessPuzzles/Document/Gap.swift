@@ -14,7 +14,7 @@ extension WitnessPuzzlesDocument {
         let position: Point
         
         func location( puzzle: WitnessPuzzlesDocument ) -> Point {
-            puzzle.convert( symbol: position )
+            position.user2puzzle( puzzle: puzzle )
         }
         
         func isValid( puzzle: WitnessPuzzlesDocument ) -> Bool {
@@ -41,9 +41,7 @@ extension WitnessPuzzlesDocument {
     }
 
     mutating func toggleGap( viewPoint: CGPoint ) -> Void {
-        let context = getContext()
-        setOrigin( context: context )
-        let userPoint = convert( user: context.convertToUserSpace( viewPoint ) )
+        let userPoint = Point.fromView2puzzle( from: viewPoint, puzzle: self )
         let newGap = Gap( position: userPoint )
         
         guard newGap.isValid( puzzle: self ) else {

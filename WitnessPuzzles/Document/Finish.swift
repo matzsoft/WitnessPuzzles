@@ -15,7 +15,7 @@ extension WitnessPuzzlesDocument {
         let direction: Direction
         
         func location( puzzle: WitnessPuzzlesDocument ) -> Point {
-            let converted = puzzle.convert( symbol: position )
+            let converted = position.user2puzzle( puzzle: puzzle )
             let offset = offset( distance: puzzle.lineWidth / 2, extra: 1 )
             return Point( converted.x + offset.x, converted.y + offset.y )
         }
@@ -89,10 +89,8 @@ extension WitnessPuzzlesDocument {
     }
 
     mutating func toggleFinish( viewPoint: CGPoint ) -> Void {
-        let context = getContext()
-        setOrigin( context: context )
-        let userPoint = convert( user: context.convertToUserSpace( viewPoint ) )
-        
+        let userPoint = Point.fromView2puzzle( from: viewPoint, puzzle: self )
+
         guard let goodDirection = Finish.validDirection( for: userPoint, in: self ) else {
             NSSound.beep();
             return

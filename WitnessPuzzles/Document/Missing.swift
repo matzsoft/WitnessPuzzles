@@ -14,7 +14,7 @@ extension WitnessPuzzlesDocument {
         let position: Point
         
         func location( puzzle: WitnessPuzzlesDocument ) -> Point {
-            puzzle.convert( symbol: position )
+            position.user2puzzle( puzzle: puzzle )
         }
         
         func isValid( puzzle: WitnessPuzzlesDocument ) -> Bool {
@@ -56,7 +56,7 @@ extension WitnessPuzzlesDocument {
         
         func draw( context: CGContext, puzzle: WitnessPuzzlesDocument ) -> Void {
             for repaint in repaints {
-                let user = puzzle.convert( symbol: repaint )
+                let user = repaint.user2puzzle( puzzle: puzzle )
                 let cornerRadius = CGFloat( puzzle.lineWidth ) / 2
 
                 context.saveGState()
@@ -137,9 +137,7 @@ extension WitnessPuzzlesDocument {
     }
 
     mutating func toggleMissing( viewPoint: CGPoint ) -> Void {
-        let context = getContext()
-        setOrigin( context: context )
-        let userPoint = convert( user: context.convertToUserSpace( viewPoint ) )
+        let userPoint = Point.fromView2puzzle( from: viewPoint, puzzle: self )
         let newMissing = Missing( position: userPoint )
         
         guard newMissing.isValid( puzzle: self ) else {

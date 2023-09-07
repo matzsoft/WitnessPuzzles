@@ -227,22 +227,7 @@ struct WitnessPuzzlesDocument: FileDocument, Codable {
                 x: 0, y: ( lineWidth + blockWidth ) * row, width: baseWidth, height: lineWidth ) )
         }
     }
-    
-    func convert( symbol: Point ) -> Point {
-        let x = symbol.x * ( lineWidth + blockWidth ) / 2 + lineWidth / 2
-        let y = symbol.y * ( lineWidth + blockWidth ) / 2 + lineWidth / 2
-        return Point( x, y )
-    }
-    
-    func convert( user: CGPoint ) -> Point {
-        let resolution = Double( lineWidth + blockWidth ) / 2
-        let offset = Double( lineWidth ) / 2
-        let x = Int( ( ( user.x - offset ) / resolution ).rounded() )
-        let y = Int( ( ( user.y - offset ) / resolution ).rounded() )
         
-        return Point( x, y )
-    }
-    
     mutating func adjustDimensions( type: PuzzleType, width: Int, height: Int ) -> Void {
         self.type = type
         self.width = width

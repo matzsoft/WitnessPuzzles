@@ -15,7 +15,7 @@ extension WitnessPuzzlesDocument {
         let color: Color
         
         func location( puzzle: WitnessPuzzlesDocument ) -> Point {
-            puzzle.convert( symbol: position )
+            position.user2puzzle( puzzle: puzzle )
         }
         
         func isValid( puzzle: WitnessPuzzlesDocument ) -> Bool {
@@ -45,9 +45,7 @@ extension WitnessPuzzlesDocument {
     }
 
     mutating func removeHexagon( viewPoint: CGPoint ) -> Bool {
-        let context = getContext()
-        setOrigin( context: context )
-        let userPoint = convert( user: context.convertToUserSpace( viewPoint ) )
+        let userPoint = Point.fromView2puzzle( from: viewPoint, puzzle: self )
         let newHexagon = Hexagon( position: userPoint, color: .black )
         
         guard newHexagon.isValid( puzzle: self ) else {
@@ -64,9 +62,7 @@ extension WitnessPuzzlesDocument {
     }
 
     mutating func addHexagon( viewPoint: CGPoint, color: Color ) -> Void {
-        let context = getContext()
-        setOrigin( context: context )
-        let userPoint = convert( user: context.convertToUserSpace( viewPoint ) )
+        let userPoint = Point.fromView2puzzle( from: viewPoint, puzzle: self )
         let newHexagon = Hexagon( position: userPoint, color: color )
         
         guard newHexagon.isValid( puzzle: self ) else {
