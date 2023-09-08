@@ -48,12 +48,15 @@ extension WitnessPuzzlesDocument {
         let userPoint = Point.fromView2puzzle( from: viewPoint, puzzle: self )
         let newHexagon = Hexagon( position: userPoint, color: .black )
         
-        guard newHexagon.isValid( puzzle: self ) else {
+        guard newHexagon.isValid( puzzle: self ),
+              !conflictsWithGaps( item: newHexagon ),
+              !conflictsWithMissings( item: newHexagon )
+        else {
             NSSound.beep();
             return true
         }
 
-        if hexagons.contains( where: { $0.position == userPoint } ) {
+        if conflictsWithHexagons( item: newHexagon ) {
             hexagons = hexagons.filter { $0.position != userPoint }
             return true
         }
@@ -65,15 +68,15 @@ extension WitnessPuzzlesDocument {
         let userPoint = Point.fromView2puzzle( from: viewPoint, puzzle: self )
         let newHexagon = Hexagon( position: userPoint, color: color )
         
-        guard newHexagon.isValid( puzzle: self ) else {
+        guard newHexagon.isValid( puzzle: self ),
+              !conflictsWithGaps( item: newHexagon ),
+              !conflictsWithMissings( item: newHexagon ),
+              !conflictsWithHexagons( item: newHexagon )
+        else {
             NSSound.beep();
             return
         }
 
-        if hexagons.contains( where: { $0.position == userPoint } ) {
-            NSSound.beep();
-        } else {
-            hexagons.insert( newHexagon )
-        }
+        hexagons.insert( newHexagon )
     }
 }

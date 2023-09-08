@@ -110,13 +110,16 @@ struct WitnessPuzzlesDocument: FileDocument, Codable {
         context.setFillColor( foreground.cgColor! )
         context.beginPath()
         type.draw( puzzle: self, context: context )
+        context.fillPath()
+        drawMissings( context: context )
 
+        context.setFillColor( foreground.cgColor! )
+        context.beginPath()
         drawStarts( context: context )
         drawFinishes( context: context )
         context.fillPath()
         drawGaps( context: context )
         drawHexagons( context: context )
-        drawMissings( context: context )
 
         return context.makeImage()!
     }

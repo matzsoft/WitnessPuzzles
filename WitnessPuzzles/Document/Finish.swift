@@ -95,8 +95,16 @@ extension WitnessPuzzlesDocument {
             NSSound.beep();
             return
         }
+        let newFinish = Finish( position: userPoint, direction: goodDirection )
+        guard !conflictsWithStarts( item: newFinish ),
+              !conflictsWithGaps( item: newFinish ),
+              !conflictsWithMissings( item: newFinish )
+        else {
+            NSSound.beep();
+            return
+        }
 
-        if finishes.contains( where: { $0.position == userPoint } ) {
+        if conflictsWithFinishes( item: newFinish ) {
             finishes = finishes.filter { $0.position != userPoint }
         } else {
             finishes.insert( Finish( position: userPoint, direction: goodDirection ) )

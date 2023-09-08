@@ -13,3 +13,32 @@ protocol PuzzleItem: Codable, Hashable {
     func location( puzzle: WitnessPuzzlesDocument ) -> WitnessPuzzlesDocument.Point
     func isValid( puzzle: WitnessPuzzlesDocument ) -> Bool
 }
+
+
+// This is what I want but Set<SomeProtocol> is not supported as of Swift 5.8.
+//func isConflicting( item: any PuzzleItem, others: Set<PuzzleItem>... ) -> Bool {
+//    others.contains( where: { $0.contains( where: { $0.position == item.position } ) } )
+//}
+
+
+extension WitnessPuzzlesDocument {
+    func conflictsWithStarts( item: any PuzzleItem ) -> Bool {
+        starts.contains(where: { item.position == $0.position } )
+    }
+    
+    func conflictsWithFinishes( item: any PuzzleItem ) -> Bool {
+        finishes.contains(where: { item.position == $0.position } )
+    }
+    
+    func conflictsWithGaps( item: any PuzzleItem ) -> Bool {
+        gaps.contains(where: { item.position == $0.position } )
+    }
+    
+    func conflictsWithMissings( item: any PuzzleItem ) -> Bool {
+        missings.contains(where: { item.position == $0.position } )
+    }
+    
+    func conflictsWithHexagons( item: any PuzzleItem ) -> Bool {
+        hexagons.contains(where: { item.position == $0.position } )
+    }
+}

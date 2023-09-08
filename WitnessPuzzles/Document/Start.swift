@@ -44,12 +44,16 @@ extension WitnessPuzzlesDocument {
         let userPoint = Point.fromView2puzzle( from: viewPoint, puzzle: self )
         let newStart = Start( position: userPoint )
         
-        guard newStart.isValid( puzzle: self ) else {
+        guard newStart.isValid( puzzle: self ),
+              !conflictsWithFinishes( item: newStart ),
+              !conflictsWithGaps( item: newStart ),
+              !conflictsWithMissings( item: newStart )
+        else {
             NSSound.beep();
             return
         }
 
-        if starts.contains( where: { $0 == newStart } ) {
+        if conflictsWithStarts( item: newStart ) {
             starts = starts.filter { $0 != newStart }
         } else {
             starts.insert( newStart )

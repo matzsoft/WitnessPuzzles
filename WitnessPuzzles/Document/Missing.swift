@@ -140,12 +140,17 @@ extension WitnessPuzzlesDocument {
         let userPoint = Point.fromView2puzzle( from: viewPoint, puzzle: self )
         let newMissing = Missing( position: userPoint )
         
-        guard newMissing.isValid( puzzle: self ) else {
+        guard newMissing.isValid( puzzle: self ),
+              !conflictsWithStarts( item: newMissing ),
+              !conflictsWithFinishes( item: newMissing ),
+              !conflictsWithGaps( item: newMissing ),
+              !conflictsWithHexagons( item: newMissing )
+        else {
             NSSound.beep();
             return
         }
 
-        if missings.contains( newMissing ) {
+        if conflictsWithMissings( item: newMissing ) {
             missings = missings.filter { $0.position != userPoint }
         } else {
             missings.insert( newMissing )

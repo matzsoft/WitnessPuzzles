@@ -44,12 +44,17 @@ extension WitnessPuzzlesDocument {
         let userPoint = Point.fromView2puzzle( from: viewPoint, puzzle: self )
         let newGap = Gap( position: userPoint )
         
-        guard newGap.isValid( puzzle: self ) else {
+        guard newGap.isValid( puzzle: self ),
+              !conflictsWithStarts( item: newGap ),
+              !conflictsWithFinishes( item: newGap ),
+              !conflictsWithMissings( item: newGap ),
+              !conflictsWithHexagons( item: newGap )
+        else {
             NSSound.beep();
             return
         }
 
-        if gaps.contains( newGap ) {
+        if conflictsWithGaps( item: newGap ) {
             gaps = gaps.filter { $0.position != userPoint }
         } else {
             gaps.insert( newGap )
