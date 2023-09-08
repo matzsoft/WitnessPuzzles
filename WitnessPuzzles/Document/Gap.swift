@@ -27,7 +27,6 @@ extension WitnessPuzzlesDocument {
         for gap in gaps {
             let user = gap.location( puzzle: self )
             context.saveGState()
-            context.beginPath()
             context.translateBy( x: CGFloat( user.x ), y: CGFloat( user.y ) )
             context.scaleBy( x: CGFloat( lineWidth ) / 6, y: CGFloat( lineWidth ) / 6 )
             context.setFillColor( background.cgColor! )

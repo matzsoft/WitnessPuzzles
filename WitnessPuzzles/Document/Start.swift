@@ -24,6 +24,10 @@ extension WitnessPuzzlesDocument {
     }
 
     func drawStarts( context: CGContext ) -> Void {
+        context.saveGState()
+        context.setFillColor( foreground.cgColor! )
+        context.beginPath()
+        
         for start in starts {
             let drawing = start.location( puzzle: self )
             context.addEllipse( in: CGRect(
@@ -38,6 +42,9 @@ extension WitnessPuzzlesDocument {
                 ) )
             }
         }
+        
+        context.fillPath()
+        context.restoreGState()
     }
     
     mutating func toggleStart( viewPoint: CGPoint ) -> Void {

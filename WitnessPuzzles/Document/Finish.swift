@@ -70,6 +70,10 @@ extension WitnessPuzzlesDocument {
     }
 
     func drawFinishes( context: CGContext ) -> Void {
+        context.saveGState()
+        context.setFillColor( foreground.cgColor! )
+        context.beginPath()
+
         for finish in finishes {
             let user = finish.location( puzzle: self )
             context.saveGState()
@@ -86,6 +90,9 @@ extension WitnessPuzzlesDocument {
             ) )
             context.restoreGState()
         }
+        
+        context.fillPath()
+        context.restoreGState()
     }
 
     mutating func toggleFinish( viewPoint: CGPoint ) -> Void {

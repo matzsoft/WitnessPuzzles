@@ -48,10 +48,15 @@ extension WitnessPuzzlesDocument {
         }
         
         func draw( puzzle: WitnessPuzzlesDocument, context: CGContext ) -> Void {
+            context.saveGState()
+            context.setFillColor( puzzle.foreground.cgColor! )
+            context.beginPath()
             switch self {
             case .rectangle: puzzle.drawRectangle( context: context )
             case .cylinder:  puzzle.drawCylinder( context: context )
             }
+            context.fillPath()
+            context.restoreGState()
         }
     }
 

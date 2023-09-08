@@ -98,26 +98,17 @@ struct WitnessPuzzlesDocument: FileDocument, Codable {
     var image: CGImage {
         let context = getContext()
 
-        context.beginPath()
-        context.addRect( CGRect(
-            origin: CGPoint( x: 0, y: 0 ),
-            size: CGSize( width: userWidth, height: userHeight ) )
-        )
         context.setFillColor( background.cgColor! )
-        context.fillPath()
+        context.fill( [
+            CGRect(  origin: CGPoint( x: 0, y: 0 ), size: CGSize( width: userWidth, height: userHeight ) )
+        ])
 
         setOrigin( context: context )
-        context.setFillColor( foreground.cgColor! )
-        context.beginPath()
         type.draw( puzzle: self, context: context )
-        context.fillPath()
         drawMissings( context: context )
 
-        context.setFillColor( foreground.cgColor! )
-        context.beginPath()
         drawStarts( context: context )
         drawFinishes( context: context )
-        context.fillPath()
         drawGaps( context: context )
         drawHexagons( context: context )
 
