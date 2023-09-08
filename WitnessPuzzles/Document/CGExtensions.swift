@@ -20,7 +20,7 @@ extension WitnessPuzzlesDocument {
             self.y = y
         }
         
-        func user2puzzle( puzzle: WitnessPuzzlesDocument ) -> Point {
+        func puzzle2user( puzzle: WitnessPuzzlesDocument ) -> Point {
             let x = x * ( puzzle.lineWidth + puzzle.blockWidth ) / 2 + puzzle.lineWidth / 2
             let y = y * ( puzzle.lineWidth + puzzle.blockWidth ) / 2 + puzzle.lineWidth / 2
             return Point( x, y )

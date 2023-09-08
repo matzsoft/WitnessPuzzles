@@ -14,7 +14,7 @@ extension WitnessPuzzlesDocument {
         let position: Point
         
         func location( puzzle: WitnessPuzzlesDocument ) -> Point {
-            position.user2puzzle( puzzle: puzzle )
+            position.puzzle2user( puzzle: puzzle )
         }
         
         func isValid( puzzle: WitnessPuzzlesDocument ) -> Bool {

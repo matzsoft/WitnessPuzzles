@@ -15,7 +15,7 @@ extension WitnessPuzzlesDocument {
         let direction: Direction
         
         func location( puzzle: WitnessPuzzlesDocument ) -> Point {
-            let converted = position.user2puzzle( puzzle: puzzle )
+            let converted = position.puzzle2user( puzzle: puzzle )
             let offset = offset( distance: puzzle.lineWidth / 2, extra: 1 )
             return Point( converted.x + offset.x, converted.y + offset.y )
         }

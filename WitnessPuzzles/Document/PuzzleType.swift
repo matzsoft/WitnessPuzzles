@@ -61,28 +61,31 @@ extension WitnessPuzzlesDocument {
     }
 
     func drawRectangle( context: CGContext ) -> Void {
+        let width = CGFloat( blockWidth + 2 * lineWidth )
+        let height = CGFloat( lineWidth )
+        let originX = -width / 2
+        let originY = -height / 2
         let cornerRadius = CGFloat( lineWidth ) / 2
 
-        for col in 0 ... width {
+        for line in lines {
+            let user = line.puzzle2user( puzzle: self )
+            
+            context.saveGState()
+            context.translateBy( x: CGFloat( user.x ), y: CGFloat( user.y ) )
+            if ( line.y & 1 ) - ( line.x & 1 ) > 0 {
+                // Rotate vertical lines info horizontal position
+                context.rotate( by:  Double.pi / 2 )
+            }
+            
             context.addPath(
                 CGPath(
                     roundedRect: CGRect(
-                        origin: CGPoint( x: ( lineWidth + blockWidth ) * col, y: 0 ),
-                        size: CGSize( width: lineWidth, height: baseHeight )
+                        origin: CGPoint( x: originX, y: originY ),
+                        size: CGSize( width: width, height: height )
                     ),
                     cornerWidth: cornerRadius, cornerHeight: cornerRadius, transform: nil )
             )
-        }
-
-        for row in 0 ... height {
-            context.addPath(
-                CGPath(
-                    roundedRect: CGRect(
-                        origin: CGPoint( x: 0, y: ( lineWidth + blockWidth ) * row ),
-                        size: CGSize( width: baseWidth, height: lineWidth )
-                    ),
-                    cornerWidth: cornerRadius, cornerHeight: cornerRadius, transform: nil )
-            )
+            context.restoreGState()
         }
     }
     

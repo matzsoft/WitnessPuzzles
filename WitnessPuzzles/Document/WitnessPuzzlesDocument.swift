@@ -45,6 +45,13 @@ struct WitnessPuzzlesDocument: FileDocument, Codable {
     var cylinderRight: Int { lineWidth / 4 }
     var validSymbolX: ClosedRange<Int> { type.validPuzzleX( puzzle: self ) }
     var validSymbolY: ClosedRange<Int> { 0 ... ( 2 * height ) }
+    var lines: Set<Point> {
+        validSymbolX.reduce( into: Set<Point>() ) { set, x in
+            validSymbolY.forEach { y in
+                if ( x ^ y ) & 1 == 1 { set.insert( Point( x, y ) ) }
+            }
+        }.subtracting( missings.map { $0.position } )
+    }
     
     init() { }
 
@@ -105,7 +112,6 @@ struct WitnessPuzzlesDocument: FileDocument, Codable {
 
         setOrigin( context: context )
         type.draw( puzzle: self, context: context )
-        drawMissings( context: context )
 
         drawStarts( context: context )
         drawFinishes( context: context )
