@@ -39,7 +39,7 @@ extension WitnessPuzzlesDocument {
         
         for gap in gaps {
             draw( gap: gap )
-            if type.needsWrap( puzzle: self, point: gap.position ) {
+            if type.needsWrap( point: gap.position, puzzle: self ) {
                 draw( gap: Gap( position: Point( validSymbolX.upperBound + 1, gap.position.y ) ) )
             }
         }

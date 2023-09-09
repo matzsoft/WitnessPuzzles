@@ -44,7 +44,7 @@ extension WitnessPuzzlesDocument {
         
         for hexagon in hexagons {
             draw( hexagon: hexagon )
-            if type.needsWrap( puzzle: self, point: hexagon.position ) {
+            if type.needsWrap( point: hexagon.position, puzzle: self ) {
                 let wrapped = Point( validSymbolX.upperBound + 1, hexagon.position.y )
 
                 draw( hexagon: Hexagon( position: wrapped, color: hexagon.color ) )
