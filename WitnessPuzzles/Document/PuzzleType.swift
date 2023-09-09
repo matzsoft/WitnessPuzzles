@@ -47,13 +47,20 @@ extension WitnessPuzzlesDocument {
             }
         }
         
+        func needsWrap( puzzle: WitnessPuzzlesDocument, point: Point ) -> Bool {
+            switch self {
+            case .rectangle: return false
+            case .cylinder:  return point.x == validPuzzleX( puzzle: puzzle ).lowerBound
+            }
+        }
+        
         func draw( puzzle: WitnessPuzzlesDocument, context: CGContext ) -> Void {
             context.saveGState()
             context.setFillColor( puzzle.foreground.cgColor! )
             context.beginPath()
             switch self {
-            case .rectangle: puzzle.drawRectangle( context: context )
-            case .cylinder:  puzzle.drawCylinder( context: context )
+            case .rectangle: puzzle.drawPuzzle( context: context )
+            case .cylinder:  puzzle.drawPuzzle( context: context )
             }
             context.fillPath()
             context.restoreGState()
@@ -74,30 +81,7 @@ extension WitnessPuzzlesDocument {
         return ( rect, cornerRadius )
     }
     
-    func drawRectangle( context: CGContext ) -> Void {
-        let ( lineRect, cornerRadius ) = lineGeometry
-
-        for line in lines {
-            let user = line.puzzle2user( puzzle: self )
-            
-            context.saveGState()
-            context.translateBy( x: CGFloat( user.x ), y: CGFloat( user.y ) )
-            if ( line.y & 1 ) - ( line.x & 1 ) > 0 {
-                // Rotate vertical lines info horizontal position
-                context.rotate( by:  Double.pi / 2 )
-            }
-            
-            context.addPath(
-                CGPath(
-                    roundedRect: lineRect, cornerWidth: cornerRadius,
-                    cornerHeight: cornerRadius, transform: nil
-                )
-            )
-            context.restoreGState()
-        }
-    }
-    
-    func drawCylinder( context: CGContext ) -> Void {
+    func drawPuzzle( context: CGContext ) -> Void {
         let ( lineRect, cornerRadius ) = lineGeometry
 
         func draw( line: Point ) {
@@ -121,7 +105,9 @@ extension WitnessPuzzlesDocument {
         
         for line in lines {
             draw( line: line )
-            if line.x == 0 { draw( line: Point( validSymbolX.upperBound + 1, line.y ) ) }
+            if type.needsWrap( puzzle: self, point: line ) {
+                draw( line: Point( validSymbolX.upperBound + 1, line.y ) )
+            }
         }
     }
 }

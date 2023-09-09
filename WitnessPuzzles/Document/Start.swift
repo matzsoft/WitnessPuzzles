@@ -43,7 +43,7 @@ extension WitnessPuzzlesDocument {
         
         for start in starts {
             draw( start: start )
-            if start.position.x == 0 && type == .cylinder {
+            if type.needsWrap( puzzle: self, point: start.position ) {
                 draw( start: Start( position: Point( validSymbolX.upperBound + 1, start.position.y ) ) )
             }
         }

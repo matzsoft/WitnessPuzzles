@@ -29,7 +29,7 @@ extension WitnessPuzzlesDocument {
             context.translateBy( x: CGFloat( user.x ), y: CGFloat( user.y ) )
             context.scaleBy( x: CGFloat( lineWidth ) / 6, y: CGFloat( lineWidth ) / 6 )
             context.setFillColor( background.cgColor! )
-            if gap.position.x.isMultiple( of: 2 ) {
+            if gap.position.isHorizontal {
                 context.fill( [ CGRect( x: -3, y: -2, width: 6, height: 4 ) ] )
             } else {
                 context.fill( [ CGRect( x: -2, y: -3, width: 4, height: 6 ) ] )
@@ -39,7 +39,7 @@ extension WitnessPuzzlesDocument {
         
         for gap in gaps {
             draw( gap: gap )
-            if gap.position.x == 0 && type == .cylinder {
+            if type.needsWrap( puzzle: self, point: gap.position ) {
                 draw( gap: Gap( position: Point( validSymbolX.upperBound + 1, gap.position.y ) ) )
             }
         }
