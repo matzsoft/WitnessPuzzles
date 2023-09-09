@@ -41,8 +41,6 @@ struct WitnessPuzzlesDocument: FileDocument, Codable {
     var baseWidth: Int { type.baseWidth( puzzle: self ) }
     var userHeight: CGFloat { CGFloat( baseHeight + 2 * padding + extraBottom() + extraTop() ) }
     var userWidth: CGFloat { type.userWidth( puzzle: self ) }
-    var cylinderLeft: Int { 3 * lineWidth / 4 }
-    var cylinderRight: Int { lineWidth / 4 }
     var validSymbolX: ClosedRange<Int> { type.validPuzzleX( puzzle: self ) }
     var validSymbolY: ClosedRange<Int> { 0 ... ( 2 * height ) }
     var lines: Set<Point> {

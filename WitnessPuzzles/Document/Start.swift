@@ -28,18 +28,25 @@ extension WitnessPuzzlesDocument {
         context.setFillColor( foreground.cgColor! )
         context.beginPath()
         
-        for start in starts {
+        let cylinderOffset = Point( validSymbolX.upperBound + 1, 0 ).puzzle2user( puzzle: self )
+        let rect = CGRect(
+            x: -startRadius, y: -startRadius,
+            width: 2 * startRadius, height: 2 * startRadius
+        )
+        
+        func draw( start: Start ) {
             let drawing = start.location( puzzle: self )
-            context.addEllipse( in: CGRect(
-                x: drawing.x - startRadius, y: drawing.y - startRadius,
-                width: 2 * startRadius, height: 2 * startRadius
-            ) )
+
+            context.saveGState()
+            context.translateBy( x: CGFloat( drawing.x ), y: CGFloat( drawing.y ) )
+            context.addEllipse( in: rect )
+            context.restoreGState()
+        }
+        
+        for start in starts {
+            draw( start: start )
             if start.position.x == 0 && type == .cylinder {
-                let drawing = Point( 2 * width, start.position.y ).puzzle2user( puzzle: self )
-                context.addEllipse( in: CGRect(
-                    x: drawing.x - startRadius, y: drawing.y - startRadius,
-                    width: 2 * startRadius, height: 2 * startRadius
-                ) )
+                draw( start: Start( position: Point( validSymbolX.upperBound + 1, start.position.y ) ) )
             }
         }
         

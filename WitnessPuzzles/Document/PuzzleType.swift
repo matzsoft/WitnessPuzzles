@@ -43,7 +43,7 @@ extension WitnessPuzzlesDocument {
         func xOriginOffset( puzzle: WitnessPuzzlesDocument ) -> CGFloat {
             switch self {
             case .rectangle: return CGFloat( puzzle.padding + puzzle.extraLeft() )
-            case .cylinder:  return CGFloat( -puzzle.cylinderRight )
+            case .cylinder:  return CGFloat( -puzzle.lineWidth ) / 4
             }
         }
         
@@ -60,12 +60,22 @@ extension WitnessPuzzlesDocument {
         }
     }
 
-    func drawRectangle( context: CGContext ) -> Void {
+    var lineGeometry: ( CGRect, CGFloat ) {
         let width = CGFloat( blockWidth + 2 * lineWidth )
         let height = CGFloat( lineWidth )
         let originX = -width / 2
         let originY = -height / 2
         let cornerRadius = CGFloat( lineWidth ) / 2
+        let rect = CGRect(
+            origin: CGPoint( x: originX, y: originY ),
+            size: CGSize( width: width, height: height )
+        )
+        
+        return ( rect, cornerRadius )
+    }
+    
+    func drawRectangle( context: CGContext ) -> Void {
+        let ( lineRect, cornerRadius ) = lineGeometry
 
         for line in lines {
             let user = line.puzzle2user( puzzle: self )
@@ -79,29 +89,39 @@ extension WitnessPuzzlesDocument {
             
             context.addPath(
                 CGPath(
-                    roundedRect: CGRect(
-                        origin: CGPoint( x: originX, y: originY ),
-                        size: CGSize( width: width, height: height )
-                    ),
-                    cornerWidth: cornerRadius, cornerHeight: cornerRadius, transform: nil )
+                    roundedRect: lineRect, cornerWidth: cornerRadius,
+                    cornerHeight: cornerRadius, transform: nil
+                )
             )
             context.restoreGState()
         }
     }
     
     func drawCylinder( context: CGContext ) -> Void {
-        context.addRect( CGRect( x: cylinderRight, y: 0, width: cylinderLeft, height: baseHeight ) )
-        context.addRect( CGRect(
-            x: ( lineWidth + blockWidth ) * width, y: 0, width: cylinderRight, height: baseHeight ) )
+        let ( lineRect, cornerRadius ) = lineGeometry
 
-        for col in 1 ..< width {
-            context.addRect( CGRect(
-                x: ( lineWidth + blockWidth ) * col, y: 0, width: lineWidth, height: baseHeight ) )
+        func draw( line: Point ) {
+            let user = line.puzzle2user( puzzle: self )
+            
+            context.saveGState()
+            context.translateBy( x: CGFloat( user.x ), y: CGFloat( user.y ) )
+            if ( line.y & 1 ) - ( line.x & 1 ) > 0 {
+                // Rotate vertical lines info horizontal position
+                context.rotate( by:  Double.pi / 2 )
+            }
+            
+            context.addPath(
+                CGPath(
+                    roundedRect: lineRect, cornerWidth: cornerRadius,
+                    cornerHeight: cornerRadius, transform: nil
+                )
+            )
+            context.restoreGState()
         }
-
-        for row in 0 ... height {
-            context.addRect( CGRect(
-                x: 0, y: ( lineWidth + blockWidth ) * row, width: baseWidth, height: lineWidth ) )
+        
+        for line in lines {
+            draw( line: line )
+            if line.x == 0 { draw( line: Point( validSymbolX.upperBound + 1, line.y ) ) }
         }
     }
 }
