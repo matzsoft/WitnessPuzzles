@@ -28,7 +28,6 @@ extension WitnessPuzzlesDocument {
         context.setFillColor( foreground.cgColor! )
         context.beginPath()
         
-        let cylinderOffset = Point( validSymbolX.upperBound + 1, 0 ).puzzle2user( puzzle: self )
         let rect = CGRect(
             x: -startRadius, y: -startRadius,
             width: 2 * startRadius, height: 2 * startRadius

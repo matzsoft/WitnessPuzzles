@@ -24,7 +24,7 @@ extension WitnessPuzzlesDocument {
     }
 
     func drawGaps( context: CGContext ) -> Void {
-        for gap in gaps {
+        func draw( gap: Gap ) {
             let user = gap.location( puzzle: self )
             context.saveGState()
             context.translateBy( x: CGFloat( user.x ), y: CGFloat( user.y ) )
@@ -36,6 +36,13 @@ extension WitnessPuzzlesDocument {
                 context.fill( [ CGRect( x: -2, y: -3, width: 4, height: 6 ) ] )
             }
             context.restoreGState()
+        }
+        
+        for gap in gaps {
+            draw( gap: gap )
+            if gap.position.x == 0 && type == .cylinder {
+                draw( gap: Gap( position: Point( validSymbolX.upperBound + 1, gap.position.y ) ) )
+            }
         }
     }
 

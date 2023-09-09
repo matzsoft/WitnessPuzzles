@@ -31,7 +31,7 @@ extension WitnessPuzzlesDocument {
             CGPoint( x: -1, y: 0 ), CGPoint( x: -0.5, y: -hexHeight ), CGPoint( x:  0.5, y: -hexHeight )
         ]
         
-        for hexagon in hexagons {
+        func draw( hexagon: Hexagon ) {
             let user = hexagon.location( puzzle: self )
             context.saveGState()
             context.beginPath()
@@ -41,6 +41,15 @@ extension WitnessPuzzlesDocument {
             context.setFillColor( hexagon.color.cgColor! )
             context.fillPath()
             context.restoreGState()
+        }
+        
+        for hexagon in hexagons {
+            draw( hexagon: hexagon )
+            if hexagon.position.x == 0 && type == .cylinder {
+                let wrapped = Point( validSymbolX.upperBound + 1, hexagon.position.y )
+
+                draw( hexagon: Hexagon( position: wrapped, color: hexagon.color ) )
+            }
         }
     }
 
