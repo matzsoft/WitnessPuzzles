@@ -20,6 +20,14 @@ extension WitnessPuzzlesDocument {
             return Point( converted.x + offset.x, converted.y + offset.y )
         }
         
+        func isValid( puzzle: WitnessPuzzlesDocument ) -> Bool {
+            if let goodDirection = Finish.validDirection( for: position, in: puzzle ) {
+                return direction == goodDirection
+            }
+            
+            return false
+        }
+
         var angle: Double {
             switch direction {
             case .north:     return 0 * Double.pi / 4
@@ -58,14 +66,6 @@ extension WitnessPuzzlesDocument {
             case ( validX, validY.upperBound ):            return .north
             default: return nil
             }
-        }
-        
-        func isValid( puzzle: WitnessPuzzlesDocument ) -> Bool {
-            guard let goodDirection = Finish.validDirection( for: position, in: puzzle ) else {
-                return false
-            }
-            
-            return direction == goodDirection
         }
     }
 

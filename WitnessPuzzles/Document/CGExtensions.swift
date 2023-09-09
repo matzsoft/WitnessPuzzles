@@ -37,6 +37,17 @@ extension WitnessPuzzlesDocument {
             
             return Point( x, y )
         }
+        
+        var isBlock:        Bool { ( x & y & 1 ) == 1 }
+        var isPath:         Bool { ( x & y & 1 ) == 0 }
+        var isIntersection: Bool { ( ( x | y ) & 1 ) == 0 }
+        var isLine:         Bool { ( ( x ^ y)  & 1 ) == 1 }
+        var isHorizontal:   Bool { isLine && x.isMultiple( of: 2 ) }
+        var isVertical:     Bool { isLine && y.isMultiple( of: 2 ) }
+        
+        func isPuzzleSpace( puzzle: WitnessPuzzlesDocument ) -> Bool {
+            puzzle.validSymbolX.contains( x ) && puzzle.validSymbolY.contains( y )
+        }
     }
     
     

@@ -19,8 +19,7 @@ extension WitnessPuzzlesDocument {
         }
         
         func isValid( puzzle: WitnessPuzzlesDocument ) -> Bool {
-            puzzle.validSymbolX.contains( position.x ) && puzzle.validSymbolY.contains( position.y )
-                && ( ( position.x & position.y & 1 ) == 0 )
+            position.isPuzzleSpace( puzzle: puzzle ) && position.isPath
         }
     }
 
