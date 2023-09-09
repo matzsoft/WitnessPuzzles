@@ -50,7 +50,9 @@ struct ContentView: View {
                 case isMissingSelected:
                     document.toggleMissing( viewPoint: location )
                 case isHexagonsSelected:
-                    if !document.removeHexagon( viewPoint: location ) {
+                    if document.hexagonExists( viewPoint: location ) {
+                        document.removeHexagon( viewPoint: location )
+                    } else {
                         isConfiguringHexagon = true
                         lastLocation = location
                     }

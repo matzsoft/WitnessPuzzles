@@ -53,24 +53,24 @@ extension WitnessPuzzlesDocument {
         }
     }
 
-    mutating func removeHexagon( viewPoint: CGPoint ) -> Bool {
+    func hexagonExists( viewPoint: CGPoint ) -> Bool {
+        let userPoint = Point.fromView2puzzle( from: viewPoint, puzzle: self )
+
+        return conflictsWithHexagons( item: Hexagon( position: userPoint, color: .black ) )
+    }
+    
+    mutating func removeHexagon( viewPoint: CGPoint ) -> Void {
         let userPoint = Point.fromView2puzzle( from: viewPoint, puzzle: self )
         let newHexagon = Hexagon( position: userPoint, color: .black )
         
         guard newHexagon.isValid( puzzle: self ),
-              !conflictsWithGaps( item: newHexagon ),
-              !conflictsWithMissings( item: newHexagon )
+              conflictsWithHexagons( item: newHexagon )
         else {
             NSSound.beep();
-            return true
+            return
         }
 
-        if conflictsWithHexagons( item: newHexagon ) {
-            hexagons = hexagons.filter { $0.position != userPoint }
-            return true
-        }
-        
-        return false
+        hexagons = hexagons.filter { $0.position != userPoint }
     }
 
     mutating func addHexagon( viewPoint: CGPoint, color: Color ) -> Void {
