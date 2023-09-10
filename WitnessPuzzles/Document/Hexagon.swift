@@ -58,6 +58,22 @@ extension WitnessPuzzlesDocument {
         return conflictsWithHexagons( item: Hexagon( position: userPoint, color: .black ) )
     }
     
+    func isHexagonPositionOK( viewPoint: CGPoint ) -> Bool {
+        let userPoint = Point.fromView2puzzle( from: viewPoint, puzzle: self )
+        let newHexagon = Hexagon( position: userPoint, color: .black )
+        
+        guard newHexagon.isValid( puzzle: self ),
+              !conflictsWithGaps( item: newHexagon ),
+              !conflictsWithMissings( item: newHexagon ),
+              !conflictsWithHexagons( item: newHexagon )
+        else {
+            NSSound.beep();
+            return false
+        }
+
+        return true
+    }
+    
     mutating func removeHexagon( viewPoint: CGPoint ) -> Void {
         let userPoint = Point.fromView2puzzle( from: viewPoint, puzzle: self )
         let newHexagon = Hexagon( position: userPoint, color: .black )
@@ -73,18 +89,10 @@ extension WitnessPuzzlesDocument {
     }
 
     mutating func addHexagon( viewPoint: CGPoint, color: Color ) -> Void {
+        guard isHexagonPositionOK( viewPoint: viewPoint ) else { return }
         let userPoint = Point.fromView2puzzle( from: viewPoint, puzzle: self )
         let newHexagon = Hexagon( position: userPoint, color: color )
         
-        guard newHexagon.isValid( puzzle: self ),
-              !conflictsWithGaps( item: newHexagon ),
-              !conflictsWithMissings( item: newHexagon ),
-              !conflictsWithHexagons( item: newHexagon )
-        else {
-            NSSound.beep();
-            return
-        }
-
         hexagons.insert( newHexagon )
     }
 }

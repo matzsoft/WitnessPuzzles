@@ -52,7 +52,7 @@ struct ContentView: View {
                 case isHexagonsSelected:
                     if document.hexagonExists( viewPoint: location ) {
                         document.removeHexagon( viewPoint: location )
-                    } else {
+                    } else if document.isHexagonPositionOK( viewPoint: location ) {
                         isConfiguringHexagon = true
                         lastLocation = location
                     }
