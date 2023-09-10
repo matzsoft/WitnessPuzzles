@@ -42,13 +42,29 @@ struct ContentView: View {
             .onTapGesture { location in
                 switch true {
                 case isStartsSelected:
-                    document.toggleStart( viewPoint: location )
+                    if document.startExists( viewPoint: location ) {
+                        document.removeStart( viewPoint: location )
+                    } else if document.isStartPositionOK( viewPoint: location ) {
+                        document.addStart( viewPoint: location )
+                    }
                 case isFinishesSelected:
-                    document.toggleFinish( viewPoint: location )
+                    if document.finishExists( viewPoint: location ) {
+                        document.removeFinish( viewPoint: location )
+                    } else if document.isFinishPositionOK( viewPoint: location ) {
+                        document.addFinish( viewPoint: location )
+                    }
                 case isGapsSelected:
-                    document.toggleGap( viewPoint: location )
+                    if document.gapExists( viewPoint: location ) {
+                        document.removeGap( viewPoint: location )
+                    } else if document.isGapPositionOK( viewPoint: location ) {
+                        document.addGap( viewPoint: location )
+                    }
                 case isMissingSelected:
-                    document.toggleMissing( viewPoint: location )
+                    if document.missingExists( viewPoint: location ) {
+                        document.removeMissing( viewPoint: location )
+                    } else if document.isMissingPositionOK( viewPoint: location ) {
+                        document.addMissing( viewPoint: location )
+                    }
                 case isHexagonsSelected:
                     if document.hexagonExists( viewPoint: location ) {
                         document.removeHexagon( viewPoint: location )

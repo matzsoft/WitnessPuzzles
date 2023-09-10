@@ -52,23 +52,46 @@ extension WitnessPuzzlesDocument {
         context.restoreGState()
     }
     
-    mutating func toggleStart( viewPoint: CGPoint ) -> Void {
+    func startExists( viewPoint: CGPoint ) -> Bool {
+        let userPoint = Point.fromView2puzzle( from: viewPoint, puzzle: self )
+
+        return conflictsWithStarts( item: Start( position: userPoint ) )
+    }
+    
+    func isStartPositionOK( viewPoint: CGPoint ) -> Bool {
         let userPoint = Point.fromView2puzzle( from: viewPoint, puzzle: self )
         let newStart = Start( position: userPoint )
-        
+
         guard newStart.isValid( puzzle: self ),
               !conflictsWithFinishes( item: newStart ),
               !conflictsWithGaps( item: newStart ),
               !conflictsWithMissings( item: newStart )
         else {
             NSSound.beep();
+            return false
+        }
+
+        return true
+    }
+    
+    mutating func removeStart( viewPoint: CGPoint ) -> Void {
+        let userPoint = Point.fromView2puzzle( from: viewPoint, puzzle: self )
+        let newStart = Start( position: userPoint )
+
+        guard newStart.isValid( puzzle: self ),
+              conflictsWithStarts( item: newStart )
+        else {
+            NSSound.beep();
             return
         }
 
-        if conflictsWithStarts( item: newStart ) {
-            starts = starts.filter { $0 != newStart }
-        } else {
-            starts.insert( newStart )
-        }
+        starts = starts.filter { $0 != newStart }
+    }
+
+    mutating func addStart( viewPoint: CGPoint ) -> Void {
+        guard isStartPositionOK( viewPoint: viewPoint ) else { return }
+        let userPoint = Point.fromView2puzzle( from: viewPoint, puzzle: self )
+        
+        starts.insert( Start( position: userPoint ) )
     }
 }

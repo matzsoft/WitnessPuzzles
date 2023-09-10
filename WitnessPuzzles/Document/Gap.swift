@@ -44,8 +44,14 @@ extension WitnessPuzzlesDocument {
             }
         }
     }
+    
+    func gapExists( viewPoint: CGPoint ) -> Bool {
+        let userPoint = Point.fromView2puzzle( from: viewPoint, puzzle: self )
 
-    mutating func toggleGap( viewPoint: CGPoint ) -> Void {
+        return conflictsWithGaps( item: Gap( position: userPoint ) )
+    }
+    
+    func isGapPositionOK( viewPoint: CGPoint ) -> Bool {
         let userPoint = Point.fromView2puzzle( from: viewPoint, puzzle: self )
         let newGap = Gap( position: userPoint )
         
@@ -56,13 +62,30 @@ extension WitnessPuzzlesDocument {
               !conflictsWithHexagons( item: newGap )
         else {
             NSSound.beep();
+            return false
+        }
+
+        return true
+    }
+    
+    mutating func removeGap( viewPoint: CGPoint ) -> Void {
+        let userPoint = Point.fromView2puzzle( from: viewPoint, puzzle: self )
+        let newGap = Gap( position: userPoint )
+
+        guard newGap.isValid( puzzle: self ),
+              conflictsWithGaps( item: newGap )
+        else {
+            NSSound.beep();
             return
         }
 
-        if conflictsWithGaps( item: newGap ) {
-            gaps = gaps.filter { $0.position != userPoint }
-        } else {
-            gaps.insert( newGap )
-        }
+        gaps = gaps.filter { $0.position != userPoint }
+    }
+
+    mutating func addGap( viewPoint: CGPoint ) -> Void {
+        guard isGapPositionOK( viewPoint: viewPoint ) else { return }
+        let userPoint = Point.fromView2puzzle( from: viewPoint, puzzle: self )
+        
+        gaps.insert( Gap( position: userPoint ) )
     }
 }

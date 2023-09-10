@@ -27,7 +27,11 @@ extension WitnessPuzzlesDocument {
     }
     
     func conflictsWithFinishes( item: any PuzzleItem ) -> Bool {
-        finishes.contains( where: { item.position == $0.position } )
+        conflictsWithFinishes( point: item.position )
+    }
+    
+    func conflictsWithFinishes( point: Point ) -> Bool {
+        finishes.contains( where: { point == $0.position } )
     }
     
     func conflictsWithGaps( item: any PuzzleItem ) -> Bool {

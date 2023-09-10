@@ -94,13 +94,19 @@ extension WitnessPuzzlesDocument {
         context.fillPath()
         context.restoreGState()
     }
+    
+    func finishExists( viewPoint: CGPoint ) -> Bool {
+        let userPoint = Point.fromView2puzzle( from: viewPoint, puzzle: self )
 
-    mutating func toggleFinish( viewPoint: CGPoint ) -> Void {
+        return conflictsWithFinishes( point: userPoint )
+    }
+    
+    func isFinishPositionOK( viewPoint: CGPoint ) -> Bool {
         let userPoint = Point.fromView2puzzle( from: viewPoint, puzzle: self )
 
         guard let goodDirection = Finish.validDirection( for: userPoint, in: self ) else {
             NSSound.beep();
-            return
+            return false
         }
         let newFinish = Finish( position: userPoint, direction: goodDirection )
         guard !conflictsWithStarts( item: newFinish ),
@@ -108,13 +114,31 @@ extension WitnessPuzzlesDocument {
               !conflictsWithMissings( item: newFinish )
         else {
             NSSound.beep();
+            return false
+        }
+
+        return true
+    }
+    
+    mutating func removeFinish( viewPoint: CGPoint ) -> Void {
+        let userPoint = Point.fromView2puzzle( from: viewPoint, puzzle: self )
+
+        guard conflictsWithFinishes( point: userPoint ) else {
+            NSSound.beep();
             return
         }
 
-        if conflictsWithFinishes( item: newFinish ) {
-            finishes = finishes.filter { $0.position != userPoint }
-        } else {
-            finishes.insert( Finish( position: userPoint, direction: goodDirection ) )
+        finishes = finishes.filter { $0.position != userPoint }
+    }
+
+    mutating func addFinish( viewPoint: CGPoint ) -> Void {
+        guard isFinishPositionOK( viewPoint: viewPoint ) else { return }
+        let userPoint = Point.fromView2puzzle( from: viewPoint, puzzle: self )
+        
+        guard let goodDirection = Finish.validDirection( for: userPoint, in: self ) else {
+            NSSound.beep();
+            return
         }
+        finishes.insert( Finish( position: userPoint, direction: goodDirection ) )
     }
 }

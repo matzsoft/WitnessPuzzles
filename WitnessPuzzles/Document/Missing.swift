@@ -22,7 +22,13 @@ extension WitnessPuzzlesDocument {
         }
     }
     
-    mutating func toggleMissing( viewPoint: CGPoint ) -> Void {
+    func missingExists( viewPoint: CGPoint ) -> Bool {
+        let userPoint = Point.fromView2puzzle( from: viewPoint, puzzle: self )
+
+        return conflictsWithMissings( point: userPoint )
+    }
+    
+    func isMissingPositionOK( viewPoint: CGPoint ) -> Bool {
         let userPoint = Point.fromView2puzzle( from: viewPoint, puzzle: self )
         let newMissing = Missing( position: userPoint )
         
@@ -33,13 +39,30 @@ extension WitnessPuzzlesDocument {
               !conflictsWithHexagons( item: newMissing )
         else {
             NSSound.beep();
+            return false
+        }
+
+        return true
+    }
+    
+    mutating func removeMissing( viewPoint: CGPoint ) -> Void {
+        let userPoint = Point.fromView2puzzle( from: viewPoint, puzzle: self )
+        let newMissing = Missing( position: userPoint )
+
+        guard newMissing.isValid( puzzle: self ),
+              conflictsWithMissings( item: newMissing )
+        else {
+            NSSound.beep();
             return
         }
 
-        if conflictsWithMissings( item: newMissing ) {
-            missings = missings.filter { $0.position != userPoint }
-        } else {
-            missings.insert( newMissing )
-        }
+        missings = missings.filter { $0.position != userPoint }
+    }
+
+    mutating func addMissing( viewPoint: CGPoint ) -> Void {
+        guard isMissingPositionOK( viewPoint: viewPoint ) else { return }
+        let userPoint = Point.fromView2puzzle( from: viewPoint, puzzle: self )
+        
+        missings.insert( Missing( position: userPoint ) )
     }
 }
