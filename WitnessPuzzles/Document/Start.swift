@@ -18,6 +18,10 @@ extension WitnessPuzzlesDocument {
         }
         
         func isValid( puzzle: WitnessPuzzlesDocument ) -> Bool {
+            Start.isValid( position: position, puzzle: puzzle )
+        }
+        
+        static func isValid( position: Point, puzzle: WitnessPuzzlesDocument ) -> Bool {
             position.isPuzzleSpace( puzzle: puzzle ) && position.isPath
         }
     }
@@ -55,17 +59,16 @@ extension WitnessPuzzlesDocument {
     func startExists( viewPoint: CGPoint ) -> Bool {
         let userPoint = Point.fromView2puzzle( from: viewPoint, puzzle: self )
 
-        return conflictsWithStarts( item: Start( position: userPoint ) )
+        return conflictsWithStarts( point: userPoint )
     }
     
     func isStartPositionOK( viewPoint: CGPoint ) -> Bool {
         let userPoint = Point.fromView2puzzle( from: viewPoint, puzzle: self )
-        let newStart = Start( position: userPoint )
 
-        guard newStart.isValid( puzzle: self ),
-              !conflictsWithFinishes( item: newStart ),
-              !conflictsWithGaps( item: newStart ),
-              !conflictsWithMissings( item: newStart )
+        guard Start.isValid( position: userPoint, puzzle: self ),
+              !conflictsWithFinishes( point: userPoint ),
+              !conflictsWithGaps( point: userPoint ),
+              !conflictsWithMissings( point: userPoint )
         else {
             NSSound.beep();
             return false
@@ -76,22 +79,16 @@ extension WitnessPuzzlesDocument {
     
     mutating func removeStart( viewPoint: CGPoint ) -> Void {
         let userPoint = Point.fromView2puzzle( from: viewPoint, puzzle: self )
-        let newStart = Start( position: userPoint )
 
-        guard newStart.isValid( puzzle: self ),
-              conflictsWithStarts( item: newStart )
-        else {
-            NSSound.beep();
-            return
-        }
-
-        starts = starts.filter { $0 != newStart }
+        starts = starts.filter { $0.position != userPoint }
     }
 
     mutating func addStart( viewPoint: CGPoint ) -> Void {
         guard isStartPositionOK( viewPoint: viewPoint ) else { return }
         let userPoint = Point.fromView2puzzle( from: viewPoint, puzzle: self )
         
-        starts.insert( Start( position: userPoint ) )
+        if Start.isValid( position: userPoint, puzzle: self ) {
+            starts.insert( Start( position: userPoint ) )
+        }
     }
 }

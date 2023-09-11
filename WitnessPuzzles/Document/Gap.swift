@@ -18,6 +18,10 @@ extension WitnessPuzzlesDocument {
         }
         
         func isValid( puzzle: WitnessPuzzlesDocument ) -> Bool {
+            Gap.isValid( position: position, puzzle: puzzle )
+        }
+        
+        static func isValid( position: Point, puzzle: WitnessPuzzlesDocument ) -> Bool {
             position.isPuzzleSpace( puzzle: puzzle ) && position.isLine
         }
     }
@@ -48,18 +52,17 @@ extension WitnessPuzzlesDocument {
     func gapExists( viewPoint: CGPoint ) -> Bool {
         let userPoint = Point.fromView2puzzle( from: viewPoint, puzzle: self )
 
-        return conflictsWithGaps( item: Gap( position: userPoint ) )
+        return conflictsWithGaps( point: userPoint )
     }
     
     func isGapPositionOK( viewPoint: CGPoint ) -> Bool {
         let userPoint = Point.fromView2puzzle( from: viewPoint, puzzle: self )
-        let newGap = Gap( position: userPoint )
         
-        guard newGap.isValid( puzzle: self ),
-              !conflictsWithStarts( item: newGap ),
-              !conflictsWithFinishes( item: newGap ),
-              !conflictsWithMissings( item: newGap ),
-              !conflictsWithHexagons( item: newGap )
+        guard Gap.isValid( position: userPoint, puzzle: self ),
+              !conflictsWithStarts( point: userPoint ),
+              !conflictsWithFinishes( point: userPoint ),
+              !conflictsWithMissings( point: userPoint ),
+              !conflictsWithHexagons( point: userPoint )
         else {
             NSSound.beep();
             return false
@@ -70,14 +73,6 @@ extension WitnessPuzzlesDocument {
     
     mutating func removeGap( viewPoint: CGPoint ) -> Void {
         let userPoint = Point.fromView2puzzle( from: viewPoint, puzzle: self )
-        let newGap = Gap( position: userPoint )
-
-        guard newGap.isValid( puzzle: self ),
-              conflictsWithGaps( item: newGap )
-        else {
-            NSSound.beep();
-            return
-        }
 
         gaps = gaps.filter { $0.position != userPoint }
     }
@@ -86,6 +81,8 @@ extension WitnessPuzzlesDocument {
         guard isGapPositionOK( viewPoint: viewPoint ) else { return }
         let userPoint = Point.fromView2puzzle( from: viewPoint, puzzle: self )
         
-        gaps.insert( Gap( position: userPoint ) )
+        if Gap.isValid( position: userPoint, puzzle: self ) {
+            gaps.insert( Gap( position: userPoint ) )
+        }
     }
 }

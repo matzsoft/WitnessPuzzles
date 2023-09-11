@@ -18,6 +18,10 @@ extension WitnessPuzzlesDocument {
         }
         
         func isValid( puzzle: WitnessPuzzlesDocument ) -> Bool {
+            Missing.isValid( position: position, puzzle: puzzle )
+        }
+        
+        static func isValid( position: Point, puzzle: WitnessPuzzlesDocument ) -> Bool {
             position.isPuzzleSpace( puzzle: puzzle ) && position.isLine
         }
     }
@@ -30,13 +34,12 @@ extension WitnessPuzzlesDocument {
     
     func isMissingPositionOK( viewPoint: CGPoint ) -> Bool {
         let userPoint = Point.fromView2puzzle( from: viewPoint, puzzle: self )
-        let newMissing = Missing( position: userPoint )
         
-        guard newMissing.isValid( puzzle: self ),
-              !conflictsWithStarts( item: newMissing ),
-              !conflictsWithFinishes( item: newMissing ),
-              !conflictsWithGaps( item: newMissing ),
-              !conflictsWithHexagons( item: newMissing )
+        guard Missing.isValid( position: userPoint, puzzle: self ),
+              !conflictsWithStarts( point: userPoint ),
+              !conflictsWithFinishes( point: userPoint ),
+              !conflictsWithGaps( point: userPoint ),
+              !conflictsWithHexagons( point: userPoint )
         else {
             NSSound.beep();
             return false
@@ -47,14 +50,6 @@ extension WitnessPuzzlesDocument {
     
     mutating func removeMissing( viewPoint: CGPoint ) -> Void {
         let userPoint = Point.fromView2puzzle( from: viewPoint, puzzle: self )
-        let newMissing = Missing( position: userPoint )
-
-        guard newMissing.isValid( puzzle: self ),
-              conflictsWithMissings( item: newMissing )
-        else {
-            NSSound.beep();
-            return
-        }
 
         missings = missings.filter { $0.position != userPoint }
     }
@@ -63,6 +58,8 @@ extension WitnessPuzzlesDocument {
         guard isMissingPositionOK( viewPoint: viewPoint ) else { return }
         let userPoint = Point.fromView2puzzle( from: viewPoint, puzzle: self )
         
-        missings.insert( Missing( position: userPoint ) )
+        if Missing.isValid( position: userPoint, puzzle: self ) {
+            missings.insert( Missing( position: userPoint ) )
+        }
     }
 }

@@ -12,6 +12,7 @@ protocol PuzzleItem: Codable, Hashable {
     var position: WitnessPuzzlesDocument.Point { get }
     func location( puzzle: WitnessPuzzlesDocument ) -> WitnessPuzzlesDocument.Point
     func isValid( puzzle: WitnessPuzzlesDocument ) -> Bool
+    static func isValid( position: WitnessPuzzlesDocument.Point, puzzle: WitnessPuzzlesDocument ) -> Bool
 }
 
 
@@ -22,24 +23,16 @@ protocol PuzzleItem: Codable, Hashable {
 
 
 extension WitnessPuzzlesDocument {
-    func conflictsWithStarts( item: any PuzzleItem ) -> Bool {
-        starts.contains( where: { item.position == $0.position } )
-    }
-    
-    func conflictsWithFinishes( item: any PuzzleItem ) -> Bool {
-        conflictsWithFinishes( point: item.position )
+    func conflictsWithStarts( point: Point ) -> Bool {
+        starts.contains( where: { point == $0.position } )
     }
     
     func conflictsWithFinishes( point: Point ) -> Bool {
         finishes.contains( where: { point == $0.position } )
     }
     
-    func conflictsWithGaps( item: any PuzzleItem ) -> Bool {
-        gaps.contains( where: { item.position == $0.position } )
-    }
-    
-    func conflictsWithMissings( item: any PuzzleItem ) -> Bool {
-        conflictsWithMissings( point: item.position )
+    func conflictsWithGaps( point: Point ) -> Bool {
+        gaps.contains( where: { point == $0.position } )
     }
     
     func conflictsWithMissings( point: Point ) -> Bool {
@@ -58,7 +51,7 @@ extension WitnessPuzzlesDocument {
         }
     }
     
-    func conflictsWithHexagons( item: any PuzzleItem ) -> Bool {
-        hexagons.contains( where: { item.position == $0.position } )
+    func conflictsWithHexagons( point: Point ) -> Bool {
+        hexagons.contains( where: { point == $0.position } )
     }
 }

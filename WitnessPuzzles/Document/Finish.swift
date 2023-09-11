@@ -27,6 +27,10 @@ extension WitnessPuzzlesDocument {
             
             return false
         }
+        
+        static func isValid( position: Point, puzzle: WitnessPuzzlesDocument ) -> Bool {
+            Finish.validDirection( for: position, in: puzzle ) != nil
+        }
 
         var angle: Double {
             switch direction {
@@ -104,14 +108,10 @@ extension WitnessPuzzlesDocument {
     func isFinishPositionOK( viewPoint: CGPoint ) -> Bool {
         let userPoint = Point.fromView2puzzle( from: viewPoint, puzzle: self )
 
-        guard let goodDirection = Finish.validDirection( for: userPoint, in: self ) else {
-            NSSound.beep();
-            return false
-        }
-        let newFinish = Finish( position: userPoint, direction: goodDirection )
-        guard !conflictsWithStarts( item: newFinish ),
-              !conflictsWithGaps( item: newFinish ),
-              !conflictsWithMissings( item: newFinish )
+        guard Finish.isValid( position: userPoint, puzzle: self ),
+              !conflictsWithStarts( point: userPoint ),
+              !conflictsWithGaps( point: userPoint ),
+              !conflictsWithMissings( point: userPoint )
         else {
             NSSound.beep();
             return false
@@ -123,11 +123,6 @@ extension WitnessPuzzlesDocument {
     mutating func removeFinish( viewPoint: CGPoint ) -> Void {
         let userPoint = Point.fromView2puzzle( from: viewPoint, puzzle: self )
 
-        guard conflictsWithFinishes( point: userPoint ) else {
-            NSSound.beep();
-            return
-        }
-
         finishes = finishes.filter { $0.position != userPoint }
     }
 
@@ -135,10 +130,8 @@ extension WitnessPuzzlesDocument {
         guard isFinishPositionOK( viewPoint: viewPoint ) else { return }
         let userPoint = Point.fromView2puzzle( from: viewPoint, puzzle: self )
         
-        guard let goodDirection = Finish.validDirection( for: userPoint, in: self ) else {
-            NSSound.beep();
-            return
+        if let goodDirection = Finish.validDirection( for: userPoint, in: self ) {
+            finishes.insert( Finish( position: userPoint, direction: goodDirection ) )
         }
-        finishes.insert( Finish( position: userPoint, direction: goodDirection ) )
     }
 }
