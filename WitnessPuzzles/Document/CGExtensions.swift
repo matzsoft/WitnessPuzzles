@@ -30,11 +30,15 @@ extension WitnessPuzzlesDocument {
         var isPath:         Bool { ( x & y & 1 ) == 0 }
         var isIntersection: Bool { ( ( x | y ) & 1 ) == 0 }
         var isLine:         Bool { ( ( x ^ y)  & 1 ) == 1 }
-        var isHorizontal:   Bool { isLine && x.isMultiple( of: 2 ) }
-        var isVertical:     Bool { isLine && y.isMultiple( of: 2 ) }
+        var isHorizontal:   Bool { isLine && y.isMultiple( of: 2 ) }
+        var isVertical:     Bool { isLine && x.isMultiple( of: 2 ) }
         
         func isPuzzleSpace( puzzle: WitnessPuzzlesDocument ) -> Bool {
             puzzle.validSymbolX.contains( x ) && puzzle.validSymbolY.contains( y )
+        }
+        
+        static func +( _ lhs: Point, _ rhs: Point ) -> Point {
+            Point( lhs.x + rhs.x, lhs.y + rhs.y )
         }
     }
     
@@ -51,7 +55,7 @@ extension WitnessPuzzlesDocument {
     }
     
     
-    enum Direction: String, Codable {
+    enum Direction: String, CaseIterable, Codable {
         case north, northeast, east, southeast, south, southwest, west, northwest
         
         var vector: Point {
@@ -64,6 +68,43 @@ extension WitnessPuzzlesDocument {
             case .southwest: return Point( -1, -1 )
             case .west:      return Point( -1, 0 )
             case .northwest: return Point( -1, 1 )
+            }
+        }
+        
+        var label: Image {
+            switch self {
+            case .north:     return Image( systemName: "arrow.up" )
+            case .northeast: return Image( systemName: "arrow.up.right" )
+            case .east:      return Image( systemName: "arrow.right" )
+            case .southeast: return Image( systemName: "arrow.down.right" )
+            case .south:     return Image( systemName: "arrow.down" )
+            case .southwest: return Image( systemName: "arrow.down.left" )
+            case .west:      return Image( systemName: "arrow.left" )
+            case .northwest: return Image( systemName: "arrow.up.left" )
+            }
+        }
+        
+        var isOrthogonal: Bool {
+            switch self {
+            case .north, .east, .south, .west:
+                return true
+            default:
+                return false
+            }
+        }
+        
+        var components: [Direction] {
+            switch self {
+            case .north, .east, .south, .west:
+                return [self]
+            case .northeast:
+                return [ .north, .east ]
+            case .southeast:
+                return [ .south, .east ]
+            case .southwest:
+                return [ .south, .west ]
+            case .northwest:
+                return [ .north, .west ]
             }
         }
     }

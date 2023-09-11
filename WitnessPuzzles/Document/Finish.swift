@@ -71,6 +71,56 @@ extension WitnessPuzzlesDocument {
             default: return nil
             }
         }
+        
+        static func validDirection(
+            from: Point, direction: Direction, in puzzle: WitnessPuzzlesDocument
+        ) -> Bool {
+            let destination = from + direction.vector
+
+            switch true {
+            case from.isLine:
+                if !destination.isPuzzleSpace( puzzle: puzzle ) { return true }
+                return puzzle.conflictsWithMissings( point: destination )
+            case from.isIntersection:
+                if direction.isOrthogonal {
+                    if !destination.isPuzzleSpace( puzzle: puzzle ) { return true }
+                    return puzzle.conflictsWithMissings( point: destination )
+                }
+                return direction.components.allSatisfy {
+                    let component = from + $0.vector
+                    if !component.isPuzzleSpace( puzzle: puzzle ) { return true }
+                    return puzzle.conflictsWithMissings( point: component )
+                }
+            default:
+                return false
+            }
+        }
+        
+        static func validDirections( for point: Point, in puzzle: WitnessPuzzlesDocument ) -> [Direction]? {
+            guard point.isPuzzleSpace( puzzle: puzzle ) else { return nil }
+            guard !puzzle.conflictsWithMissings( point: point ) else { return nil }
+            
+            let acceptable = {
+                switch true {
+                case point.isVertical:
+                    return [Direction]( [ .east, .west ] ).filter {
+                        Finish.validDirection( from: point, direction: $0, in: puzzle )
+                    }
+                case point.isHorizontal:
+                    return [Direction]( [ .north, .south ] ).filter {
+                        Finish.validDirection( from: point, direction: $0, in: puzzle )
+                    }
+                case point.isIntersection:
+                    return Direction.allCases.filter {
+                        Finish.validDirection( from: point, direction: $0, in: puzzle )
+                    }
+                default:
+                    return []
+                }
+            }()
+            
+            return acceptable.isEmpty ? nil : acceptable
+        }
     }
 
     func drawFinishes( context: CGContext ) -> Void {

@@ -40,7 +40,13 @@ extension WitnessPuzzlesDocument {
         switch true {
         case point.isLine:
             return missings.contains( where: { point == $0.position } )
-        case point.isBlock, point.isIntersection:
+        case point.isBlock:
+            let lines = Set( [
+                Point( point.x - 1, point.y ), Point( point.x, point.y - 1 ),
+                Point( point.x + 1, point.y ), Point( point.x, point.y + 1 )
+            ].map { Missing( position: $0 ) } )
+            return !lines.intersection( missings ).isEmpty
+        case point.isIntersection:
             let lines = Set( [
                 Point( point.x - 1, point.y ), Point( point.x, point.y - 1 ),
                 Point( point.x + 1, point.y ), Point( point.x, point.y + 1 )
