@@ -58,17 +58,11 @@ extension WitnessPuzzlesDocument {
     func isGapPositionOK( viewPoint: CGPoint ) -> Bool {
         let userPoint = Point.fromView2puzzle( from: viewPoint, puzzle: self )
         
-        guard Gap.isValid( position: userPoint, puzzle: self ),
-              !conflictsWithStarts( point: userPoint ),
-              !conflictsWithFinishes( point: userPoint ),
-              !conflictsWithMissings( point: userPoint ),
+        return Gap.isValid( position: userPoint, puzzle: self ) &&
+              !conflictsWithStarts( point: userPoint ) &&
+              !conflictsWithFinishes( point: userPoint ) &&
+              !conflictsWithMissings( point: userPoint ) &&
               !conflictsWithHexagons( point: userPoint )
-        else {
-            NSSound.beep();
-            return false
-        }
-
-        return true
     }
     
     mutating func removeGap( viewPoint: CGPoint ) -> Void {

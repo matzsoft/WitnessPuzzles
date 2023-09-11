@@ -65,16 +65,10 @@ extension WitnessPuzzlesDocument {
     func isStartPositionOK( viewPoint: CGPoint ) -> Bool {
         let userPoint = Point.fromView2puzzle( from: viewPoint, puzzle: self )
 
-        guard Start.isValid( position: userPoint, puzzle: self ),
-              !conflictsWithFinishes( point: userPoint ),
-              !conflictsWithGaps( point: userPoint ),
+        return Start.isValid( position: userPoint, puzzle: self ) &&
+              !conflictsWithFinishes( point: userPoint ) &&
+              !conflictsWithGaps( point: userPoint ) &&
               !conflictsWithMissings( point: userPoint )
-        else {
-            NSSound.beep();
-            return false
-        }
-
-        return true
     }
     
     mutating func removeStart( viewPoint: CGPoint ) -> Void {

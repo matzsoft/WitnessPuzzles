@@ -7,5 +7,3 @@
 1. Creating a missing can still create an orphan.
 
 ## TODO
-
-1. Move all the beeps from the document to the GUI.

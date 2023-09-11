@@ -46,24 +46,32 @@ struct ContentView: View {
                         document.removeStart( viewPoint: location )
                     } else if document.isStartPositionOK( viewPoint: location ) {
                         document.addStart( viewPoint: location )
+                    } else {
+                        NSSound.beep()
                     }
                 case isFinishesSelected:
                     if document.finishExists( viewPoint: location ) {
                         document.removeFinish( viewPoint: location )
                     } else if document.isFinishPositionOK( viewPoint: location ) {
                         document.addFinish( viewPoint: location )
+                    } else {
+                        NSSound.beep()
                     }
                 case isGapsSelected:
                     if document.gapExists( viewPoint: location ) {
                         document.removeGap( viewPoint: location )
                     } else if document.isGapPositionOK( viewPoint: location ) {
                         document.addGap( viewPoint: location )
+                    } else {
+                        NSSound.beep()
                     }
                 case isMissingSelected:
                     if document.missingExists( viewPoint: location ) {
                         document.removeMissing( viewPoint: location )
                     } else if document.isMissingPositionOK( viewPoint: location ) {
                         document.addMissing( viewPoint: location )
+                    } else {
+                        NSSound.beep()
                     }
                 case isHexagonsSelected:
                     if document.hexagonExists( viewPoint: location ) {
@@ -71,6 +79,8 @@ struct ContentView: View {
                     } else if document.isHexagonPositionOK( viewPoint: location ) {
                         isConfiguringHexagon = true
                         lastLocation = location
+                    } else {
+                        NSSound.beep()
                     }
                 default:
                     break

@@ -35,17 +35,11 @@ extension WitnessPuzzlesDocument {
     func isMissingPositionOK( viewPoint: CGPoint ) -> Bool {
         let userPoint = Point.fromView2puzzle( from: viewPoint, puzzle: self )
         
-        guard Missing.isValid( position: userPoint, puzzle: self ),
-              !conflictsWithStarts( point: userPoint ),
-              !conflictsWithFinishes( point: userPoint ),
-              !conflictsWithGaps( point: userPoint ),
+        return Missing.isValid( position: userPoint, puzzle: self ) &&
+              !conflictsWithStarts( point: userPoint ) &&
+              !conflictsWithFinishes( point: userPoint ) &&
+              !conflictsWithGaps( point: userPoint ) &&
               !conflictsWithHexagons( point: userPoint )
-        else {
-            NSSound.beep();
-            return false
-        }
-
-        return true
     }
     
     mutating func removeMissing( viewPoint: CGPoint ) -> Void {

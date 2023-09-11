@@ -65,16 +65,10 @@ extension WitnessPuzzlesDocument {
     func isHexagonPositionOK( viewPoint: CGPoint ) -> Bool {
         let userPoint = Point.fromView2puzzle( from: viewPoint, puzzle: self )
         
-        guard Hexagon.isValid( position: userPoint, puzzle: self ),
-              !conflictsWithGaps( point: userPoint ),
-              !conflictsWithMissings( point: userPoint ),
+        return Hexagon.isValid( position: userPoint, puzzle: self ) &&
+              !conflictsWithGaps( point: userPoint ) &&
+              !conflictsWithMissings( point: userPoint ) &&
               !conflictsWithHexagons( point: userPoint )
-        else {
-            NSSound.beep();
-            return false
-        }
-
-        return true
     }
     
     mutating func removeHexagon( viewPoint: CGPoint ) -> Void {
