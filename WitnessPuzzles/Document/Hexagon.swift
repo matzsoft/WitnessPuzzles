@@ -56,31 +56,24 @@ extension WitnessPuzzlesDocument {
         }
     }
 
-    func hexagonExists( viewPoint: CGPoint ) -> Bool {
-        let userPoint = Point.fromView2puzzle( from: viewPoint, puzzle: self )
-
-        return conflictsWithHexagons( point: userPoint )
+    func hexagonExists( point: Point ) -> Bool {
+        return conflictsWithHexagons( point: point )
     }
     
-    func isHexagonPositionOK( viewPoint: CGPoint ) -> Bool {
-        let userPoint = Point.fromView2puzzle( from: viewPoint, puzzle: self )
-        
-        return Hexagon.isValid( position: userPoint, puzzle: self ) &&
-              !conflictsWithGaps( point: userPoint ) &&
-              !conflictsWithMissings( point: userPoint ) &&
-              !conflictsWithHexagons( point: userPoint )
+    func isHexagonPositionOK( point: Point ) -> Bool {
+        return Hexagon.isValid( position: point, puzzle: self ) &&
+              !conflictsWithGaps( point: point ) &&
+              !conflictsWithMissings( point: point ) &&
+              !conflictsWithHexagons( point: point )
     }
     
-    mutating func removeHexagon( viewPoint: CGPoint ) -> Void {
-        let userPoint = Point.fromView2puzzle( from: viewPoint, puzzle: self )
-
-        hexagons = hexagons.filter { $0.position != userPoint }
+    mutating func removeHexagon( point: Point ) -> Void {
+        hexagons = hexagons.filter { $0.position != point }
     }
 
-    mutating func addHexagon( viewPoint: CGPoint, color: Color ) -> Void {
-        guard isHexagonPositionOK( viewPoint: viewPoint ) else { return }
-        let userPoint = Point.fromView2puzzle( from: viewPoint, puzzle: self )
+    mutating func addHexagon( point: Point, color: Color ) -> Void {
+        guard isHexagonPositionOK( point: point ) else { return }
         
-        hexagons.insert( Hexagon( position: userPoint, color: color ) )
+        hexagons.insert( Hexagon( position: point, color: color ) )
     }
 }

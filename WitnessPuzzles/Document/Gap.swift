@@ -49,34 +49,27 @@ extension WitnessPuzzlesDocument {
         }
     }
     
-    func gapExists( viewPoint: CGPoint ) -> Bool {
-        let userPoint = Point.fromView2puzzle( from: viewPoint, puzzle: self )
-
-        return conflictsWithGaps( point: userPoint )
+    func gapExists( point: Point ) -> Bool {
+        return conflictsWithGaps( point: point )
     }
     
-    func isGapPositionOK( viewPoint: CGPoint ) -> Bool {
-        let userPoint = Point.fromView2puzzle( from: viewPoint, puzzle: self )
-        
-        return Gap.isValid( position: userPoint, puzzle: self ) &&
-              !conflictsWithStarts( point: userPoint ) &&
-              !conflictsWithFinishes( point: userPoint ) &&
-              !conflictsWithMissings( point: userPoint ) &&
-              !conflictsWithHexagons( point: userPoint )
+    func isGapPositionOK( point: Point ) -> Bool {
+        return Gap.isValid( position: point, puzzle: self ) &&
+              !conflictsWithStarts( point: point ) &&
+              !conflictsWithFinishes( point: point ) &&
+              !conflictsWithMissings( point: point ) &&
+              !conflictsWithHexagons( point: point )
     }
     
-    mutating func removeGap( viewPoint: CGPoint ) -> Void {
-        let userPoint = Point.fromView2puzzle( from: viewPoint, puzzle: self )
-
-        gaps = gaps.filter { $0.position != userPoint }
+    mutating func removeGap( point: Point ) -> Void {
+        gaps = gaps.filter { $0.position != point }
     }
 
-    mutating func addGap( viewPoint: CGPoint ) -> Void {
-        guard isGapPositionOK( viewPoint: viewPoint ) else { return }
-        let userPoint = Point.fromView2puzzle( from: viewPoint, puzzle: self )
+    mutating func addGap( point: Point ) -> Void {
+        guard isGapPositionOK( point: point ) else { return }
         
-        if Gap.isValid( position: userPoint, puzzle: self ) {
-            gaps.insert( Gap( position: userPoint ) )
+        if Gap.isValid( position: point, puzzle: self ) {
+            gaps.insert( Gap( position: point ) )
         }
     }
 }

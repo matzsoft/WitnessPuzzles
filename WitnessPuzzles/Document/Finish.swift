@@ -99,33 +99,26 @@ extension WitnessPuzzlesDocument {
         context.restoreGState()
     }
     
-    func finishExists( viewPoint: CGPoint ) -> Bool {
-        let userPoint = Point.fromView2puzzle( from: viewPoint, puzzle: self )
-
-        return conflictsWithFinishes( point: userPoint )
+    func finishExists( point: Point ) -> Bool {
+        return conflictsWithFinishes( point: point )
     }
     
-    func isFinishPositionOK( viewPoint: CGPoint ) -> Bool {
-        let userPoint = Point.fromView2puzzle( from: viewPoint, puzzle: self )
-
-        return Finish.isValid( position: userPoint, puzzle: self ) &&
-              !conflictsWithStarts( point: userPoint ) &&
-              !conflictsWithGaps( point: userPoint ) &&
-              !conflictsWithMissings( point: userPoint )
+    func isFinishPositionOK( point: Point ) -> Bool {
+        return Finish.isValid( position: point, puzzle: self ) &&
+              !conflictsWithStarts( point: point ) &&
+              !conflictsWithGaps( point: point ) &&
+              !conflictsWithMissings( point: point )
     }
     
-    mutating func removeFinish( viewPoint: CGPoint ) -> Void {
-        let userPoint = Point.fromView2puzzle( from: viewPoint, puzzle: self )
-
-        finishes = finishes.filter { $0.position != userPoint }
+    mutating func removeFinish( point: Point ) -> Void {
+        finishes = finishes.filter { $0.position != point }
     }
 
-    mutating func addFinish( viewPoint: CGPoint ) -> Void {
-        guard isFinishPositionOK( viewPoint: viewPoint ) else { return }
-        let userPoint = Point.fromView2puzzle( from: viewPoint, puzzle: self )
+    mutating func addFinish( point: Point ) -> Void {
+        guard isFinishPositionOK( point: point ) else { return }
         
-        if let goodDirection = Finish.validDirection( for: userPoint, in: self ) {
-            finishes.insert( Finish( position: userPoint, direction: goodDirection ) )
+        if let goodDirection = Finish.validDirection( for: point, in: self ) {
+            finishes.insert( Finish( position: point, direction: goodDirection ) )
         }
     }
 }

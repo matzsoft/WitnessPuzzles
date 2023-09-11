@@ -19,7 +19,7 @@ struct ContentView: View {
     @State var isIconsSelected = false
     
     @State var isConfiguringHexagon = false
-    @State var lastLocation = CGPoint( x: 0, y: 0 )
+    @State var lastLocation = WitnessPuzzlesDocument.Point( 0, 0 )
     @State var lastColor = Color.black
 
     func select( tool: Binding<Bool> ) -> Void {
@@ -40,45 +40,46 @@ struct ContentView: View {
     var body: some View {
         Image( nsImage: document.nsImage )
             .onTapGesture { location in
+                let point = WitnessPuzzlesDocument.Point.fromView2puzzle( from: location, puzzle: document )
                 switch true {
                 case isStartsSelected:
-                    if document.startExists( viewPoint: location ) {
-                        document.removeStart( viewPoint: location )
-                    } else if document.isStartPositionOK( viewPoint: location ) {
-                        document.addStart( viewPoint: location )
+                    if document.startExists( point: point ) {
+                        document.removeStart( point: point )
+                    } else if document.isStartPositionOK( point: point ) {
+                        document.addStart( point: point )
                     } else {
                         NSSound.beep()
                     }
                 case isFinishesSelected:
-                    if document.finishExists( viewPoint: location ) {
-                        document.removeFinish( viewPoint: location )
-                    } else if document.isFinishPositionOK( viewPoint: location ) {
-                        document.addFinish( viewPoint: location )
+                    if document.finishExists( point: point ) {
+                        document.removeFinish( point: point )
+                    } else if document.isFinishPositionOK( point: point ) {
+                        document.addFinish( point: point )
                     } else {
                         NSSound.beep()
                     }
                 case isGapsSelected:
-                    if document.gapExists( viewPoint: location ) {
-                        document.removeGap( viewPoint: location )
-                    } else if document.isGapPositionOK( viewPoint: location ) {
-                        document.addGap( viewPoint: location )
+                    if document.gapExists( point: point ) {
+                        document.removeGap( point: point )
+                    } else if document.isGapPositionOK( point: point ) {
+                        document.addGap( point: point )
                     } else {
                         NSSound.beep()
                     }
                 case isMissingSelected:
-                    if document.missingExists( viewPoint: location ) {
-                        document.removeMissing( viewPoint: location )
-                    } else if document.isMissingPositionOK( viewPoint: location ) {
-                        document.addMissing( viewPoint: location )
+                    if document.missingExists( point: point ) {
+                        document.removeMissing( point: point )
+                    } else if document.isMissingPositionOK( point: point ) {
+                        document.addMissing( point: point )
                     } else {
                         NSSound.beep()
                     }
                 case isHexagonsSelected:
-                    if document.hexagonExists( viewPoint: location ) {
-                        document.removeHexagon( viewPoint: location )
-                    } else if document.isHexagonPositionOK( viewPoint: location ) {
+                    if document.hexagonExists( point: point ) {
+                        document.removeHexagon( point: point )
+                    } else if document.isHexagonPositionOK( point: point ) {
                         isConfiguringHexagon = true
-                        lastLocation = location
+                        lastLocation = point
                     } else {
                         NSSound.beep()
                     }
@@ -115,7 +116,7 @@ struct ContentView: View {
                 PropertiesView( document: $document )
             }
             .sheet( isPresented: $isConfiguringHexagon, onDismiss: {} ) {
-                HexagonView(document: $document, location: lastLocation, color: $lastColor )
+                HexagonView( document: $document, location: lastLocation, color: $lastColor )
             }
     }
 }

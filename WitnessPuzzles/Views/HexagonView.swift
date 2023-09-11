@@ -11,7 +11,7 @@ import SwiftUI
 struct HexagonView: View {
     @Environment( \.presentationMode ) var presentationMode
     @Binding var document: WitnessPuzzlesDocument
-    let location: CGPoint
+    let location: WitnessPuzzlesDocument.Point
     @Binding var color: Color
 
     var body: some View {
@@ -28,7 +28,7 @@ struct HexagonView: View {
                 .keyboardShortcut( .cancelAction )
                 Spacer()
                 Button( "Done", role: .destructive ) {
-                    document.addHexagon( viewPoint: location, color: color )
+                    document.addHexagon( point: location, color: color )
                     if NSColorPanel.shared.isVisible { NSColorPanel.shared.orderOut( nil ) }
                     presentationMode.wrappedValue.dismiss()
                 }

@@ -56,33 +56,26 @@ extension WitnessPuzzlesDocument {
         context.restoreGState()
     }
     
-    func startExists( viewPoint: CGPoint ) -> Bool {
-        let userPoint = Point.fromView2puzzle( from: viewPoint, puzzle: self )
-
-        return conflictsWithStarts( point: userPoint )
+    func startExists( point: Point ) -> Bool {
+        return conflictsWithStarts( point: point )
     }
     
-    func isStartPositionOK( viewPoint: CGPoint ) -> Bool {
-        let userPoint = Point.fromView2puzzle( from: viewPoint, puzzle: self )
-
-        return Start.isValid( position: userPoint, puzzle: self ) &&
-              !conflictsWithFinishes( point: userPoint ) &&
-              !conflictsWithGaps( point: userPoint ) &&
-              !conflictsWithMissings( point: userPoint )
+    func isStartPositionOK( point: Point ) -> Bool {
+        return Start.isValid( position: point, puzzle: self ) &&
+              !conflictsWithFinishes( point: point ) &&
+              !conflictsWithGaps( point: point ) &&
+              !conflictsWithMissings( point: point )
     }
     
-    mutating func removeStart( viewPoint: CGPoint ) -> Void {
-        let userPoint = Point.fromView2puzzle( from: viewPoint, puzzle: self )
-
-        starts = starts.filter { $0.position != userPoint }
+    mutating func removeStart( point: Point ) -> Void {
+        starts = starts.filter { $0.position != point }
     }
 
-    mutating func addStart( viewPoint: CGPoint ) -> Void {
-        guard isStartPositionOK( viewPoint: viewPoint ) else { return }
-        let userPoint = Point.fromView2puzzle( from: viewPoint, puzzle: self )
+    mutating func addStart( point: Point ) -> Void {
+        guard isStartPositionOK( point: point ) else { return }
         
-        if Start.isValid( position: userPoint, puzzle: self ) {
-            starts.insert( Start( position: userPoint ) )
+        if Start.isValid( position: point, puzzle: self ) {
+            starts.insert( Start( position: point ) )
         }
     }
 }
