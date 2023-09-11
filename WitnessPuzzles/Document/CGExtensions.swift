@@ -26,18 +26,6 @@ extension WitnessPuzzlesDocument {
             return Point( x, y )
         }
         
-        static func fromView2puzzle( from: CGPoint, puzzle: WitnessPuzzlesDocument ) -> Point {
-            let context = puzzle.getContext()
-            puzzle.setOrigin( context: context )
-            let user = context.convertToUserSpace( from )
-            let resolution = Double( puzzle.lineWidth + puzzle.blockWidth ) / 2
-            let offset = Double( puzzle.lineWidth ) / 2
-            let x = Int( ( ( user.x - offset ) / resolution ).rounded() )
-            let y = Int( ( ( user.y - offset ) / resolution ).rounded() )
-            
-            return Point( x, y )
-        }
-        
         var isBlock:        Bool { ( x & y & 1 ) == 1 }
         var isPath:         Bool { ( x & y & 1 ) == 0 }
         var isIntersection: Bool { ( ( x | y ) & 1 ) == 0 }
@@ -48,6 +36,18 @@ extension WitnessPuzzlesDocument {
         func isPuzzleSpace( puzzle: WitnessPuzzlesDocument ) -> Bool {
             puzzle.validSymbolX.contains( x ) && puzzle.validSymbolY.contains( y )
         }
+    }
+    
+    func toPuzzleSpace( from view: CGPoint ) -> Point {
+        let context = getContext()
+        setOrigin( context: context )
+        let user = context.convertToUserSpace( view )
+        let resolution = Double( lineWidth + blockWidth ) / 2
+        let offset = Double( lineWidth ) / 2
+        let x = Int( ( ( user.x - offset ) / resolution ).rounded() )
+        let y = Int( ( ( user.y - offset ) / resolution ).rounded() )
+        
+        return Point( x, y )
     }
     
     

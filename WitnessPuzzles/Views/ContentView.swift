@@ -40,7 +40,7 @@ struct ContentView: View {
     var body: some View {
         Image( nsImage: document.nsImage )
             .onTapGesture { location in
-                let point = WitnessPuzzlesDocument.Point.fromView2puzzle( from: location, puzzle: document )
+                let point = document.toPuzzleSpace( from: location )
                 switch true {
                 case isStartsSelected:
                     if document.startExists( point: point ) {
