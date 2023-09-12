@@ -58,10 +58,8 @@ extension String {
         let trimmed = self.trimmingCharacters( in: .whitespacesAndNewlines )
         let hexSanitized = trimmed.replacingOccurrences( of: "#", with: "" )
         let length = hexSanitized.count
-        var rgb: UInt64 = 0
+        let rgb = UInt64( hexSanitized, radix: 16 ) ?? 255
 
-        Scanner( string: hexSanitized ).scanHexInt64( &rgb )
-        
         if length == 6 {
             let r = CGFloat( ( rgb & 0xFF0000 ) >> 16 ) / 255.0
             let g = CGFloat( ( rgb & 0x00FF00 ) >>  8 ) / 255.0
