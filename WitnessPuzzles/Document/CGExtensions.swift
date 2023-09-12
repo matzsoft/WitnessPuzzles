@@ -58,18 +58,7 @@ extension WitnessPuzzlesDocument {
     enum Direction: String, CaseIterable, Identifiable, Codable {
         case north, northeast, east, southeast, south, southwest, west, northwest
         
-        var id: Int {
-            switch self {
-            case .north:     return 0
-            case .northeast: return 1
-            case .east:      return 2
-            case .southeast: return 3
-            case .south:     return 4
-            case .southwest: return 5
-            case .west:      return 6
-            case .northwest: return 7
-            }
-        }
+        var id: String { rawValue }
         
         var vector: Point {
             switch self {
