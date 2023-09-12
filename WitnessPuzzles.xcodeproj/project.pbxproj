@@ -26,6 +26,7 @@
 		DDBECF8A2AA68CA6005313E7 /* Start.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDBECF882AA68CA6005313E7 /* Start.swift */; };
 		DDBECF8E2AA97372005313E7 /* PuzzleType.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDBECF8C2AA97372005313E7 /* PuzzleType.swift */; };
 		DDBECF922AAA484B005313E7 /* PuzzleItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDBECF902AAA484B005313E7 /* PuzzleItem.swift */; };
+		DDDC41732AAFD202005A4F68 /* FinishView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDDC41712AAFD202005A4F68 /* FinishView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -70,6 +71,7 @@
 		DDBECF882AA68CA6005313E7 /* Start.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Start.swift; sourceTree = "<group>"; };
 		DDBECF8C2AA97372005313E7 /* PuzzleType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PuzzleType.swift; sourceTree = "<group>"; };
 		DDBECF902AAA484B005313E7 /* PuzzleItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PuzzleItem.swift; sourceTree = "<group>"; };
+		DDDC41712AAFD202005A4F68 /* FinishView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FinishView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -161,6 +163,7 @@
 			isa = PBXGroup;
 			children = (
 				DDBECF3D2A955AE0005313E7 /* ContentView.swift */,
+				DDDC41712AAFD202005A4F68 /* FinishView.swift */,
 				DDBECF7C2AA42150005313E7 /* HexagonView.swift */,
 				DDBECF6F2A9EFA5C005313E7 /* PropertiesView.swift */,
 			);
@@ -324,6 +327,7 @@
 				DDBECF762AA261DD005313E7 /* Finish.swift in Sources */,
 				DDBECF712A9EFA5C005313E7 /* PropertiesView.swift in Sources */,
 				DDBECF6C2A9ABCE4005313E7 /* Color+Codable.swift in Sources */,
+				DDDC41732AAFD202005A4F68 /* FinishView.swift in Sources */,
 				DDBECF6A2A99349A005313E7 /* CGExtensions.swift in Sources */,
 				DDBECF922AAA484B005313E7 /* PuzzleItem.swift in Sources */,
 				DDBECF7E2AA42150005313E7 /* HexagonView.swift in Sources */,

@@ -18,8 +18,10 @@ struct ContentView: View {
     @State var isHexagonsSelected = false
     @State var isIconsSelected = false
     
+    @State var isConfiguringFinish = false
     @State var isConfiguringHexagon = false
     @State var lastLocation = WitnessPuzzlesDocument.Point( 0, 0 )
+    @State var lastDirections = [WitnessPuzzlesDocument.Direction]()
     @State var lastColor = Color.black
 
     func select( tool: Binding<Bool> ) -> Void {
@@ -53,8 +55,15 @@ struct ContentView: View {
                 case isFinishesSelected:
                     if document.finishExists( point: point ) {
                         document.removeFinish( point: point )
-                    } else if document.isFinishPositionOK( point: point ) {
-                        document.addFinish( point: point )
+                    } else if let directions =
+                                WitnessPuzzlesDocument.Finish.validDirections( for: point, in: document ) {
+                        if directions.count == 1 {
+                            document.addFinish( point: point, direction: directions.first! )
+                        } else {
+                            isConfiguringFinish = true
+                            lastLocation = point
+                            lastDirections = directions
+                        }
                     } else {
                         NSSound.beep()
                     }
@@ -114,6 +123,12 @@ struct ContentView: View {
             }
             .sheet( isPresented: $isPresentingProperties, onDismiss: {} ) {
                 PropertiesView( document: $document )
+            }
+            .sheet( isPresented: $isConfiguringFinish, onDismiss: {} ) {
+                FinishView(
+                    document: $document, location: lastLocation,
+                    directions: lastDirections, direction: lastDirections.first!
+                )
             }
             .sheet( isPresented: $isConfiguringHexagon, onDismiss: {} ) {
                 HexagonView( document: $document, location: lastLocation, color: $lastColor )

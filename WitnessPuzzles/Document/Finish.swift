@@ -21,15 +21,11 @@ extension WitnessPuzzlesDocument {
         }
         
         func isValid( puzzle: WitnessPuzzlesDocument ) -> Bool {
-            if let goodDirection = Finish.validDirection( for: position, in: puzzle ) {
-                return direction == goodDirection
-            }
-            
-            return false
+            Finish.validDirection( from: position, direction: direction, in: puzzle )
         }
         
         static func isValid( position: Point, puzzle: WitnessPuzzlesDocument ) -> Bool {
-            Finish.validDirection( for: position, in: puzzle ) != nil
+            Finish.validDirections( for: position, in: puzzle ) != nil
         }
 
         var angle: Double {
@@ -52,23 +48,6 @@ extension WitnessPuzzlesDocument {
                 return Point( vector.x * ( distance + extra ), vector.y * ( distance + extra ) )
             case .northeast, .southeast, .southwest, .northwest:
                 return Point( vector.x * distance, vector.y * distance )
-            }
-        }
-        
-        static func validDirection( for point: Point, in puzzle: WitnessPuzzlesDocument ) -> Direction? {
-            let validX = puzzle.validSymbolX
-            let validY = puzzle.validSymbolY
-            
-            switch ( point.x, point.y ) {
-            case ( validX.lowerBound, validY.lowerBound ): return .southwest
-            case ( validX.lowerBound, validY.upperBound ): return .northwest
-            case ( validX.upperBound, validY.upperBound ): return .northeast
-            case ( validX.upperBound, validY.lowerBound ): return .southeast
-            case ( validX.lowerBound, validY ):            return .west
-            case ( validX.upperBound, validY ):            return .east
-            case ( validX, validY.lowerBound ):            return .south
-            case ( validX, validY.upperBound ):            return .north
-            default: return nil
             }
         }
         
@@ -164,11 +143,11 @@ extension WitnessPuzzlesDocument {
         finishes = finishes.filter { $0.position != point }
     }
 
-    mutating func addFinish( point: Point ) -> Void {
-        guard isFinishPositionOK( point: point ) else { return }
+    mutating func addFinish( point: Point, direction: Direction ) -> Void {
+        let newFinish = Finish( position: point, direction: direction )
         
-        if let goodDirection = Finish.validDirection( for: point, in: self ) {
-            finishes.insert( Finish( position: point, direction: goodDirection ) )
+        if newFinish.isValid( puzzle: self ) {
+            finishes.insert( newFinish )
         }
     }
 }
