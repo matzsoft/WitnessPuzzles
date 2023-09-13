@@ -89,7 +89,7 @@ extension WitnessPuzzlesDocument {
             
             context.saveGState()
             context.translateBy( x: CGFloat( user.x ), y: CGFloat( user.y ) )
-            if ( line.y & 1 ) - ( line.x & 1 ) > 0 {
+            if line.isVertical {
                 // Rotate vertical lines info horizontal position
                 context.rotate( by:  Double.pi / 2 )
             }
