@@ -9,34 +9,22 @@
 import SwiftUI
 
 struct ContentView: View {
-    enum ToolType: String, Identifiable {
-        case none, properties, starts, finishes, gaps, missings, hexagons, icons
-        
-        var id: String { rawValue }
-        
-        mutating func select( _ tool: ToolType ) -> Void {
-            self = tool == self ? .none : tool
-        }
-    }
-    
     @Binding var document: WitnessPuzzlesDocument
-    @State var toolType = ToolType.none
-    
-    @State var isConfiguringProperties = false
-    @State var isConfiguringFinish = false
-    @State var isConfiguringHexagon = false
-    @State var isConfiguringIcon = false
-    
+    @State var selectedTool: ToolType?
+    @State var currentConfiguration: ToolType?
     @State var lastLocation = WitnessPuzzlesDocument.Point( 0, 0 )
     @State var lastDirections = [WitnessPuzzlesDocument.Direction]()
     @State var lastColor = Color.black
+
+    func toggleTool( _ tool: ToolType ) { selectedTool = selectedTool == tool ? nil : tool }
+    func deselectTool( _ tool: ToolType ) { if selectedTool == tool { selectedTool = nil } }
 
     var body: some View {
         Image( nsImage: document.nsImage )
             .onTapGesture { location in
                 let point = document.toPuzzleSpace( from: location )
-                switch toolType {
-                case .none, .properties:
+                switch selectedTool {
+                case nil, .properties:
                     break
                 case .starts:
                     if document.startExists( point: point ) {
@@ -54,7 +42,7 @@ struct ContentView: View {
                         if directions.count == 1 {
                             document.addFinish( point: point, direction: directions.first! )
                         } else {
-                            isConfiguringFinish = true
+                            currentConfiguration = .finishes
                             lastLocation = point
                             lastDirections = directions
                         }
@@ -81,7 +69,7 @@ struct ContentView: View {
                     if document.hexagonExists( point: point ) {
                         document.removeHexagon( point: point )
                     } else if document.isHexagonPositionOK( point: point ) {
-                        isConfiguringHexagon = true
+                        currentConfiguration = .hexagons
                         lastLocation = point
                     } else {
                         NSSound.beep()
@@ -90,7 +78,7 @@ struct ContentView: View {
                     if document.iconExists( point: point ) {
                         document.removeIcon( point: point )
                     } else if document.isIconPositionOK( point: point ) {
-                        isConfiguringIcon = true
+                        currentConfiguration = .icons
                         lastLocation = point
                     } else {
                         NSSound.beep()
@@ -99,43 +87,45 @@ struct ContentView: View {
             }
             .toolbar {
                 ToolbarItemGroup( placement: .automatic ) {
-                    Button( action: { toolType.select( .properties ); isConfiguringProperties = true } ) {
+                    Button( action: { toggleTool( .properties ); currentConfiguration = .properties } ) {
                         Label( "Properties", systemImage: "ruler" )
-                    }.labelStyle( VerticalLabelStyle( isSelected: toolType == .properties ) )
-                    Button( action: { toolType.select( .starts ) } ) {
+                    }.labelStyle( VerticalLabelStyle( isSelected: selectedTool == .properties ) )
+                    Button( action: { toggleTool( .starts ) } ) {
                         Label( "Starts", systemImage: "play" )
-                    }.labelStyle( VerticalLabelStyle( isSelected: toolType == .starts ) )
-                    Button( action: { toolType.select( .finishes ) } ) {
+                    }.labelStyle( VerticalLabelStyle( isSelected: selectedTool == .starts ) )
+                    Button( action: { toggleTool( .finishes ) } ) {
                         Label( "Finishes", systemImage: "stop" )
-                    }.labelStyle( VerticalLabelStyle( isSelected: toolType == .finishes ) )
-                    Button( action: { toolType.select( .gaps ) } ) {
+                    }.labelStyle( VerticalLabelStyle( isSelected: selectedTool == .finishes ) )
+                    Button( action: { toggleTool( .gaps ) } ) {
                         Label( "Gaps", systemImage: "pause" )
-                    }.labelStyle( VerticalLabelStyle( isSelected: toolType == .gaps ) )
-                    Button( action: { toolType.select( .missings ) } ) {
+                    }.labelStyle( VerticalLabelStyle( isSelected: selectedTool == .gaps ) )
+                    Button( action: { toggleTool( .missings ) } ) {
                         Label( "Missing", systemImage: "cloud" )
-                    }.labelStyle( VerticalLabelStyle( isSelected: toolType == .missings ) )
-                    Button( action: { toolType.select( .hexagons ) } ) {
+                    }.labelStyle( VerticalLabelStyle( isSelected: selectedTool == .missings ) )
+                    Button( action: { toggleTool( .hexagons ) } ) {
                         Label( "Hexagons", systemImage: "hexagon.fill" )
-                    }.labelStyle( VerticalLabelStyle( isSelected: toolType == .hexagons ) )
-                    Button( action: { toolType.select( .icons ) } ) {
+                    }.labelStyle( VerticalLabelStyle( isSelected: selectedTool == .hexagons ) )
+                    Button( action: { toggleTool( .icons ) } ) {
                         Label( "Icons", systemImage: "seal" )
-                    }.labelStyle( VerticalLabelStyle( isSelected: toolType == .icons ) )
+                    }.labelStyle( VerticalLabelStyle( isSelected: selectedTool == .icons ) )
                 }
             }
-            .sheet( isPresented: $isConfiguringProperties, onDismiss: { toolType = .none } ) {
-                PropertiesView( document: $document )
-            }
-            .sheet( isPresented: $isConfiguringFinish, onDismiss: {} ) {
-                FinishView(
-                    document: $document, location: lastLocation,
-                    directions: lastDirections, direction: lastDirections.first!
-                )
-            }
-            .sheet( isPresented: $isConfiguringHexagon, onDismiss: {} ) {
-                HexagonView( document: $document, location: lastLocation, color: $lastColor )
-            }
-            .sheet( isPresented: $isConfiguringIcon, onDismiss: {} ) {
-                IconView( document: $document, location: lastLocation, color: $lastColor )
+            .sheet( item: $currentConfiguration, onDismiss: { deselectTool( .properties ) } ) { sheet in
+                switch sheet {
+                case .properties:
+                    PropertiesView( document: $document )
+                case .finishes:
+                    FinishView(
+                        document: $document, location: lastLocation,
+                        directions: lastDirections, direction: lastDirections.first!
+                    )
+                case .hexagons:
+                    HexagonView( document: $document, location: lastLocation, color: $lastColor )
+                case .icons:
+                    IconView( document: $document, location: lastLocation, color: $lastColor )
+                default:
+                    Text( verbatim: "No configuration for \(sheet.rawValue.capitalized)." )
+                }
             }
     }
 }
@@ -144,6 +134,15 @@ struct ContentView: View {
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
         ContentView( document: .constant( WitnessPuzzlesDocument() ) )
+    }
+}
+
+
+extension ContentView {
+    enum ToolType: String, Identifiable {
+        case properties, starts, finishes, gaps, missings, hexagons, icons
+        
+        var id: String { rawValue }
     }
 }
 
