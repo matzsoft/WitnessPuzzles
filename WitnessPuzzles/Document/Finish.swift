@@ -21,11 +21,13 @@ extension WitnessPuzzlesDocument {
         }
         
         func isValid( puzzle: WitnessPuzzlesDocument ) -> Bool {
-            Finish.validDirection( from: position, direction: direction, in: puzzle )
+            guard position.isPuzzleSpace( puzzle: puzzle ) else { return false }
+            return Finish.validDirection( from: position, direction: direction, in: puzzle )
         }
         
         static func isValid( position: Point, puzzle: WitnessPuzzlesDocument ) -> Bool {
-            Finish.validDirections( for: position, in: puzzle ) != nil
+            guard position.isPuzzleSpace( puzzle: puzzle ) else { return false }
+            return Finish.validDirections( for: position, in: puzzle ) != nil
         }
 
         var angle: Double {

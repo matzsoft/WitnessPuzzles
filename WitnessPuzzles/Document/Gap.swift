@@ -33,7 +33,7 @@ extension WitnessPuzzlesDocument {
             context.translateBy( x: CGFloat( user.x ), y: CGFloat( user.y ) )
             context.scaleBy( x: CGFloat( lineWidth ) / 6, y: CGFloat( lineWidth ) / 6 )
             context.setFillColor( background.cgColor! )
-            if gap.position.isHorizontal {
+            if gap.position.isVertical {
                 context.fill( [ CGRect( x: -3, y: -2, width: 6, height: 4 ) ] )
             } else {
                 context.fill( [ CGRect( x: -2, y: -3, width: 4, height: 6 ) ] )

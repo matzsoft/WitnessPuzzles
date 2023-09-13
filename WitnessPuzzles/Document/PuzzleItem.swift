@@ -60,4 +60,8 @@ extension WitnessPuzzlesDocument {
     func conflictsWithHexagons( point: Point ) -> Bool {
         hexagons.contains( where: { point == $0.position } )
     }
+    
+    func conflictsWithIcons( point: Point ) -> Bool {
+        icons.contains( where: { point == $0.position } )
+    }
 }

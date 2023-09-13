@@ -20,6 +20,7 @@ struct ContentView: View {
     
     @State var isConfiguringFinish = false
     @State var isConfiguringHexagon = false
+    @State var isConfiguringIcon = false
     @State var lastLocation = WitnessPuzzlesDocument.Point( 0, 0 )
     @State var lastDirections = [WitnessPuzzlesDocument.Direction]()
     @State var lastColor = Color.black
@@ -92,6 +93,15 @@ struct ContentView: View {
                     } else {
                         NSSound.beep()
                     }
+                case isIconsSelected:
+                    if document.iconExists( point: point ) {
+                        document.removeIcon( point: point )
+                    } else if document.isIconPositionOK( point: point ) {
+                        isConfiguringIcon = true
+                        lastLocation = point
+                    } else {
+                        NSSound.beep()
+                    }
                 default:
                     break
                 }
@@ -132,6 +142,9 @@ struct ContentView: View {
             }
             .sheet( isPresented: $isConfiguringHexagon, onDismiss: {} ) {
                 HexagonView( document: $document, location: lastLocation, color: $lastColor )
+            }
+            .sheet( isPresented: $isConfiguringIcon, onDismiss: {} ) {
+                IconView( document: $document, location: lastLocation, color: $lastColor )
             }
     }
 }

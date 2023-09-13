@@ -29,6 +29,7 @@ struct WitnessPuzzlesDocument: FileDocument, Codable {
     var hexagons = Set<Hexagon>()
     var gaps = Set<Gap>()
     var missings = Set<Missing>()
+    var icons = Set<Icon>()
 
     var lineWidth = 4
     var blockWidth = 8
@@ -115,6 +116,7 @@ struct WitnessPuzzlesDocument: FileDocument, Codable {
         drawFinishes( context: context )
         drawGaps( context: context )
         drawHexagons( context: context )
+        drawIcons( context: context )
 
         return context.makeImage()!
     }
@@ -168,5 +170,6 @@ struct WitnessPuzzlesDocument: FileDocument, Codable {
         hexagons = hexagons.filter { $0.isValid( puzzle: self ) }
         gaps = gaps.filter { $0.isValid( puzzle: self ) }
         missings = missings.filter { $0.isValid( puzzle: self ) }
+        icons = icons.filter { $0.isValid( puzzle: self ) }
     }
 }
