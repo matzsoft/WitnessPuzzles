@@ -19,7 +19,7 @@ extension WitnessPuzzlesDocument {
         }
         
         func isValid( puzzle: WitnessPuzzlesDocument ) -> Bool {
-            Start.isValid( position: position, puzzle: puzzle )
+            Icon.isValid( position: position, puzzle: puzzle )
         }
         
         static func isValid( position: Point, puzzle: WitnessPuzzlesDocument ) -> Bool {

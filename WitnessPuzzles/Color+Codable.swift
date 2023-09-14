@@ -41,8 +41,13 @@ extension Color: Codable {
     }
     
     func toHex( alpha: Bool = false ) -> String? {
-        guard let components = cgColor?.components, components.count >= 3 else { return nil }
-        
+        guard let originalColor = cgColor else { return nil }
+        guard let rgbColor = originalColor.converted(
+            to: CGColorSpaceCreateDeviceRGB(), intent: .defaultIntent, options: nil )
+        else { return nil }
+        guard let components = rgbColor.components else { return nil }
+        guard components.count >= 3 else { return nil }
+                
         let r = Int( ( components[0] * 255 ).rounded() )
         let g = Int( ( components[1] * 255 ).rounded() )
         let b = Int( ( components[2] * 255 ).rounded() )
