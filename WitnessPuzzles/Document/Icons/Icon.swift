@@ -9,11 +9,39 @@
 import Foundation
 import SwiftUI
 
-extension WitnessPuzzlesDocument {
-    struct Icon: PuzzleItem {
-        let position: Point
-        let color: Color
+protocol IconType {
+    var color: Color { get }
+}
 
+
+extension WitnessPuzzlesDocument {
+    enum Icon: CaseIterable, Hashable, Codable {
+        case square( SquareIcon )
+        
+        var id: UUID { UUID() }
+        static var allCases: [WitnessPuzzlesDocument.Icon] {
+            [ .square( SquareIcon( position: Point( 1, 1 ), color: .black ) ) ]
+        }
+
+        func hash( into hasher: inout Hasher ) {
+            switch self {
+            case .square( let icon ):
+                hasher.combine( icon )
+            }
+        }
+        
+        var position: Point {
+            switch self {
+            case .square( let icon ): return icon.position
+            }
+        }
+        
+        var color: Color {
+            switch self {
+            case .square( let icon ): return icon.color
+            }
+        }
+        
         func location( puzzle: WitnessPuzzlesDocument ) -> Point {
             position.puzzle2user( puzzle: puzzle )
         }
@@ -25,35 +53,27 @@ extension WitnessPuzzlesDocument {
         static func isValid( position: Point, puzzle: WitnessPuzzlesDocument ) -> Bool {
             position.isPuzzleSpace( puzzle: puzzle ) && position.isBlock
         }
+        
+        func draw( puzzle: WitnessPuzzlesDocument, context: CGContext ) -> Void {
+            switch self {
+            case .square( let icon ): icon.draw( puzzle: puzzle, context: context )
+            }
+        }
+        
+        func move( to: Point ) -> Icon {
+            switch self {
+            case .square( let icon ): return Icon.square( icon.move( to: to ) )
+            }
+        }
     }
 
     func drawIcons( context: CGContext ) -> Void {
-        let iconWidth = 0.5 * CGFloat( blockWidth )
-        let cornerRadius = iconWidth / 4
-        let rect = CGRect( x: -iconWidth / 2, y: -iconWidth / 2, width: iconWidth, height: iconWidth )
-        
-        func draw( icon: Icon ) {
-            let drawing = icon.location( puzzle: self )
-
-            context.saveGState()
-            context.translateBy( x: CGFloat( drawing.x ), y: CGFloat( drawing.y ) )
-            context.setFillColor( icon.color.cgColor! )
-            context.beginPath()
-            context.addPath(
-                CGPath(
-                    roundedRect: rect, cornerWidth: cornerRadius,
-                    cornerHeight: cornerRadius, transform: nil
-                )
-            )
-            context.fillPath()
-            context.restoreGState()
-        }
-        
         for icon in icons {
-            draw( icon: icon )
+            icon.draw( puzzle: self, context: context )
             if type.needsWrap( point: icon.position, puzzle: self ) {
                 let newPosition = Point( validSymbolX.upperBound + 1, icon.position.y )
-                draw( icon: Icon( position: newPosition, color: icon.color ) )
+                let moved = icon.move( to: newPosition )
+                moved.draw( puzzle: self, context: context )
             }
         }
         
@@ -71,13 +91,5 @@ extension WitnessPuzzlesDocument {
     
     mutating func removeIcon( point: Point ) -> Void {
         icons = icons.filter { $0.position != point }
-    }
-
-    mutating func addIcon( point: Point, color: Color ) -> Void {
-        guard isIconPositionOK( point: point ) else { return }
-        
-        if Icon.isValid( position: point, puzzle: self ) {
-            icons.insert( Icon( position: point, color: color ) )
-        }
     }
 }

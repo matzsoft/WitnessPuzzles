@@ -28,7 +28,7 @@ struct IconView: View {
                 .keyboardShortcut( .cancelAction )
                 Spacer()
                 Button( "Done", role: .destructive ) {
-                    document.addIcon( point: location, color: color )
+                    document.addSquareIcon( point: location, color: color )
                     if NSColorPanel.shared.isVisible { NSColorPanel.shared.orderOut( nil ) }
                     presentationMode.wrappedValue.dismiss()
                 }
