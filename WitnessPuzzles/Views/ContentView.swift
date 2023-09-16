@@ -15,6 +15,7 @@ struct ContentView: View {
     @State var lastLocation = WitnessPuzzlesDocument.Point( 0, 0 )
     @State var lastDirections = [WitnessPuzzlesDocument.Direction]()
     @State var lastColor = Color.black
+    @State var lastIconType = WitnessPuzzlesDocument.IconType.square
 
     func toggleTool( _ tool: ToolType ) { selectedTool = selectedTool == tool ? nil : tool }
     func deselectTool( _ tool: ToolType ) { if selectedTool == tool { selectedTool = nil } }
@@ -122,7 +123,10 @@ struct ContentView: View {
                 case .hexagons:
                     HexagonView( document: $document, location: lastLocation, color: $lastColor )
                 case .icons:
-                    IconView( document: $document, location: lastLocation, color: $lastColor )
+                    IconView(
+                        document: $document, location: lastLocation,
+                        color: $lastColor, iconType: $lastIconType
+                    )
                 default:
                     Text( verbatim: "No configuration for \(sheet.rawValue.capitalized)." )
                 }

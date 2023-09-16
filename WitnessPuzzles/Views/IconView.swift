@@ -13,12 +13,19 @@ struct IconView: View {
     @Binding var document: WitnessPuzzlesDocument
     let location: WitnessPuzzlesDocument.Point
     @Binding var color: Color
+    @Binding var iconType: WitnessPuzzlesDocument.IconType
 
     var body: some View {
         VStack {
 //            Text( "Select a color for the new hexagon" )
 //            Divider()
             ColorPicker( "Color", selection: $color )
+            Divider()
+            Picker( "Icon Type", selection: $iconType ) {
+                ForEach( WitnessPuzzlesDocument.IconType.allCases ) {
+                    $0.label.tag( $0 )
+                }
+            }.pickerStyle( .segmented )
             Divider()
             HStack {
                 Button( "Cancel", role: .cancel ) {
@@ -28,7 +35,12 @@ struct IconView: View {
                 .keyboardShortcut( .cancelAction )
                 Spacer()
                 Button( "Done", role: .destructive ) {
-                    document.addSquareIcon( point: location, color: color )
+                    switch iconType {
+                    case .square:
+                        document.addSquareIcon( point: location, color: color )
+                    case .star:
+                        document.addStarIcon( point: location, color: color )
+                    }
                     if NSColorPanel.shared.isVisible { NSColorPanel.shared.orderOut( nil ) }
                     presentationMode.wrappedValue.dismiss()
                 }

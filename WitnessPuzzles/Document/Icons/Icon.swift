@@ -18,8 +18,16 @@ protocol IconItem: Hashable, Codable {
 
 
 extension WitnessPuzzlesDocument {
-    enum IconType: String, CaseIterable, Codable {
+    enum IconType: String, CaseIterable, Identifiable, Codable {
         case square, star
+        var id: String { rawValue }
+        
+        var label: Image {
+            switch self {
+            case .square: return Image( systemName: "stop.fill" )
+            case .star:   return Image( systemName: "seal.fill" )
+            }
+        }
     }
     
     struct Icon: PuzzleItem, Hashable, Codable {
