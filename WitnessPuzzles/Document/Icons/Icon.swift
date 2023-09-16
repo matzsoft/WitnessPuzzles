@@ -9,39 +9,59 @@
 import Foundation
 import SwiftUI
 
-protocol IconType {
+protocol IconItem: Hashable, Codable {
+    var position: WitnessPuzzlesDocument.Point { get }
     var color: Color { get }
+    func draw( puzzle: WitnessPuzzlesDocument, context: CGContext )
+    func move( to: WitnessPuzzlesDocument.Point ) -> any IconItem
 }
 
 
 extension WitnessPuzzlesDocument {
-    enum Icon: CaseIterable, Hashable, Codable {
-        case square( SquareIcon )
+    enum IconType: String, CaseIterable, Codable {
+        case square, star
+    }
+    
+    struct Icon: PuzzleItem, Hashable, Codable {
+        let type: IconType
+        let icon: any IconItem
         
-        var id: UUID { UUID() }
-        static var allCases: [WitnessPuzzlesDocument.Icon] {
-            [ .square( SquareIcon( position: Point( 1, 1 ), color: .black ) ) ]
+        init( type: WitnessPuzzlesDocument.IconType, icon: any IconItem ) {
+            self.type = type
+            self.icon = icon
+        }
+        
+        enum CodingKeys: CodingKey {
+            case type
+            case icon
         }
 
-        func hash( into hasher: inout Hasher ) {
-            switch self {
-            case .square( let icon ):
-                hasher.combine( icon )
+        init( from decoder: Decoder ) throws {
+            let container = try decoder.container( keyedBy: CodingKeys.self )
+            type = try container.decode( IconType.self, forKey: .type )
+            switch type {
+            case .square:
+                icon = try container.decode( SquareIcon.self, forKey: .icon )
+            case .star:
+                icon = try container.decode( StarIcon.self, forKey: .icon )
             }
         }
         
-        var position: Point {
-            switch self {
-            case .square( let icon ): return icon.position
+        func encode( to encoder: Encoder ) throws {
+            var container = encoder.container( keyedBy: CodingKeys.self )
+            try container.encode( type, forKey: .type )
+            
+            switch type {
+            case .square:
+                try container.encode( icon as! SquareIcon, forKey: .icon )
+            case .star:
+                try container.encode( icon as! StarIcon, forKey: .icon )
             }
         }
         
-        var color: Color {
-            switch self {
-            case .square( let icon ): return icon.color
-            }
-        }
-        
+        var position: Point { icon.position }
+        var id: UUID { UUID() }
+
         func location( puzzle: WitnessPuzzlesDocument ) -> Point {
             position.puzzle2user( puzzle: puzzle )
         }
@@ -53,26 +73,23 @@ extension WitnessPuzzlesDocument {
         static func isValid( position: Point, puzzle: WitnessPuzzlesDocument ) -> Bool {
             position.isPuzzleSpace( puzzle: puzzle ) && position.isBlock
         }
-        
-        func draw( puzzle: WitnessPuzzlesDocument, context: CGContext ) -> Void {
-            switch self {
-            case .square( let icon ): icon.draw( puzzle: puzzle, context: context )
-            }
+
+        static func ==( lhs: Icon, rhs: Icon ) -> Bool {
+            lhs.type == rhs.type && lhs.icon.position == rhs.icon.position
         }
         
-        func move( to: Point ) -> Icon {
-            switch self {
-            case .square( let icon ): return Icon.square( icon.move( to: to ) )
-            }
+        func hash( into hasher: inout Hasher ) {
+            hasher.combine( type )
+            hasher.combine( icon )
         }
     }
 
     func drawIcons( context: CGContext ) -> Void {
         for icon in icons {
-            icon.draw( puzzle: self, context: context )
+            icon.icon.draw( puzzle: self, context: context )
             if type.needsWrap( point: icon.position, puzzle: self ) {
                 let newPosition = Point( validSymbolX.upperBound + 1, icon.position.y )
-                let moved = icon.move( to: newPosition )
+                let moved = icon.icon.move( to: newPosition )
                 moved.draw( puzzle: self, context: context )
             }
         }

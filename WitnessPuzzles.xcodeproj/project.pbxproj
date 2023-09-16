@@ -10,6 +10,7 @@
 		DD29DCDB2AB13A1C0031F8CD /* Icon.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD29DCD92AB13A1C0031F8CD /* Icon.swift */; };
 		DD29DCDF2AB15E670031F8CD /* IconView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD29DCDD2AB15E670031F8CD /* IconView.swift */; };
 		DD29DCE82AB4E5B20031F8CD /* SquareIcon.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD29DCE62AB4E5B20031F8CD /* SquareIcon.swift */; };
+		DD29DCEC2AB522FF0031F8CD /* StarIcon.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD29DCEA2AB522FF0031F8CD /* StarIcon.swift */; };
 		DDBECF3A2A955AE0005313E7 /* WitnessPuzzlesApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDBECF392A955AE0005313E7 /* WitnessPuzzlesApp.swift */; };
 		DDBECF3C2A955AE0005313E7 /* WitnessPuzzlesDocument.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDBECF3B2A955AE0005313E7 /* WitnessPuzzlesDocument.swift */; };
 		DDBECF3E2A955AE0005313E7 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDBECF3D2A955AE0005313E7 /* ContentView.swift */; };
@@ -53,6 +54,7 @@
 		DD29DCD92AB13A1C0031F8CD /* Icon.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Icon.swift; sourceTree = "<group>"; };
 		DD29DCDD2AB15E670031F8CD /* IconView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IconView.swift; sourceTree = "<group>"; };
 		DD29DCE62AB4E5B20031F8CD /* SquareIcon.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SquareIcon.swift; sourceTree = "<group>"; };
+		DD29DCEA2AB522FF0031F8CD /* StarIcon.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StarIcon.swift; sourceTree = "<group>"; };
 		DDBECF362A955AE0005313E7 /* WitnessPuzzles.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = WitnessPuzzles.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		DDBECF392A955AE0005313E7 /* WitnessPuzzlesApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WitnessPuzzlesApp.swift; sourceTree = "<group>"; };
 		DDBECF3B2A955AE0005313E7 /* WitnessPuzzlesDocument.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WitnessPuzzlesDocument.swift; sourceTree = "<group>"; };
@@ -110,6 +112,7 @@
 			children = (
 				DD29DCD92AB13A1C0031F8CD /* Icon.swift */,
 				DD29DCE62AB4E5B20031F8CD /* SquareIcon.swift */,
+				DD29DCEA2AB522FF0031F8CD /* StarIcon.swift */,
 			);
 			path = Icons;
 			sourceTree = "<group>";
@@ -137,8 +140,8 @@
 		DDBECF382A955AE0005313E7 /* WitnessPuzzles */ = {
 			isa = PBXGroup;
 			children = (
-				DDBECF722AA261A5005313E7 /* Document */,
 				DDBECF6B2A9ABCE4005313E7 /* Color+Codable.swift */,
+				DDBECF722AA261A5005313E7 /* Document */,
 				DDBECF392A955AE0005313E7 /* WitnessPuzzlesApp.swift */,
 				DDBECF6D2A9EFA2D005313E7 /* Views */,
 				DDBECF3F2A955AE0005313E7 /* Assets.xcassets */,
@@ -189,11 +192,11 @@
 		DDBECF722AA261A5005313E7 /* Document */ = {
 			isa = PBXGroup;
 			children = (
-				DD29DCE02AB4E4D00031F8CD /* Icons */,
 				DDBECF682A99349A005313E7 /* CGExtensions.swift */,
 				DDBECF742AA261DD005313E7 /* Finish.swift */,
 				DDBECF802AA44B9E005313E7 /* Gap.swift */,
 				DDBECF782AA3B20C005313E7 /* Hexagon.swift */,
+				DD29DCE02AB4E4D00031F8CD /* Icons */,
 				DDBECF842AA65A74005313E7 /* Missing.swift */,
 				DDBECF902AAA484B005313E7 /* PuzzleItem.swift */,
 				DDBECF8C2AA97372005313E7 /* PuzzleType.swift */,
@@ -341,6 +344,7 @@
 				DDBECF8A2AA68CA6005313E7 /* Start.swift in Sources */,
 				DDBECF8E2AA97372005313E7 /* PuzzleType.swift in Sources */,
 				DDBECF3E2A955AE0005313E7 /* ContentView.swift in Sources */,
+				DD29DCEC2AB522FF0031F8CD /* StarIcon.swift in Sources */,
 				DDBECF822AA44B9E005313E7 /* Gap.swift in Sources */,
 				DDBECF762AA261DD005313E7 /* Finish.swift in Sources */,
 				DDBECF712A9EFA5C005313E7 /* PropertiesView.swift in Sources */,
