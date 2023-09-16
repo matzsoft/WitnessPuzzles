@@ -17,6 +17,8 @@ None known at this time.
 
 1. Expand the icons tool to implement different icon types.
 1. Make an icon for the app.
+1. Try to eliminate the proliferation of location methods.
+1. Can the IconType enum be eliminated by type introspection?
 
 ### GUI
 
