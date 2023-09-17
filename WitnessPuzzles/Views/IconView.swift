@@ -40,6 +40,8 @@ struct IconView: View {
                         document.addSquareIcon( point: location, color: color )
                     case .star:
                         document.addStarIcon( point: location, color: color )
+                    case .elimination:
+                        document.addEliminationIcon( point: location, color: color )
                     }
                     if NSColorPanel.shared.isVisible { NSColorPanel.shared.orderOut( nil ) }
                     presentationMode.wrappedValue.dismiss()

@@ -11,6 +11,7 @@
 		DD29DCDF2AB15E670031F8CD /* IconView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD29DCDD2AB15E670031F8CD /* IconView.swift */; };
 		DD29DCE82AB4E5B20031F8CD /* SquareIcon.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD29DCE62AB4E5B20031F8CD /* SquareIcon.swift */; };
 		DD29DCEC2AB522FF0031F8CD /* StarIcon.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD29DCEA2AB522FF0031F8CD /* StarIcon.swift */; };
+		DD29DCF02AB67C220031F8CD /* EliminationIcon.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD29DCEE2AB67C220031F8CD /* EliminationIcon.swift */; };
 		DDBECF3A2A955AE0005313E7 /* WitnessPuzzlesApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDBECF392A955AE0005313E7 /* WitnessPuzzlesApp.swift */; };
 		DDBECF3C2A955AE0005313E7 /* WitnessPuzzlesDocument.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDBECF3B2A955AE0005313E7 /* WitnessPuzzlesDocument.swift */; };
 		DDBECF3E2A955AE0005313E7 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDBECF3D2A955AE0005313E7 /* ContentView.swift */; };
@@ -55,6 +56,7 @@
 		DD29DCDD2AB15E670031F8CD /* IconView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IconView.swift; sourceTree = "<group>"; };
 		DD29DCE62AB4E5B20031F8CD /* SquareIcon.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SquareIcon.swift; sourceTree = "<group>"; };
 		DD29DCEA2AB522FF0031F8CD /* StarIcon.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StarIcon.swift; sourceTree = "<group>"; };
+		DD29DCEE2AB67C220031F8CD /* EliminationIcon.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EliminationIcon.swift; sourceTree = "<group>"; };
 		DDBECF362A955AE0005313E7 /* WitnessPuzzles.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = WitnessPuzzles.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		DDBECF392A955AE0005313E7 /* WitnessPuzzlesApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WitnessPuzzlesApp.swift; sourceTree = "<group>"; };
 		DDBECF3B2A955AE0005313E7 /* WitnessPuzzlesDocument.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WitnessPuzzlesDocument.swift; sourceTree = "<group>"; };
@@ -113,6 +115,7 @@
 				DD29DCD92AB13A1C0031F8CD /* Icon.swift */,
 				DD29DCE62AB4E5B20031F8CD /* SquareIcon.swift */,
 				DD29DCEA2AB522FF0031F8CD /* StarIcon.swift */,
+				DD29DCEE2AB67C220031F8CD /* EliminationIcon.swift */,
 			);
 			path = Icons;
 			sourceTree = "<group>";
@@ -350,6 +353,7 @@
 				DDBECF712A9EFA5C005313E7 /* PropertiesView.swift in Sources */,
 				DDBECF6C2A9ABCE4005313E7 /* Color+Codable.swift in Sources */,
 				DDDC41732AAFD202005A4F68 /* FinishView.swift in Sources */,
+				DD29DCF02AB67C220031F8CD /* EliminationIcon.swift in Sources */,
 				DD29DCDF2AB15E670031F8CD /* IconView.swift in Sources */,
 				DDBECF6A2A99349A005313E7 /* CGExtensions.swift in Sources */,
 				DDBECF922AAA484B005313E7 /* PuzzleItem.swift in Sources */,

@@ -19,13 +19,14 @@ protocol IconItem: Hashable, Codable {
 
 extension WitnessPuzzlesDocument {
     enum IconType: String, CaseIterable, Identifiable, Codable {
-        case square, star
+        case square, star, elimination
         var id: String { rawValue }
         
         var label: Image {
             switch self {
-            case .square: return Image( systemName: "stop.fill" )
-            case .star:   return Image( systemName: "seal.fill" )
+            case .square:      return Image( systemName: "stop.fill" )
+            case .star:        return Image( systemName: "seal.fill" )
+            case .elimination: return Image( systemName: "arrow.triangle.merge")
             }
         }
     }
@@ -52,6 +53,8 @@ extension WitnessPuzzlesDocument {
                 icon = try container.decode( SquareIcon.self, forKey: .icon )
             case .star:
                 icon = try container.decode( StarIcon.self, forKey: .icon )
+            case .elimination:
+                icon = try container.decode( EliminationIcon.self, forKey: .icon )
             }
         }
         
@@ -64,6 +67,8 @@ extension WitnessPuzzlesDocument {
                 try container.encode( icon as! SquareIcon, forKey: .icon )
             case .star:
                 try container.encode( icon as! StarIcon, forKey: .icon )
+            case .elimination:
+                try container.encode( icon as! EliminationIcon, forKey: .icon )
             }
         }
         
