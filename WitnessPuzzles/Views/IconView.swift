@@ -14,6 +14,7 @@ struct IconView: View {
     let location: WitnessPuzzlesDocument.Point
     @Binding var color: Color
     @Binding var iconType: WitnessPuzzlesDocument.IconType
+    @Binding var trianglesCount: Double
 
     var body: some View {
         VStack {
@@ -26,6 +27,19 @@ struct IconView: View {
                     $0.label.tag( $0 )
                 }
             }.pickerStyle( .segmented )
+            if iconType == .triangles {
+                VStack {
+                    Slider( value: $trianglesCount, in: 1 ... 3, step: 1 ) {
+                        Text( "Triangles Count" )
+                    } minimumValueLabel: {
+                        Text( "1" )
+                    } maximumValueLabel: {
+                        Text( "3" )
+                    }
+                    .tint( .black )
+                    Text( String( format: "%.0f", trianglesCount ) )
+                }
+            }
             Divider()
             HStack {
                 Button( "Cancel", role: .cancel ) {
@@ -41,7 +55,9 @@ struct IconView: View {
                     case .star:
                         document.addStarIcon( point: location, color: color )
                     case .triangles:
-                        document.addTrianglesIcon( point: location, color: color, count: 2 )
+                        document.addTrianglesIcon(
+                            point: location, color: color, count: Int( trianglesCount )
+                        )
                     case .elimination:
                         document.addEliminationIcon( point: location, color: color )
                     }

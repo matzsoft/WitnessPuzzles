@@ -16,6 +16,7 @@ struct ContentView: View {
     @State var lastDirections = [WitnessPuzzlesDocument.Direction]()
     @State var lastColor = Color.black
     @State var lastIconType = WitnessPuzzlesDocument.IconType.square
+    @State var trianglesCount = 2.0
 
     func toggleTool( _ tool: ToolType ) { selectedTool = selectedTool == tool ? nil : tool }
     func deselectTool( _ tool: ToolType ) { if selectedTool == tool { selectedTool = nil } }
@@ -125,7 +126,7 @@ struct ContentView: View {
                 case .icons:
                     IconView(
                         document: $document, location: lastLocation,
-                        color: $lastColor, iconType: $lastIconType
+                        color: $lastColor, iconType: $lastIconType, trianglesCount: $trianglesCount
                     )
                 default:
                     Text( verbatim: "No configuration for \(sheet.rawValue.capitalized)." )
