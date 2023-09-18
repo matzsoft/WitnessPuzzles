@@ -23,11 +23,7 @@ extension WitnessPuzzlesDocument {
         var id: String { rawValue }
         
         var label: Image {
-            switch self {
-            case .square:      return Image( systemName: "stop.fill" )
-            case .star:        return Image( systemName: "seal.fill" )
-            case .elimination: return Image( systemName: "arrow.triangle.merge")
-            }
+            Image( "\(rawValue.capitalized)Icon" )
         }
     }
     
