@@ -37,31 +37,29 @@ extension WitnessPuzzlesDocument {
             context.translateBy( x: CGFloat( drawing.x ), y: CGFloat( drawing.y ) )
             context.scaleBy( x: stepSize, y: stepSize )
             context.setFillColor( color.cgColor! )
-            
-            func drawOne() {
-                context.beginPath()
+            context.beginPath()
+
+            func drawOne( xOffset: CGFloat ) {
+                context.translateBy( x: xOffset, y: 0 )
                 context.addLines( between: [ iconTop, iconLeft, iconRight ] )
-                context.fillPath()
+                context.translateBy( x: -xOffset, y: 0 )
             }
             
             switch count {
             case 1:
-                drawOne()
+                drawOne( xOffset: 0 )
             case 2:
-                context.translateBy( x: -2, y: 0 )
-                drawOne()
-                context.translateBy( x: 4, y: 0 )
-                drawOne()
+                drawOne( xOffset: -2 )
+                drawOne( xOffset: 2 )
             case 3:
-                drawOne()
-                context.translateBy( x: -3, y: 0 )
-                drawOne()
-                context.translateBy( x: 6, y: 0 )
-                drawOne()
+                drawOne( xOffset: -3 )
+                drawOne( xOffset: 0 )
+                drawOne( xOffset: 3)
             default:
                 fatalError( "Triangles icon with invalid count \(count)." )
             }
             
+            context.fillPath()
             context.restoreGState()
         }
         
