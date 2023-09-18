@@ -40,6 +40,8 @@ struct IconView: View {
                         document.addSquareIcon( point: location, color: color )
                     case .star:
                         document.addStarIcon( point: location, color: color )
+                    case .triangles:
+                        document.addTrianglesIcon( point: location, color: color, count: 2 )
                     case .elimination:
                         document.addEliminationIcon( point: location, color: color )
                     }

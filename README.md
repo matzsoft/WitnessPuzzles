@@ -15,7 +15,8 @@ None known at this time.
 
 ### Functional
 
-1. Add new icon types: triangles and tetris.
+1. Add a way to select the triangles count for the triangle icon type.
+1. Add the new tetris icon type.
 1. Make an icon for the app.
 1. Look to cleanup the extra* methods.
 1. Can the IconType enum be eliminated by type introspection?
