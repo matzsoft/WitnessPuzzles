@@ -22,7 +22,7 @@ struct ContentView: View {
     func deselectTool( _ tool: ToolType ) { if selectedTool == tool { selectedTool = nil } }
 
     var body: some View {
-        Image( nsImage: document.nsImage )
+        Image( document.image, scale: 1.0, label: Text(verbatim: "" ) )
             .onTapGesture { location in
                 let point = document.toPuzzleSpace( from: location )
                 switch selectedTool {

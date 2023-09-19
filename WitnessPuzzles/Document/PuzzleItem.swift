@@ -10,7 +10,6 @@ import Foundation
 
 protocol PuzzleItem: Codable, Hashable {
     var position: WitnessPuzzlesDocument.Point { get }
-    func location( puzzle: WitnessPuzzlesDocument ) -> WitnessPuzzlesDocument.Point
     func extent( puzzle: WitnessPuzzlesDocument ) -> CGRect
     func isValid( puzzle: WitnessPuzzlesDocument ) -> Bool
     static func isValid( position: WitnessPuzzlesDocument.Point, puzzle: WitnessPuzzlesDocument ) -> Bool

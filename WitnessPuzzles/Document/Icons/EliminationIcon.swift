@@ -14,14 +14,10 @@ extension WitnessPuzzlesDocument {
         let position: Point
         let color: Color
         
-        func location( puzzle: WitnessPuzzlesDocument ) -> Point {
-            position.puzzle2user( puzzle: puzzle )
-        }
-        
         func draw( puzzle: WitnessPuzzlesDocument, context: CGContext ) {
             let iconWidth = 27 * CGFloat( puzzle.blockWidth ) / 220
             let rect = CGRect( x: -0.5, y: 0, width: iconWidth, height: 2 * iconWidth )
-            let drawing = location( puzzle: puzzle )
+            let drawing = position.puzzle2user( puzzle: puzzle )
 
             context.saveGState()
             context.translateBy( x: CGFloat( drawing.x ), y: CGFloat( drawing.y ) )

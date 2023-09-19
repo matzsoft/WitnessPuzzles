@@ -75,10 +75,6 @@ extension WitnessPuzzlesDocument {
         var position: Point { icon.position }
         var id: UUID { UUID() }
 
-        func location( puzzle: WitnessPuzzlesDocument ) -> Point {
-            position.puzzle2user( puzzle: puzzle )
-        }
-        
         func extent( puzzle: WitnessPuzzlesDocument ) -> CGRect {
             let center = position.puzzle2user( puzzle: puzzle ).cgPoint
             let width = CGFloat( puzzle.blockWidth )

@@ -17,12 +17,6 @@ extension WitnessPuzzlesDocument {
         static let circleRect = CGRect( x: -1, y: -1, width: 2, height: 2 )
         static let stemRect = CGRect( x: -1, y: -2, width: 2, height: 2 )
         
-        func location( puzzle: WitnessPuzzlesDocument ) -> Point {
-            let converted = position.puzzle2user( puzzle: puzzle )
-            let offset = offset( distance: puzzle.lineWidth / 2, extra: 1 )
-            return Point( converted.x + offset.x, converted.y + offset.y )
-        }
-        
         func extent( puzzle: WitnessPuzzlesDocument ) -> CGRect {
             let location = position.puzzle2user( puzzle: puzzle )
             let offset = offset( distance: puzzle.lineWidth / 2, extra: 1 )

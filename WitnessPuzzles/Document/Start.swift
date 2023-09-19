@@ -13,10 +13,6 @@ extension WitnessPuzzlesDocument {
     struct Start: PuzzleItem {
         let position: Point
         
-        func location( puzzle: WitnessPuzzlesDocument ) -> Point {
-            position.puzzle2user( puzzle: puzzle )
-        }
-        
         func extent( puzzle: WitnessPuzzlesDocument ) -> CGRect {
             let center = position.puzzle2user( puzzle: puzzle )
             return CGRect(

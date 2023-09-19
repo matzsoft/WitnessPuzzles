@@ -80,7 +80,6 @@ struct WitnessPuzzlesDocument: FileDocument, Codable {
     }
     
     func getContext( fill: Color? = nil ) -> CGContext {
-        let baseRect = type.baseRect( puzzle: self )
         let userRect = type.userRect( puzzle: self )
         let imageWidth = Int( userRect.width * scaleFactor )
         let imageHeight = Int( userRect.height * scaleFactor )
@@ -116,11 +115,6 @@ struct WitnessPuzzlesDocument: FileDocument, Codable {
         return context.makeImage()!
     }
     
-    var nsImage: NSImage {
-        let image = image
-        return NSImage( cgImage: image, size: NSSize( width: image.width, height: image.height ) )
-    }
-
     mutating func adjustDimensions( type: PuzzleType, width: Int, height: Int ) -> Void {
         self.type = type
         self.width = width

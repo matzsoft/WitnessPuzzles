@@ -22,16 +22,12 @@ extension WitnessPuzzlesDocument {
             self.count = count
         }
         
-        func location( puzzle: WitnessPuzzlesDocument ) -> Point {
-            position.puzzle2user( puzzle: puzzle )
-        }
-        
         func draw( puzzle: WitnessPuzzlesDocument, context: CGContext ) {
             let stepSize = CGFloat( puzzle.blockWidth ) / 10
             let iconTop = CGPoint( x: 0, y: 2 * sqrt( 3 ) / 3 )
             let iconLeft = CGPoint( x: -1, y: -2 * sqrt( 3 ) / 6 )
             let iconRight = CGPoint( x: 1, y: -2 * sqrt( 3 ) / 6 )
-            let drawing = location( puzzle: puzzle )
+            let drawing = position.puzzle2user( puzzle: puzzle )
 
             context.saveGState()
             context.translateBy( x: CGFloat( drawing.x ), y: CGFloat( drawing.y ) )
