@@ -17,6 +17,16 @@ extension WitnessPuzzlesDocument {
             position.puzzle2user( puzzle: puzzle )
         }
         
+        func extent( puzzle: WitnessPuzzlesDocument ) -> CGRect {
+            let center = position.puzzle2user( puzzle: puzzle ).cgPoint
+            let long = CGFloat( puzzle.lineWidth )
+            let short = 2 * long / 3
+            let width = position.isVertical ? long : short
+            let height = position.isVertical ? short : long
+            
+            return CGRect( x: center.x - width / 2, y: center.y - height / 2, width: width, height: height )
+        }
+        
         func isValid( puzzle: WitnessPuzzlesDocument ) -> Bool {
             Gap.isValid( position: position, puzzle: puzzle )
         }
@@ -27,26 +37,15 @@ extension WitnessPuzzlesDocument {
     }
 
     func drawGaps( context: CGContext ) -> Void {
-        func draw( gap: Gap ) {
-            let user = gap.location( puzzle: self )
-            context.saveGState()
-            context.translateBy( x: CGFloat( user.x ), y: CGFloat( user.y ) )
-            context.scaleBy( x: CGFloat( lineWidth ) / 6, y: CGFloat( lineWidth ) / 6 )
-            context.setFillColor( background.cgColor! )
-            if gap.position.isVertical {
-                context.fill( [ CGRect( x: -3, y: -2, width: 6, height: 4 ) ] )
-            } else {
-                context.fill( [ CGRect( x: -2, y: -3, width: 4, height: 6 ) ] )
-            }
-            context.restoreGState()
-        }
-        
+        context.saveGState()
+        context.setFillColor( background.cgColor! )
         for gap in gaps {
-            draw( gap: gap )
-            if type.needsWrap( point: gap.position, puzzle: self ) {
-                draw( gap: Gap( position: Point( validSymbolX.upperBound + 1, gap.position.y ) ) )
+            context.fill( [ gap.extent( puzzle: self ) ] )
+            if let wrapped = type.wrap( point: gap.position, puzzle: self ) {
+                context.fill( [ Gap( position: wrapped ).extent( puzzle: self ) ] )
             }
         }
+        context.restoreGState()
     }
     
     func gapExists( point: Point ) -> Bool {

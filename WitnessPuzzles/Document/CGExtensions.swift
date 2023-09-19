@@ -32,6 +32,7 @@ extension WitnessPuzzlesDocument {
         var isLine:         Bool { ( ( x ^ y)  & 1 ) == 1 }
         var isHorizontal:   Bool { isLine && y.isMultiple( of: 2 ) }
         var isVertical:     Bool { isLine && x.isMultiple( of: 2 ) }
+        var cgPoint:        CGPoint { CGPoint( x: x, y: y ) }
         
         func isPuzzleSpace( puzzle: WitnessPuzzlesDocument ) -> Bool {
             puzzle.validSymbolX.contains( x ) && puzzle.validSymbolY.contains( y )

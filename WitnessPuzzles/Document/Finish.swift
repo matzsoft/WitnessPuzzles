@@ -14,10 +14,24 @@ extension WitnessPuzzlesDocument {
         let position: Point
         let direction: Direction
         
+        static let circleRect = CGRect( x: -1, y: -1, width: 2, height: 2 )
+        static let stemRect = CGRect( x: -1, y: -2, width: 2, height: 2 )
+        
         func location( puzzle: WitnessPuzzlesDocument ) -> Point {
             let converted = position.puzzle2user( puzzle: puzzle )
             let offset = offset( distance: puzzle.lineWidth / 2, extra: 1 )
             return Point( converted.x + offset.x, converted.y + offset.y )
+        }
+        
+        func extent( puzzle: WitnessPuzzlesDocument ) -> CGRect {
+            let location = position.puzzle2user( puzzle: puzzle )
+            let offset = offset( distance: puzzle.lineWidth / 2, extra: 1 )
+            let center = ( location + offset ).cgPoint
+            let radius = CGFloat( puzzle.finishRadius )
+            
+            return CGRect(
+                x: center.x - radius, y: center.y - radius, width: 2 * radius, height: 2 * radius
+            )
         }
         
         func isValid( puzzle: WitnessPuzzlesDocument ) -> Bool {
@@ -105,27 +119,28 @@ extension WitnessPuzzlesDocument {
     }
 
     func drawFinishes( context: CGContext ) -> Void {
+        func draw( finish: Finish ) {
+            let extent = finish.extent( puzzle: self )
+            context.saveGState()
+            context.translateBy( x: extent.midX, y: extent.midY )
+            context.scaleBy( x: extent.width / 2, y: extent.height / 2 )
+            context.addEllipse( in: Finish.circleRect )
+            
+            context.rotate( by: finish.angle )
+            context.addRect( Finish.stemRect )
+            context.restoreGState()
+        }
+        
         context.saveGState()
         context.setFillColor( foreground.cgColor! )
         context.beginPath()
 
         for finish in finishes {
-            let user = finish.location( puzzle: self )
-            context.saveGState()
-            context.translateBy( x: CGFloat( user.x ), y: CGFloat( user.y ) )
-            context.addEllipse( in: CGRect(
-                x: -finishRadius, y: -finishRadius,
-                width: 2 * finishRadius, height: 2 * finishRadius
-            ) )
-            
-            context.rotate( by: finish.angle )
-            context.addRect( CGRect(
-                x: -finishRadius, y: -2 * finishRadius,
-                width: 2 * finishRadius, height: 2 * finishRadius
-            ) )
-            context.restoreGState()
+            draw( finish: finish )
+            if let wrapped = type.wrap( point: finish.position, puzzle: self ) {
+                draw( finish: Finish( position: wrapped, direction: finish.direction ) )
+            }
         }
-        
         context.fillPath()
         context.restoreGState()
     }

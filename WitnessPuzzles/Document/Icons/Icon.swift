@@ -79,6 +79,12 @@ extension WitnessPuzzlesDocument {
             position.puzzle2user( puzzle: puzzle )
         }
         
+        func extent( puzzle: WitnessPuzzlesDocument ) -> CGRect {
+            let center = position.puzzle2user( puzzle: puzzle ).cgPoint
+            let width = CGFloat( puzzle.blockWidth )
+            return CGRect( x: center.x - width / 2, y: center.y - width / 2, width: width, height: width )
+        }
+        
         func isValid( puzzle: WitnessPuzzlesDocument ) -> Bool {
             Icon.isValid( position: position, puzzle: puzzle )
         }
@@ -100,10 +106,8 @@ extension WitnessPuzzlesDocument {
     func drawIcons( context: CGContext ) -> Void {
         for icon in icons {
             icon.icon.draw( puzzle: self, context: context )
-            if type.needsWrap( point: icon.position, puzzle: self ) {
-                let newPosition = Point( validSymbolX.upperBound + 1, icon.position.y )
-                let moved = icon.icon.move( to: newPosition )
-                moved.draw( puzzle: self, context: context )
+            if let wrapped = type.wrap( point: icon.position, puzzle: self ) {
+                icon.icon.move( to: wrapped ).draw( puzzle: self, context: context )
             }
         }
         

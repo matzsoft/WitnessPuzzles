@@ -17,6 +17,16 @@ extension WitnessPuzzlesDocument {
             position.puzzle2user( puzzle: puzzle )
         }
         
+        func extent( puzzle: WitnessPuzzlesDocument ) -> CGRect {
+            let center = position.puzzle2user( puzzle: puzzle ).cgPoint
+            let short = CGFloat( puzzle.lineWidth )
+            let long = CGFloat( puzzle.lineWidth + puzzle.blockWidth )
+            let width = position.isVertical ? short : long
+            let height = position.isVertical ? long : short
+            
+            return CGRect( x: center.x - width / 2, y: center.y - height / 2, width: width, height: height )
+        }
+        
         func isValid( puzzle: WitnessPuzzlesDocument ) -> Bool {
             Missing.isValid( position: position, puzzle: puzzle )
         }

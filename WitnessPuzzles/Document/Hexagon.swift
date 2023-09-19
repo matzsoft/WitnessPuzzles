@@ -18,6 +18,14 @@ extension WitnessPuzzlesDocument {
             position.puzzle2user( puzzle: puzzle )
         }
         
+        func extent( puzzle: WitnessPuzzlesDocument ) -> CGRect {
+            let center = position.puzzle2user( puzzle: puzzle ).cgPoint
+            let radius = CGFloat( puzzle.lineWidth ) / 2
+            return CGRect(
+                x: center.x - radius, y: center.y - radius, width: 2 * radius, height: 2 * radius
+            )
+        }
+        
         func isValid( puzzle: WitnessPuzzlesDocument ) -> Bool {
             Hexagon.isValid( position: position, puzzle: puzzle )
         }
@@ -35,11 +43,11 @@ extension WitnessPuzzlesDocument {
         ]
         
         func draw( hexagon: Hexagon ) {
-            let user = hexagon.location( puzzle: self )
+            let extent = hexagon.extent( puzzle: self )
             context.saveGState()
             context.beginPath()
-            context.translateBy( x: CGFloat( user.x ), y: CGFloat( user.y ) )
-            context.scaleBy( x: CGFloat( lineWidth ) / 2, y: CGFloat( lineWidth ) / 2 )
+            context.translateBy( x: extent.midX, y: extent.midY )
+            context.scaleBy( x: extent.width / 2, y: extent.height / 2 )
             context.addLines( between: hexPoints )
             context.setFillColor( hexagon.color.cgColor! )
             context.fillPath()
@@ -48,9 +56,7 @@ extension WitnessPuzzlesDocument {
         
         for hexagon in hexagons {
             draw( hexagon: hexagon )
-            if type.needsWrap( point: hexagon.position, puzzle: self ) {
-                let wrapped = Point( validSymbolX.upperBound + 1, hexagon.position.y )
-
+            if let wrapped = type.wrap( point: hexagon.position, puzzle: self ) {
                 draw( hexagon: Hexagon( position: wrapped, color: hexagon.color ) )
             }
         }

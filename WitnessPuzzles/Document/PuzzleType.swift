@@ -47,10 +47,14 @@ extension WitnessPuzzlesDocument {
             }
         }
         
-        func needsWrap( point: Point, puzzle: WitnessPuzzlesDocument ) -> Bool {
+        func wrap( point: Point, puzzle: WitnessPuzzlesDocument ) -> Point? {
             switch self {
-            case .rectangle: return false
-            case .cylinder:  return point.x == validPuzzleX( puzzle: puzzle ).lowerBound
+            case .rectangle: return nil
+            case .cylinder:
+                if point.x == validPuzzleX( puzzle: puzzle ).lowerBound {
+                    return Point( validPuzzleX( puzzle: puzzle ).upperBound + 1, point.y )
+                }
+                return nil
             }
         }
         
@@ -105,8 +109,8 @@ extension WitnessPuzzlesDocument {
         
         for line in lines {
             draw( line: line )
-            if type.needsWrap( point: line, puzzle: self ) {
-                draw( line: Point( validSymbolX.upperBound + 1, line.y ) )
+            if let wrapped = type.wrap( point: line, puzzle: self ) {
+                draw( line: wrapped )
             }
         }
     }

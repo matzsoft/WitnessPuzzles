@@ -17,6 +17,14 @@ extension WitnessPuzzlesDocument {
             position.puzzle2user( puzzle: puzzle )
         }
         
+        func extent( puzzle: WitnessPuzzlesDocument ) -> CGRect {
+            let center = position.puzzle2user( puzzle: puzzle )
+            return CGRect(
+                x: center.x - puzzle.startRadius, y: center.y - puzzle.startRadius,
+                width: 2 * puzzle.startRadius, height: 2 * puzzle.startRadius
+            )
+        }
+        
         func isValid( puzzle: WitnessPuzzlesDocument ) -> Bool {
             Start.isValid( position: position, puzzle: puzzle )
         }
@@ -31,24 +39,10 @@ extension WitnessPuzzlesDocument {
         context.setFillColor( foreground.cgColor! )
         context.beginPath()
         
-        let rect = CGRect(
-            x: -startRadius, y: -startRadius,
-            width: 2 * startRadius, height: 2 * startRadius
-        )
-        
-        func draw( start: Start ) {
-            let drawing = start.location( puzzle: self )
-
-            context.saveGState()
-            context.translateBy( x: CGFloat( drawing.x ), y: CGFloat( drawing.y ) )
-            context.addEllipse( in: rect )
-            context.restoreGState()
-        }
-        
         for start in starts {
-            draw( start: start )
-            if type.needsWrap( point: start.position, puzzle: self ) {
-                draw( start: Start( position: Point( validSymbolX.upperBound + 1, start.position.y ) ) )
+            context.addEllipse( in: start.extent( puzzle: self ) )
+            if let wrapped = type.wrap( point: start.position, puzzle: self ) {
+                context.addEllipse( in: Start( position: wrapped ).extent( puzzle: self ) )
             }
         }
         
