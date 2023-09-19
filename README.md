@@ -2,7 +2,7 @@
 
 ## Bugs
 
-None known at this time.
+1. Finishes in cylinder puzzles are not correctly computing valid directions.
 
 ## TODO
 
@@ -17,7 +17,6 @@ None known at this time.
 
 1. Add the new tetris icon type.
 1. Make an icon for the app.
-1. Look to cleanup the extra* methods.
 1. Can the IconType enum be eliminated by type introspection?
 
 ### GUI

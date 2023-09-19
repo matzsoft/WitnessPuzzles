@@ -45,7 +45,6 @@ extension WitnessPuzzlesDocument {
     
     func toPuzzleSpace( from view: CGPoint ) -> Point {
         let context = getContext()
-        setOrigin( context: context )
         let user = context.convertToUserSpace( view )
         let resolution = Double( lineWidth + blockWidth ) / 2
         let offset = Double( lineWidth ) / 2

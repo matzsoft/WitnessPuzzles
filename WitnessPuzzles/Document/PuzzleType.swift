@@ -13,23 +13,36 @@ extension WitnessPuzzlesDocument {
     enum PuzzleType: String, CaseIterable, Codable {
         case rectangle = "Rectangle", cylinder = "Cylinder"
         
-        func baseWidth( puzzle: WitnessPuzzlesDocument ) -> Int {
+        func baseRect( puzzle: WitnessPuzzlesDocument ) -> CGRect {
+            let baseHeight = ( puzzle.height + 1 ) * puzzle.lineWidth + puzzle.height * puzzle.blockWidth
             switch self {
             case .rectangle:
-                return ( puzzle.width + 1 ) * puzzle.lineWidth + puzzle.width * puzzle.blockWidth
+                let baseWidth = ( puzzle.width + 1 ) * puzzle.lineWidth + puzzle.width * puzzle.blockWidth
+                return CGRect( x: 0, y: 0, width: baseWidth, height: baseHeight )
             case .cylinder:
-                return puzzle.width * ( puzzle.lineWidth + puzzle.blockWidth )
+                let baseWidth = puzzle.width * ( puzzle.lineWidth + puzzle.blockWidth )
+                return CGRect( x: 0, y: 0, width: baseWidth, height: baseHeight )
             }
         }
         
-        func userWidth( puzzle: WitnessPuzzlesDocument ) -> CGFloat {
+        func userRect( puzzle: WitnessPuzzlesDocument ) -> CGRect {
+            let baseRect = baseRect( puzzle: puzzle )
+            let startsRects = puzzle.starts.map { $0.extent( puzzle: puzzle ) }
+            let finishesRects = puzzle.finishes.map { $0.extent( puzzle: puzzle ) }
+            let itemRects = startsRects + finishesRects
+            let overflowRect = itemRects.reduce( baseRect ) { $0.union( $1 ) }
+            let paddedRect = overflowRect.insetBy(
+                dx: -CGFloat( puzzle.padding ), dy: -CGFloat( puzzle.padding )
+            )
+            
             switch self {
             case .rectangle:
-                return CGFloat(
-                    puzzle.baseWidth + 2 * puzzle.padding + puzzle.extraLeft() + puzzle.extraRight()
-                )
+                return paddedRect
             case .cylinder:
-                return CGFloat( puzzle.baseWidth )
+                return CGRect(
+                    x: baseRect.minX + CGFloat( puzzle.lineWidth ) / 4, y: paddedRect.minY,
+                    width: baseRect.width, height: paddedRect.height
+                )
             }
         }
         
@@ -37,13 +50,6 @@ extension WitnessPuzzlesDocument {
             switch self {
             case .rectangle: return 0 ... ( 2 * puzzle.width )
             case .cylinder:  return 0 ... ( 2 * puzzle.width - 1 )
-            }
-        }
-        
-        func xOriginOffset( puzzle: WitnessPuzzlesDocument ) -> CGFloat {
-            switch self {
-            case .rectangle: return CGFloat( puzzle.padding + puzzle.extraLeft() )
-            case .cylinder:  return CGFloat( -puzzle.lineWidth ) / 4
             }
         }
         

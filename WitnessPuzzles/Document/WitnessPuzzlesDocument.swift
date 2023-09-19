@@ -38,10 +38,6 @@ struct WitnessPuzzlesDocument: FileDocument, Codable {
     
     var startRadius: Int { lineWidth }
     var finishRadius: Int { lineWidth / 2 }
-    var baseHeight: Int { ( height + 1 ) * lineWidth + height * blockWidth }
-    var baseWidth: Int { type.baseWidth( puzzle: self ) }
-    var userHeight: CGFloat { CGFloat( baseHeight + 2 * padding + extraBottom() + extraTop() ) }
-    var userWidth: CGFloat { type.userWidth( puzzle: self ) }
     var validSymbolX: ClosedRange<Int> { type.validPuzzleX( puzzle: self ) }
     var validSymbolY: ClosedRange<Int> { 0 ... ( 2 * height ) }
     var lines: Set<Point> {
@@ -83,9 +79,11 @@ struct WitnessPuzzlesDocument: FileDocument, Codable {
         }
     }
     
-    func getContext() -> CGContext {
-        let imageWidth = Int( userWidth * scaleFactor )
-        let imageHeight = Int( userHeight * scaleFactor )
+    func getContext( fill: Color? = nil ) -> CGContext {
+        let baseRect = type.baseRect( puzzle: self )
+        let userRect = type.userRect( puzzle: self )
+        let imageWidth = Int( userRect.width * scaleFactor )
+        let imageHeight = Int( userRect.height * scaleFactor )
         
         let context = CGContext(
             data: nil, width: imageWidth, height: imageHeight, bitsPerComponent: 16, bytesPerRow: 0,
@@ -94,24 +92,21 @@ struct WitnessPuzzlesDocument: FileDocument, Codable {
         )!
 
         context.scaleBy( x: CGFloat( scaleFactor ), y: CGFloat( scaleFactor ) )
+        
+        if let fill = fill {
+            let fillRect = userRect.offsetBy( dx: -userRect.minX, dy: -userRect.minY )
+            context.setFillColor( fill.cgColor! )
+            context.fill( [ fillRect ] )
+        }
+        
+        context.translateBy( x: -userRect.minX, y: -userRect.minY )
         return context
     }
     
-    func setOrigin( context: CGContext ) -> Void {
-        context.translateBy( x: type.xOriginOffset( puzzle: self ), y: CGFloat( padding + extraBottom() ) )
-    }
-    
     var image: CGImage {
-        let context = getContext()
+        let context = getContext( fill: background )
 
-        context.setFillColor( background.cgColor! )
-        context.fill( [
-            CGRect(  origin: CGPoint( x: 0, y: 0 ), size: CGSize( width: userWidth, height: userHeight ) )
-        ])
-
-        setOrigin( context: context )
         type.draw( puzzle: self, context: context )
-
         drawStarts( context: context )
         drawFinishes( context: context )
         drawGaps( context: context )
@@ -126,40 +121,6 @@ struct WitnessPuzzlesDocument: FileDocument, Codable {
         return NSImage( cgImage: image, size: NSSize( width: image.width, height: image.height ) )
     }
 
-    func extraLeft() -> Int {
-        let startExtra = max( starts.map { startRadius - $0.location( puzzle: self ).x }.max() ?? 0, 0 )
-        let finishMax = finishes.map { finishRadius - $0.location( puzzle: self ).x }.max() ?? 0
-        let finishExtra = max( finishMax, 0 )
-        
-        return startExtra + finishExtra
-    }
-
-    func extraBottom() -> Int {
-        let startExtra = max( starts.map { startRadius - $0.location( puzzle: self ).y }.max() ?? 0, 0 )
-        let finishMax = finishes.map { finishRadius - $0.location( puzzle: self ).y }.max() ?? 0
-        let finishExtra = max( finishMax, 0 )
-        
-        return startExtra + finishExtra
-    }
-
-    func extraRight() -> Int {
-        let startsMax = starts.map { $0.location( puzzle: self ).x + startRadius }.max() ?? 0
-        let startExtra = max( startsMax - baseWidth, 0 )
-        let finishMax = finishes.map { $0.location( puzzle: self ).x + finishRadius }.max() ?? 0
-        let finishExtra = max( finishMax - baseWidth, 0 )
-        
-        return startExtra + finishExtra
-    }
-
-    func extraTop() -> Int {
-        let startsMax = starts.map { $0.location( puzzle: self ).y + startRadius }.max() ?? 0
-        let startExtra = max( startsMax - baseHeight, 0 )
-        let finishMax = finishes.map { $0.location( puzzle: self ).y + finishRadius }.max() ?? 0
-        let finishExtra = max( finishMax - baseHeight, 0 )
-        
-        return startExtra + finishExtra
-    }
-        
     mutating func adjustDimensions( type: PuzzleType, width: Int, height: Int ) -> Void {
         self.type = type
         self.width = width
