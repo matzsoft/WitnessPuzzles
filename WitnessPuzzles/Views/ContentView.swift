@@ -14,7 +14,7 @@ struct ContentView: View {
     @State var currentConfiguration: ToolType?
     @State var lastLocation = WitnessPuzzlesDocument.Point( 0, 0 )
     @State var lastDirections = [WitnessPuzzlesDocument.Direction]()
-    @State var lastColor = Color.black
+    @State var lastColor = Color( cgColor: CGColor( red: 1, green: 0.4, blue: 0.1, alpha: 1 ) )
     @State var lastIconType = WitnessPuzzlesDocument.IconType.square
     @State var trianglesCount = WitnessPuzzlesDocument.TrianglesCount.two
 

@@ -99,6 +99,35 @@ extension WitnessPuzzlesDocument {
             hasher.combine( type )
             hasher.combine( icon )
         }
+        
+        static func image(
+            size: CGFloat, type: IconType, color: Color, trianglesCount: TrianglesCount
+        ) -> Image {
+            let extent = CGRect( x: 0, y: 0, width: size, height: size )
+            let context = CGContext(
+                data: nil, width: Int( size ), height: Int( size ), bitsPerComponent: 16, bytesPerRow: 0,
+                space: CGColorSpace( name: CGColorSpace.sRGB )!,
+                bitmapInfo: CGBitmapInfo( rawValue: CGImageAlphaInfo.premultipliedLast.rawValue ).rawValue
+            )!
+            
+            context.clear( extent )
+            switch type {
+            case .square:
+                let icon = SquareIcon( color: color )
+                icon.draw( in: extent, context: context )
+            case .star:
+                let icon = StarIcon( color: color )
+                icon.draw( in: extent, context: context )
+            case .triangles:
+                let icon = TrianglesIcon( color: color, count: trianglesCount )
+                icon.draw( in: extent, context: context )
+            case .elimination:
+                let icon = EliminationIcon( color: color )
+                icon.draw( in: extent, context: context )
+            }
+            
+            return Image( context.makeImage()!, scale: 1, label: Text( verbatim: "" ) )
+        }
     }
 
     func drawIcons( context: CGContext ) -> Void {

@@ -24,14 +24,20 @@ struct IconView: View {
             Divider()
             Picker( "Icon Type", selection: $iconType ) {
                 ForEach( WitnessPuzzlesDocument.IconType.allCases ) {
-                    $0.label.tag( $0 )
+                    WitnessPuzzlesDocument.Icon.image(
+                        size: 25, type: $0,
+                        color: color, trianglesCount: trianglesCount
+                    ).tag( $0 )
                 }
             }.pickerStyle( .segmented )
             if iconType == .triangles {
                 VStack {
                     Picker( "Triangles Count", selection: $trianglesCount ) {
                         ForEach( WitnessPuzzlesDocument.TrianglesCount.allCases ) {
-                            Text( verbatim: String( $0.rawValue ) ).tag( $0 )
+                            WitnessPuzzlesDocument.Icon.image(
+                                size: 25, type: .triangles,
+                                color: color, trianglesCount: $0
+                            ).tag( $0 )
                         }
                     }.pickerStyle( .segmented )
 //                    Slider( value: $trianglesCount, in: 1 ... 3, step: 1 ) {
