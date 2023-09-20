@@ -14,7 +14,7 @@ struct IconView: View {
     let location: WitnessPuzzlesDocument.Point
     @Binding var color: Color
     @Binding var iconType: WitnessPuzzlesDocument.IconType
-    @Binding var trianglesCount: Double
+    @Binding var trianglesCount: WitnessPuzzlesDocument.TrianglesCount
 
     var body: some View {
         VStack {
@@ -29,15 +29,20 @@ struct IconView: View {
             }.pickerStyle( .segmented )
             if iconType == .triangles {
                 VStack {
-                    Slider( value: $trianglesCount, in: 1 ... 3, step: 1 ) {
-                        Text( "Triangles Count" )
-                    } minimumValueLabel: {
-                        Text( "1" )
-                    } maximumValueLabel: {
-                        Text( "3" )
-                    }
-                    .tint( .black )
-                    Text( String( format: "%.0f", trianglesCount ) )
+                    Picker( "Triangles Count", selection: $trianglesCount ) {
+                        ForEach( WitnessPuzzlesDocument.TrianglesCount.allCases ) {
+                            Text( verbatim: String( $0.rawValue ) ).tag( $0 )
+                        }
+                    }.pickerStyle( .segmented )
+//                    Slider( value: $trianglesCount, in: 1 ... 3, step: 1 ) {
+//                        Text( "Triangles Count" )
+//                    } minimumValueLabel: {
+//                        Text( "1" )
+//                    } maximumValueLabel: {
+//                        Text( "3" )
+//                    }
+//                    .tint( .black )
+//                    Text( String( format: "%.0f", trianglesCount ) )
                 }
             }
             Divider()
@@ -55,9 +60,7 @@ struct IconView: View {
                     case .star:
                         document.addStarIcon( point: location, color: color )
                     case .triangles:
-                        document.addTrianglesIcon(
-                            point: location, color: color, count: Int( trianglesCount )
-                        )
+                        document.addTrianglesIcon( point: location, color: color, count: trianglesCount )
                     case .elimination:
                         document.addEliminationIcon( point: location, color: color )
                     }

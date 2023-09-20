@@ -16,7 +16,7 @@ struct ContentView: View {
     @State var lastDirections = [WitnessPuzzlesDocument.Direction]()
     @State var lastColor = Color.black
     @State var lastIconType = WitnessPuzzlesDocument.IconType.square
-    @State var trianglesCount = 2.0
+    @State var trianglesCount = WitnessPuzzlesDocument.TrianglesCount.two
 
     func toggleTool( _ tool: ToolType ) { selectedTool = selectedTool == tool ? nil : tool }
     func deselectTool( _ tool: ToolType ) { if selectedTool == tool { selectedTool = nil } }

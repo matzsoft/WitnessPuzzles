@@ -10,15 +10,14 @@ import Foundation
 import SwiftUI
 
 extension WitnessPuzzlesDocument {
+    enum TrianglesCount: Int, CaseIterable, Identifiable, Codable {
+        case one = 1, two, three
+        var id: Int { rawValue }
+    }
+    
     struct TrianglesIcon: IconItem, Codable, Equatable, Hashable {
         let color: Color
-        let count: Int
-        
-        internal init( color: Color, count: Int ) {
-            guard 1 <= count && count <= 3 else { fatalError( "Invalid triangles icon count \(count)." ) }
-            self.color = color
-            self.count = count
-        }
+        let count: TrianglesCount
         
         func draw( in rect: CGRect, context: CGContext ) {
             let stepSize = rect.width / 10
@@ -39,17 +38,15 @@ extension WitnessPuzzlesDocument {
             }
             
             switch count {
-            case 1:
+            case .one:
                 drawOne( xOffset: 0 )
-            case 2:
+            case .two:
                 drawOne( xOffset: -2 )
                 drawOne( xOffset: 2 )
-            case 3:
+            case .three:
                 drawOne( xOffset: -3 )
                 drawOne( xOffset: 0 )
                 drawOne( xOffset: 3)
-            default:
-                fatalError( "Triangles icon with invalid count \(count)." )
             }
             
             context.fillPath()
@@ -57,7 +54,7 @@ extension WitnessPuzzlesDocument {
         }
     }
     
-    mutating func addTrianglesIcon( point: Point, color: Color, count: Int ) -> Void {
+    mutating func addTrianglesIcon( point: Point, color: Color, count: TrianglesCount ) -> Void {
         guard isIconPositionOK( point: point ) else { return }
         
         if Icon.isValid( position: point, puzzle: self ) {
