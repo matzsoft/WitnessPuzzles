@@ -11,7 +11,6 @@ import SwiftUI
 
 extension WitnessPuzzlesDocument {
     struct EliminationIcon: IconItem, Codable, Equatable, Hashable {
-        let position: Point
         let color: Color
         
         func draw( in rect: CGRect, context: CGContext ) {
@@ -35,8 +34,8 @@ extension WitnessPuzzlesDocument {
         guard isIconPositionOK( point: point ) else { return }
         
         if Icon.isValid( position: point, puzzle: self ) {
-            let newIcon = EliminationIcon( position: point, color: color )
-            icons.insert( Icon( type: .elimination, icon: newIcon ) )
+            let newIcon = EliminationIcon( color: color )
+            icons.insert( Icon( position: point, type: .elimination, icon: newIcon ) )
         }
     }
 }

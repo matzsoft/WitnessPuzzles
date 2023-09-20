@@ -10,7 +10,6 @@ import Foundation
 import SwiftUI
 
 protocol IconItem: Hashable, Codable {
-    var position: WitnessPuzzlesDocument.Point { get }
     var color: Color { get }
     func draw( in rect: CGRect, context: CGContext )
 }
@@ -27,21 +26,27 @@ extension WitnessPuzzlesDocument {
     }
     
     struct Icon: PuzzleItem, Hashable, Codable {
+        let position: Point
         let type: IconType
         let icon: any IconItem
         
-        init( type: WitnessPuzzlesDocument.IconType, icon: any IconItem ) {
+        var id: UUID { UUID() }
+
+        init( position: Point, type: WitnessPuzzlesDocument.IconType, icon: any IconItem ) {
+            self.position = position
             self.type = type
             self.icon = icon
         }
         
         enum CodingKeys: CodingKey {
+            case position
             case type
             case icon
         }
 
         init( from decoder: Decoder ) throws {
             let container = try decoder.container( keyedBy: CodingKeys.self )
+            position = try container.decode( Point.self, forKey: .position )
             type = try container.decode( IconType.self, forKey: .type )
             switch type {
             case .square:
@@ -57,6 +62,7 @@ extension WitnessPuzzlesDocument {
         
         func encode( to encoder: Encoder ) throws {
             var container = encoder.container( keyedBy: CodingKeys.self )
+            try container.encode( position, forKey: .position )
             try container.encode( type, forKey: .type )
             
             switch type {
@@ -71,9 +77,6 @@ extension WitnessPuzzlesDocument {
             }
         }
         
-        var position: Point { icon.position }
-        var id: UUID { UUID() }
-
         func extent( puzzle: WitnessPuzzlesDocument ) -> CGRect {
             let center = position.puzzle2user( puzzle: puzzle ).cgPoint
             let width = CGFloat( puzzle.blockWidth )
@@ -89,7 +92,7 @@ extension WitnessPuzzlesDocument {
         }
 
         static func ==( lhs: Icon, rhs: Icon ) -> Bool {
-            lhs.type == rhs.type && lhs.icon.position == rhs.icon.position
+            lhs.type == rhs.type && lhs.position == rhs.position
         }
         
         func hash( into hasher: inout Hasher ) {

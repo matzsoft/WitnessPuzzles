@@ -11,13 +11,11 @@ import SwiftUI
 
 extension WitnessPuzzlesDocument {
     struct TrianglesIcon: IconItem, Codable, Equatable, Hashable {
-        let position: Point
         let color: Color
         let count: Int
         
-        internal init( position: Point, color: Color, count: Int ) {
+        internal init( color: Color, count: Int ) {
             guard 1 <= count && count <= 3 else { fatalError( "Invalid triangles icon count \(count)." ) }
-            self.position = position
             self.color = color
             self.count = count
         }
@@ -63,8 +61,8 @@ extension WitnessPuzzlesDocument {
         guard isIconPositionOK( point: point ) else { return }
         
         if Icon.isValid( position: point, puzzle: self ) {
-            let newIcon = TrianglesIcon( position: point, color: color, count: count )
-            icons.insert( Icon( type: .triangles, icon: newIcon ) )
+            let newIcon = TrianglesIcon( color: color, count: count )
+            icons.insert( Icon( position: point, type: .triangles, icon: newIcon ) )
         }
     }
 }

@@ -11,7 +11,6 @@ import SwiftUI
 
 extension WitnessPuzzlesDocument {
     struct StarIcon: IconItem, Codable, Equatable, Hashable {
-        let position: Point
         let color: Color
         
         func draw( in rect: CGRect, context: CGContext ) -> Void {
@@ -32,7 +31,7 @@ extension WitnessPuzzlesDocument {
         guard isIconPositionOK( point: point ) else { return }
         
         if Icon.isValid( position: point, puzzle: self ) {
-            icons.insert( Icon( type: .star, icon: StarIcon( position: point, color: color ) ) )
+            icons.insert( Icon( position: point, type: .star, icon: StarIcon( color: color ) ) )
         }
     }
 }
