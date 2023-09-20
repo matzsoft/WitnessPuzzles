@@ -22,15 +22,14 @@ extension WitnessPuzzlesDocument {
             self.count = count
         }
         
-        func draw( puzzle: WitnessPuzzlesDocument, context: CGContext ) {
-            let stepSize = CGFloat( puzzle.blockWidth ) / 10
+        func draw( in rect: CGRect, context: CGContext ) {
+            let stepSize = rect.width / 10
             let iconTop = CGPoint( x: 0, y: 2 * sqrt( 3 ) / 3 )
             let iconLeft = CGPoint( x: -1, y: -2 * sqrt( 3 ) / 6 )
             let iconRight = CGPoint( x: 1, y: -2 * sqrt( 3 ) / 6 )
-            let drawing = position.puzzle2user( puzzle: puzzle )
 
             context.saveGState()
-            context.translateBy( x: CGFloat( drawing.x ), y: CGFloat( drawing.y ) )
+            context.translateBy( x: rect.midX, y: rect.midY )
             context.scaleBy( x: stepSize, y: stepSize )
             context.setFillColor( color.cgColor! )
             context.beginPath()
@@ -57,10 +56,6 @@ extension WitnessPuzzlesDocument {
             
             context.fillPath()
             context.restoreGState()
-        }
-        
-        func move( to: Point ) -> any IconItem {
-            EliminationIcon( position: to, color: color )
         }
     }
     

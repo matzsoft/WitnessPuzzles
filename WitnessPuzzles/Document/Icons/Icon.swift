@@ -12,8 +12,7 @@ import SwiftUI
 protocol IconItem: Hashable, Codable {
     var position: WitnessPuzzlesDocument.Point { get }
     var color: Color { get }
-    func draw( puzzle: WitnessPuzzlesDocument, context: CGContext )
-    func move( to: WitnessPuzzlesDocument.Point ) -> any IconItem
+    func draw( in rect: CGRect, context: CGContext )
 }
 
 
@@ -101,9 +100,10 @@ extension WitnessPuzzlesDocument {
 
     func drawIcons( context: CGContext ) -> Void {
         for icon in icons {
-            icon.icon.draw( puzzle: self, context: context )
-            if let wrapped = type.wrap( point: icon.position, puzzle: self ) {
-                icon.icon.move( to: wrapped ).draw( puzzle: self, context: context )
+            let extent = icon.extent( puzzle: self )
+            icon.icon.draw( in: extent, context: context )
+            if let wrapped = type.wrap( point: icon.position, puzzle: self )?.cgPoint {
+                icon.icon.draw( in: extent.move( to: wrapped ), context: context )
             }
         }
         

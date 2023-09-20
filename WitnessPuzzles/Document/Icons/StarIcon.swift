@@ -14,30 +14,17 @@ extension WitnessPuzzlesDocument {
         let position: Point
         let color: Color
         
-        func isValid( puzzle: WitnessPuzzlesDocument ) -> Bool {
-            StarIcon.isValid( position: position, puzzle: puzzle )
-        }
-        
-        static func isValid( position: Point, puzzle: WitnessPuzzlesDocument ) -> Bool {
-            position.isPuzzleSpace( puzzle: puzzle ) && position.isBlock
-        }
-        
-        func draw( puzzle: WitnessPuzzlesDocument, context: CGContext ) -> Void {
-            let iconWidth = 0.5 * CGFloat( puzzle.blockWidth )
-            let rect = CGRect( x: -iconWidth / 2, y: -iconWidth / 2, width: iconWidth, height: iconWidth )
-            let drawing = position.puzzle2user( puzzle: puzzle )
+        func draw( in rect: CGRect, context: CGContext ) -> Void {
+            let iconRect = CGRect( x: -0.25, y: -0.25, width: 0.5, height: 0.5 )
             
             context.saveGState()
-            context.translateBy( x: CGFloat( drawing.x ), y: CGFloat( drawing.y ) )
+            context.translateBy( x: rect.midX, y: rect.midY )
+            context.scaleBy( x: rect.width, y: rect.height )
             context.setFillColor( color.cgColor! )
-            context.fill( [ rect ] )
+            context.fill( [ iconRect ] )
             context.rotate( by: Double.pi / 4 )
-            context.fill( [ rect ] )
+            context.fill( [ iconRect ] )
             context.restoreGState()
-        }
-        
-        func move( to: Point ) -> any IconItem {
-            StarIcon( position: to, color: color )
         }
     }
     

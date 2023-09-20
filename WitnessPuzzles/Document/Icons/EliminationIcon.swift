@@ -14,25 +14,20 @@ extension WitnessPuzzlesDocument {
         let position: Point
         let color: Color
         
-        func draw( puzzle: WitnessPuzzlesDocument, context: CGContext ) {
-            let iconWidth = 27 * CGFloat( puzzle.blockWidth ) / 220
-            let rect = CGRect( x: -0.5, y: 0, width: iconWidth, height: 2 * iconWidth )
-            let drawing = position.puzzle2user( puzzle: puzzle )
+        func draw( in rect: CGRect, context: CGContext ) {
+            let iconWidth = 27.0 / 220
+            let iconRect = CGRect( x: -iconWidth / 2, y: 0, width: iconWidth, height: 2 * iconWidth )
 
             context.saveGState()
-            context.translateBy( x: CGFloat( drawing.x ), y: CGFloat( drawing.y ) )
-            context.scaleBy( x: iconWidth, y: iconWidth )
+            context.translateBy( x: rect.midX, y: rect.midY )
+            context.scaleBy( x: rect.width, y: rect.height )
             context.setFillColor( color.cgColor! )
-            context.fill( [ rect ] )
+            context.fill( [ iconRect ] )
             context.rotate( by: 2 * Double.pi / 3 )
-            context.fill( [ rect ] )
+            context.fill( [ iconRect ] )
             context.rotate( by: 2 * Double.pi / 3 )
-            context.fill( [ rect ] )
+            context.fill( [ iconRect ] )
             context.restoreGState()
-        }
-        
-        func move( to: Point ) -> any IconItem {
-            EliminationIcon( position: to, color: color )
         }
     }
     
