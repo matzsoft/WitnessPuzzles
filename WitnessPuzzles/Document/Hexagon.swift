@@ -73,9 +73,9 @@ extension WitnessPuzzlesDocument {
         hexagons = hexagons.filter { $0.position != point }
     }
 
-    mutating func addHexagon( point: Point, color: Color ) -> Void {
+    mutating func addHexagon( point: Point, info: IconInfo ) -> Void {
         guard isHexagonPositionOK( point: point ) else { return }
         
-        hexagons.insert( Hexagon( position: point, color: color ) )
+        hexagons.insert( Hexagon( position: point, color: info.color ) )
     }
 }

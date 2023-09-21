@@ -14,6 +14,13 @@ struct ContentView: View {
     @State var currentConfiguration: ToolType?
     @State var lastLocation = WitnessPuzzlesDocument.Point( 0, 0 )
     @State var lastDirections = [WitnessPuzzlesDocument.Direction]()
+    @State var iconInfo = WitnessPuzzlesDocument.IconInfo(
+        color: Color( cgColor: CGColor( red: 1, green: 0.4, blue: 0.1, alpha: 1 ) ),
+        iconType: WitnessPuzzlesDocument.IconType.square,
+        trianglesCount: WitnessPuzzlesDocument.TrianglesCount.two,
+        tetrisShape: WitnessPuzzlesDocument.tetrisShapes[0],
+        tetrisRotation: WitnessPuzzlesDocument.TetrisRotations.zero
+    )
     @State var lastColor = Color( cgColor: CGColor( red: 1, green: 0.4, blue: 0.1, alpha: 1 ) )
     @State var lastIconType = WitnessPuzzlesDocument.IconType.square
     @State var trianglesCount = WitnessPuzzlesDocument.TrianglesCount.two
@@ -124,7 +131,7 @@ struct ContentView: View {
                         directions: lastDirections, direction: lastDirections.first!
                     )
                 case .hexagons:
-                    HexagonView( document: $document, location: lastLocation, color: $lastColor )
+                    HexagonView( document: $document, location: lastLocation, info: $iconInfo )
                 case .icons:
                     IconView(
                         document: $document, location: lastLocation,

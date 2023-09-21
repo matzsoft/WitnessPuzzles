@@ -12,13 +12,13 @@ struct HexagonView: View {
     @Environment( \.presentationMode ) var presentationMode
     @Binding var document: WitnessPuzzlesDocument
     let location: WitnessPuzzlesDocument.Point
-    @Binding var color: Color
+    @Binding var info: WitnessPuzzlesDocument.IconInfo
 
     var body: some View {
         VStack {
 //            Text( "Select a color for the new hexagon" )
 //            Divider()
-            ColorPicker( "Color", selection: $color )
+            ColorPicker( "Color", selection: $info.color )
             Divider()
             HStack {
                 Button( "Cancel", role: .cancel ) {
@@ -28,7 +28,7 @@ struct HexagonView: View {
                 .keyboardShortcut( .cancelAction )
                 Spacer()
                 Button( "Done", role: .destructive ) {
-                    document.addHexagon( point: location, color: color )
+                    document.addHexagon( point: location, info: info )
                     if NSColorPanel.shared.isVisible { NSColorPanel.shared.orderOut( nil ) }
                     presentationMode.wrappedValue.dismiss()
                 }

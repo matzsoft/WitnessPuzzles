@@ -24,6 +24,14 @@ extension WitnessPuzzlesDocument {
             Image( "\(rawValue.capitalized)Icon" )
         }
     }
+
+    struct IconInfo {
+        var color: Color
+        var iconType: IconType
+        var trianglesCount: TrianglesCount
+        var tetrisShape: TetrisShape
+        var tetrisRotation: TetrisRotations
+    }
     
     struct Icon: PuzzleItem, Hashable, Codable {
         let position: Point
