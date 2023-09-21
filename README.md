@@ -3,6 +3,7 @@
 ## Bugs
 
 1. Finishes in cylinder puzzles are not correctly computing valid directions.
+1. Cancel on the IconView doesn't create the icon, but it also doesn't reset the settings.
 
 ## TODO
 
@@ -23,5 +24,8 @@
 
 1. The sliders on the properties sheet are horrible.  They are difficult to see and hence use.  There must be a way to make them better.
 1. Need a better way to highlight the active tool in the tool bar.
-1. Someone suggested that the properties sheet should live update the window below.  Investigate how to do this if possible.
+1. Tried to make the properties sheet do a live update of the document window.  It sort of worked but there were problems:
+
+- Counldn't get the cancel to work properly.
+- Changing the dimensions causes the sheet to move out from under the mouse making using the controls difficult.
 
