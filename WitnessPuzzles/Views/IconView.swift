@@ -12,42 +12,36 @@ struct IconView: View {
     @Environment( \.presentationMode ) var presentationMode
     @Binding var document: WitnessPuzzlesDocument
     let location: WitnessPuzzlesDocument.Point
-    @Binding var color: Color
-    @Binding var iconType: WitnessPuzzlesDocument.IconType
-    @Binding var trianglesCount: WitnessPuzzlesDocument.TrianglesCount
-    @Binding var tetrisShape: WitnessPuzzlesDocument.TetrisShape
-    @Binding var tetrisRotation: WitnessPuzzlesDocument.TetrisRotations
+    @Binding var info: WitnessPuzzlesDocument.IconInfo
 
     var body: some View {
         VStack {
 //            Text( "Select a color for the new hexagon" )
 //            Divider()
-            ColorPicker( "Color", selection: $color )
+            ColorPicker( "Color", selection: $info.color )
             Divider()
-            Picker( "Icon Type", selection: $iconType ) {
-                ForEach( WitnessPuzzlesDocument.IconType.allCases ) {
-                    WitnessPuzzlesDocument.Icon.image(
-                        size: 25, type: $0,
-                        color: color, trianglesCount: trianglesCount,
-                        tetrisShape: tetrisShape, tetrisRotation: tetrisRotation
-                    ).tag( $0 )
+            Picker( "Icon Type", selection: $info.iconType ) {
+                ForEach( WitnessPuzzlesDocument.IconType.allCases ) { newType in
+                    let infoCopy = { () -> WitnessPuzzlesDocument.IconInfo in
+                        var copy = info; copy.iconType = newType; return copy
+                    }()
+                    WitnessPuzzlesDocument.Icon.image( size: 25, info: infoCopy ).tag( newType )
                 }
             }.pickerStyle( .segmented )
-            if iconType == .triangles {
+            if info.iconType == .triangles {
                 VStack {
-                    Picker( "Triangles Count", selection: $trianglesCount ) {
-                        ForEach( WitnessPuzzlesDocument.TrianglesCount.allCases ) {
-                            WitnessPuzzlesDocument.Icon.image(
-                                size: 25, type: .triangles,
-                                color: color, trianglesCount: $0,
-                                tetrisShape: tetrisShape, tetrisRotation: tetrisRotation
-                            ).tag( $0 )
+                    Picker( "Triangles Count", selection: $info.trianglesCount ) {
+                        ForEach( WitnessPuzzlesDocument.TrianglesCount.allCases ) { count in
+                            let infoCopy = { () -> WitnessPuzzlesDocument.IconInfo in
+                                var copy = info; copy.trianglesCount = count; return copy
+                            }()
+                            WitnessPuzzlesDocument.Icon.image( size: 25, info: infoCopy ).tag( count )
                         }
                     }.pickerStyle( .segmented )
                 }
             }
-            if iconType == .tetris {
-                TetrisView( color: $color, trianglesCount: $trianglesCount, tetrisShape: $tetrisShape )
+            if info.iconType == .tetris {
+                TetrisView( info: $info )
             }
             Divider()
             HStack {
@@ -58,19 +52,17 @@ struct IconView: View {
                 .keyboardShortcut( .cancelAction )
                 Spacer()
                 Button( "Done", role: .destructive ) {
-                    switch iconType {
+                    switch info.iconType {
                     case .square:
-                        document.addSquareIcon( point: location, color: color )
+                        document.addSquareIcon( point: location, color: info.color )
                     case .star:
-                        document.addStarIcon( point: location, color: color )
+                        document.addStarIcon( point: location, color: info.color )
                     case .triangles:
-                        document.addTrianglesIcon( point: location, color: color, count: trianglesCount )
+                        document.addTrianglesIcon( point: location, info: info )
                     case .elimination:
-                        document.addEliminationIcon( point: location, color: color )
+                        document.addEliminationIcon( point: location, color: info.color )
                     case .tetris:
-                        document.addTetrisIcon(
-                            point: location, color: color, shape: tetrisShape, rotation: tetrisRotation
-                        )
+                        document.addTetrisIcon( point: location, info: info )
                     }
                     if NSColorPanel.shared.isVisible { NSColorPanel.shared.orderOut( nil ) }
                     presentationMode.wrappedValue.dismiss()

@@ -23,6 +23,13 @@ extension WitnessPuzzlesDocument {
             self.rotatable = shape.rotatable
         }
         
+        init( info: IconInfo ) {
+            color = info.color
+            blocks = info.tetrisShape.blocks
+            rotation = info.tetrisRotation
+            rotatable = info.tetrisShape.rotatable
+        }
+        
         func draw( in rect: CGRect, context: CGContext ) {
             let scaleFactor = 66.0
             let blockSize = 10.0
@@ -55,13 +62,11 @@ extension WitnessPuzzlesDocument {
         }
     }
     
-    mutating func addTetrisIcon(
-        point: Point, color: Color, shape: TetrisShape, rotation: TetrisRotations
-    ) -> Void {
+    mutating func addTetrisIcon( point: Point, info: IconInfo ) -> Void {
         guard isIconPositionOK( point: point ) else { return }
         
         if Icon.isValid( position: point, puzzle: self ) {
-            let newIcon = TetrisIcon( color: color, shape: shape, rotation: rotation )
+            let newIcon = TetrisIcon( info: info )
             icons.insert( Icon( position: point, type: .tetris, icon: newIcon ) )
         }
     }

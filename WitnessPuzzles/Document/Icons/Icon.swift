@@ -112,10 +112,7 @@ extension WitnessPuzzlesDocument {
             hasher.combine( icon )
         }
         
-        static func image(
-            size: CGFloat, type: IconType, color: Color, trianglesCount: TrianglesCount,
-            tetrisShape: TetrisShape, tetrisRotation: TetrisRotations
-        ) -> Image {
+        static func image( size: CGFloat, info: IconInfo ) -> Image {
             let extent = CGRect( x: 0, y: 0, width: size, height: size )
             let context = CGContext(
                 data: nil, width: Int( size ), height: Int( size ), bitsPerComponent: 16, bytesPerRow: 0,
@@ -124,21 +121,21 @@ extension WitnessPuzzlesDocument {
             )!
             
             context.clear( extent )
-            switch type {
+            switch info.iconType {
             case .square:
-                let icon = SquareIcon( color: color )
+                let icon = SquareIcon( color: info.color )
                 icon.draw( in: extent, context: context )
             case .star:
-                let icon = StarIcon( color: color )
+                let icon = StarIcon( color: info.color )
                 icon.draw( in: extent, context: context )
             case .triangles:
-                let icon = TrianglesIcon( color: color, count: trianglesCount )
+                let icon = TrianglesIcon( info: info )
                 icon.draw( in: extent, context: context )
             case .elimination:
-                let icon = EliminationIcon( color: color )
+                let icon = EliminationIcon( color: info.color )
                 icon.draw( in: extent, context: context )
             case .tetris:
-                let icon = TetrisIcon( color: color, shape: tetrisShape, rotation: tetrisRotation )
+                let icon = TetrisIcon( info: info )
                 icon.draw( in: extent, context: context )
             }
             

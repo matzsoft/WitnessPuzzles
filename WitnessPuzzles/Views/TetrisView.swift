@@ -9,19 +9,16 @@
 import SwiftUI
 
 struct TetrisView: View {
-    @Binding var color: Color
-    @Binding var trianglesCount: WitnessPuzzlesDocument.TrianglesCount
-    @Binding var tetrisShape: WitnessPuzzlesDocument.TetrisShape
+    @Binding var info: WitnessPuzzlesDocument.IconInfo
 
     var body: some View {
         VStack {
-            Picker( "Tetris Shape", selection: $tetrisShape ) {
-                ForEach( WitnessPuzzlesDocument.tetrisShapes ) {
-                    WitnessPuzzlesDocument.Icon.image(
-                        size: 25, type: .tetris,
-                        color: color, trianglesCount: trianglesCount,
-                        tetrisShape: $0, tetrisRotation: .zero
-                    ).tag( $0 )
+            Picker( "Tetris Shape", selection: $info.tetrisShape ) {
+                ForEach( WitnessPuzzlesDocument.tetrisShapes ) { newShape in
+                    let infoCopy = { () -> WitnessPuzzlesDocument.IconInfo in
+                        var copy = info; copy.tetrisShape = newShape; return copy
+                    }()
+                    WitnessPuzzlesDocument.Icon.image( size: 25, info: infoCopy ).tag( newShape )
                 }
             }.pickerStyle( .segmented )
         }

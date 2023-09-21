@@ -19,6 +19,16 @@ extension WitnessPuzzlesDocument {
         let color: Color
         let count: TrianglesCount
         
+        init( color: Color, count: TrianglesCount ) {
+            self.color = color
+            self.count = count
+        }
+        
+        init( info: IconInfo) {
+            color = info.color
+            count = info.trianglesCount
+        }
+        
         func draw( in rect: CGRect, context: CGContext ) {
             let stepSize = rect.width / 10
             let iconTop = CGPoint( x: 0, y: 2 * sqrt( 3 ) / 3 )
@@ -54,11 +64,11 @@ extension WitnessPuzzlesDocument {
         }
     }
     
-    mutating func addTrianglesIcon( point: Point, color: Color, count: TrianglesCount ) -> Void {
+    mutating func addTrianglesIcon( point: Point, info: IconInfo ) -> Void {
         guard isIconPositionOK( point: point ) else { return }
         
         if Icon.isValid( position: point, puzzle: self ) {
-            let newIcon = TrianglesIcon( color: color, count: count )
+            let newIcon = TrianglesIcon( info: info )
             icons.insert( Icon( position: point, type: .triangles, icon: newIcon ) )
         }
     }
