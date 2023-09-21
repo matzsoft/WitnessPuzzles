@@ -17,6 +17,8 @@ struct ContentView: View {
     @State var lastColor = Color( cgColor: CGColor( red: 1, green: 0.4, blue: 0.1, alpha: 1 ) )
     @State var lastIconType = WitnessPuzzlesDocument.IconType.square
     @State var trianglesCount = WitnessPuzzlesDocument.TrianglesCount.two
+    @State var lastTetrisShape = WitnessPuzzlesDocument.tetrisShapes[0]
+    @State var lastTetrisRotation = WitnessPuzzlesDocument.TetrisRotations.zero
 
     func toggleTool( _ tool: ToolType ) { selectedTool = selectedTool == tool ? nil : tool }
     func deselectTool( _ tool: ToolType ) { if selectedTool == tool { selectedTool = nil } }
@@ -126,7 +128,8 @@ struct ContentView: View {
                 case .icons:
                     IconView(
                         document: $document, location: lastLocation,
-                        color: $lastColor, iconType: $lastIconType, trianglesCount: $trianglesCount
+                        color: $lastColor, iconType: $lastIconType, trianglesCount: $trianglesCount,
+                        tetrisShape: $lastTetrisShape, tetrisRotation: $lastTetrisRotation
                     )
                 default:
                     Text( verbatim: "No configuration for \(sheet.rawValue.capitalized)." )

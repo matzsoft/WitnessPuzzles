@@ -15,6 +15,8 @@ struct IconView: View {
     @Binding var color: Color
     @Binding var iconType: WitnessPuzzlesDocument.IconType
     @Binding var trianglesCount: WitnessPuzzlesDocument.TrianglesCount
+    @Binding var tetrisShape: WitnessPuzzlesDocument.TetrisShape
+    @Binding var tetrisRotation: WitnessPuzzlesDocument.TetrisRotations
 
     var body: some View {
         VStack {
@@ -26,7 +28,8 @@ struct IconView: View {
                 ForEach( WitnessPuzzlesDocument.IconType.allCases ) {
                     WitnessPuzzlesDocument.Icon.image(
                         size: 25, type: $0,
-                        color: color, trianglesCount: trianglesCount
+                        color: color, trianglesCount: trianglesCount,
+                        tetrisShape: tetrisShape, tetrisRotation: tetrisRotation
                     ).tag( $0 )
                 }
             }.pickerStyle( .segmented )
@@ -36,20 +39,15 @@ struct IconView: View {
                         ForEach( WitnessPuzzlesDocument.TrianglesCount.allCases ) {
                             WitnessPuzzlesDocument.Icon.image(
                                 size: 25, type: .triangles,
-                                color: color, trianglesCount: $0
+                                color: color, trianglesCount: $0,
+                                tetrisShape: tetrisShape, tetrisRotation: tetrisRotation
                             ).tag( $0 )
                         }
                     }.pickerStyle( .segmented )
-//                    Slider( value: $trianglesCount, in: 1 ... 3, step: 1 ) {
-//                        Text( "Triangles Count" )
-//                    } minimumValueLabel: {
-//                        Text( "1" )
-//                    } maximumValueLabel: {
-//                        Text( "3" )
-//                    }
-//                    .tint( .black )
-//                    Text( String( format: "%.0f", trianglesCount ) )
                 }
+            }
+            if iconType == .tetris {
+                TetrisView( color: $color, trianglesCount: $trianglesCount, tetrisShape: $tetrisShape )
             }
             Divider()
             HStack {
@@ -69,6 +67,10 @@ struct IconView: View {
                         document.addTrianglesIcon( point: location, color: color, count: trianglesCount )
                     case .elimination:
                         document.addEliminationIcon( point: location, color: color )
+                    case .tetris:
+                        document.addTetrisIcon(
+                            point: location, color: color, shape: tetrisShape, rotation: tetrisRotation
+                        )
                     }
                     if NSColorPanel.shared.isVisible { NSColorPanel.shared.orderOut( nil ) }
                     presentationMode.wrappedValue.dismiss()

@@ -17,7 +17,7 @@ protocol IconItem: Hashable, Codable {
 
 extension WitnessPuzzlesDocument {
     enum IconType: String, CaseIterable, Identifiable, Codable {
-        case square, star, triangles, elimination
+        case square, star, triangles, elimination, tetris
         var id: String { rawValue }
         
         var label: Image {
@@ -57,6 +57,8 @@ extension WitnessPuzzlesDocument {
                 icon = try container.decode( TrianglesIcon.self, forKey: .icon )
             case .elimination:
                 icon = try container.decode( EliminationIcon.self, forKey: .icon )
+            case .tetris:
+                icon = try container.decode( TetrisIcon.self, forKey: .icon )
             }
         }
         
@@ -74,6 +76,8 @@ extension WitnessPuzzlesDocument {
                 try container.encode( icon as! TrianglesIcon, forKey: .icon )
             case .elimination:
                 try container.encode( icon as! EliminationIcon, forKey: .icon )
+            case .tetris:
+                try container.encode( icon as! TetrisIcon, forKey: .icon )
             }
         }
         
@@ -101,7 +105,8 @@ extension WitnessPuzzlesDocument {
         }
         
         static func image(
-            size: CGFloat, type: IconType, color: Color, trianglesCount: TrianglesCount
+            size: CGFloat, type: IconType, color: Color, trianglesCount: TrianglesCount,
+            tetrisShape: TetrisShape, tetrisRotation: TetrisRotations
         ) -> Image {
             let extent = CGRect( x: 0, y: 0, width: size, height: size )
             let context = CGContext(
@@ -123,6 +128,9 @@ extension WitnessPuzzlesDocument {
                 icon.draw( in: extent, context: context )
             case .elimination:
                 let icon = EliminationIcon( color: color )
+                icon.draw( in: extent, context: context )
+            case .tetris:
+                let icon = TetrisIcon( color: color, shape: tetrisShape, rotation: tetrisRotation )
                 icon.draw( in: extent, context: context )
             }
             

@@ -13,6 +13,9 @@
 		DD29DCEC2AB522FF0031F8CD /* StarIcon.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD29DCEA2AB522FF0031F8CD /* StarIcon.swift */; };
 		DD29DCF02AB67C220031F8CD /* EliminationIcon.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD29DCEE2AB67C220031F8CD /* EliminationIcon.swift */; };
 		DD29DCF42AB80C0E0031F8CD /* TrianglesIcon.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD29DCF22AB80C0E0031F8CD /* TrianglesIcon.swift */; };
+		DD29DCF92ABBA2C90031F8CD /* TetrisShapes.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD29DCF72ABBA2C90031F8CD /* TetrisShapes.swift */; };
+		DD29DCFD2ABBBB5B0031F8CD /* TetrisIcon.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD29DCFB2ABBBB5B0031F8CD /* TetrisIcon.swift */; };
+		DD29DD012ABBF53A0031F8CD /* TetrisView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD29DCFF2ABBF53A0031F8CD /* TetrisView.swift */; };
 		DDBECF3A2A955AE0005313E7 /* WitnessPuzzlesApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDBECF392A955AE0005313E7 /* WitnessPuzzlesApp.swift */; };
 		DDBECF3C2A955AE0005313E7 /* WitnessPuzzlesDocument.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDBECF3B2A955AE0005313E7 /* WitnessPuzzlesDocument.swift */; };
 		DDBECF3E2A955AE0005313E7 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDBECF3D2A955AE0005313E7 /* ContentView.swift */; };
@@ -59,6 +62,9 @@
 		DD29DCEA2AB522FF0031F8CD /* StarIcon.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StarIcon.swift; sourceTree = "<group>"; };
 		DD29DCEE2AB67C220031F8CD /* EliminationIcon.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EliminationIcon.swift; sourceTree = "<group>"; };
 		DD29DCF22AB80C0E0031F8CD /* TrianglesIcon.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrianglesIcon.swift; sourceTree = "<group>"; };
+		DD29DCF72ABBA2C90031F8CD /* TetrisShapes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TetrisShapes.swift; sourceTree = "<group>"; };
+		DD29DCFB2ABBBB5B0031F8CD /* TetrisIcon.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TetrisIcon.swift; sourceTree = "<group>"; };
+		DD29DCFF2ABBF53A0031F8CD /* TetrisView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TetrisView.swift; sourceTree = "<group>"; };
 		DDBECF362A955AE0005313E7 /* WitnessPuzzles.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = WitnessPuzzles.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		DDBECF392A955AE0005313E7 /* WitnessPuzzlesApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WitnessPuzzlesApp.swift; sourceTree = "<group>"; };
 		DDBECF3B2A955AE0005313E7 /* WitnessPuzzlesDocument.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WitnessPuzzlesDocument.swift; sourceTree = "<group>"; };
@@ -118,9 +124,19 @@
 				DD29DCE62AB4E5B20031F8CD /* SquareIcon.swift */,
 				DD29DCEA2AB522FF0031F8CD /* StarIcon.swift */,
 				DD29DCEE2AB67C220031F8CD /* EliminationIcon.swift */,
+				DD29DCF52ABBA2A60031F8CD /* Tetris */,
 				DD29DCF22AB80C0E0031F8CD /* TrianglesIcon.swift */,
 			);
 			path = Icons;
+			sourceTree = "<group>";
+		};
+		DD29DCF52ABBA2A60031F8CD /* Tetris */ = {
+			isa = PBXGroup;
+			children = (
+				DD29DCFB2ABBBB5B0031F8CD /* TetrisIcon.swift */,
+				DD29DCF72ABBA2C90031F8CD /* TetrisShapes.swift */,
+			);
+			path = Tetris;
 			sourceTree = "<group>";
 		};
 		DDBECF2D2A955AE0005313E7 = {
@@ -191,6 +207,7 @@
 				DDBECF7C2AA42150005313E7 /* HexagonView.swift */,
 				DD29DCDD2AB15E670031F8CD /* IconView.swift */,
 				DDBECF6F2A9EFA5C005313E7 /* PropertiesView.swift */,
+				DD29DCFF2ABBF53A0031F8CD /* TetrisView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -350,11 +367,14 @@
 				DDBECF7A2AA3B20C005313E7 /* Hexagon.swift in Sources */,
 				DDBECF8A2AA68CA6005313E7 /* Start.swift in Sources */,
 				DDBECF8E2AA97372005313E7 /* PuzzleType.swift in Sources */,
+				DD29DCF92ABBA2C90031F8CD /* TetrisShapes.swift in Sources */,
+				DD29DD012ABBF53A0031F8CD /* TetrisView.swift in Sources */,
 				DDBECF3E2A955AE0005313E7 /* ContentView.swift in Sources */,
 				DD29DCEC2AB522FF0031F8CD /* StarIcon.swift in Sources */,
 				DDBECF822AA44B9E005313E7 /* Gap.swift in Sources */,
 				DDBECF762AA261DD005313E7 /* Finish.swift in Sources */,
 				DDBECF712A9EFA5C005313E7 /* PropertiesView.swift in Sources */,
+				DD29DCFD2ABBBB5B0031F8CD /* TetrisIcon.swift in Sources */,
 				DDBECF6C2A9ABCE4005313E7 /* Color+Codable.swift in Sources */,
 				DDDC41732AAFD202005A4F68 /* FinishView.swift in Sources */,
 				DD29DCF02AB67C220031F8CD /* EliminationIcon.swift in Sources */,
