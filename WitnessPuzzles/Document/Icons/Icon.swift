@@ -31,6 +31,21 @@ extension WitnessPuzzlesDocument {
         var trianglesCount: TrianglesCount
         var tetrisShape: TetrisShape
         var tetrisRotation: TetrisRotations
+        
+        func replacing(
+            color: Color? = nil, iconType: IconType? = nil, trianglesCount: TrianglesCount? = nil,
+            tetrisShape: TetrisShape? = nil, tetrisRotation: TetrisRotations? = nil
+        ) -> IconInfo {
+            var copy = self
+            
+            if let color = color { copy.color = color }
+            if let iconType = iconType { copy.iconType = iconType }
+            if let trianglesCount = trianglesCount { copy.trianglesCount = trianglesCount }
+            if let tetrisShape = tetrisShape { copy.tetrisShape = tetrisShape }
+            if let tetrisRotation = tetrisRotation { copy.tetrisRotation = tetrisRotation }
+            
+            return copy
+        }
     }
     
     struct Icon: PuzzleItem, Hashable, Codable {

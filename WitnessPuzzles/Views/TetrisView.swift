@@ -14,11 +14,9 @@ struct TetrisView: View {
     var body: some View {
         VStack {
             Picker( "Tetris Shape", selection: $info.tetrisShape ) {
-                ForEach( WitnessPuzzlesDocument.tetrisShapes ) { newShape in
-                    let infoCopy = { () -> WitnessPuzzlesDocument.IconInfo in
-                        var copy = info; copy.tetrisShape = newShape; return copy
-                    }()
-                    WitnessPuzzlesDocument.Icon.image( size: 25, info: infoCopy ).tag( newShape )
+                ForEach( WitnessPuzzlesDocument.tetrisShapes ) {
+                    let infoCopy = info.replacing( tetrisShape: $0 )
+                    WitnessPuzzlesDocument.Icon.image( size: 25, info: infoCopy ).tag( $0 )
                 }
             }.pickerStyle( .segmented )
         }

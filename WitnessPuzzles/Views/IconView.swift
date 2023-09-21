@@ -21,21 +21,17 @@ struct IconView: View {
             ColorPicker( "Color", selection: $info.color )
             Divider()
             Picker( "Icon Type", selection: $info.iconType ) {
-                ForEach( WitnessPuzzlesDocument.IconType.allCases ) { newType in
-                    let infoCopy = { () -> WitnessPuzzlesDocument.IconInfo in
-                        var copy = info; copy.iconType = newType; return copy
-                    }()
-                    WitnessPuzzlesDocument.Icon.image( size: 25, info: infoCopy ).tag( newType )
+                ForEach( WitnessPuzzlesDocument.IconType.allCases ) {
+                    let infoCopy = info.replacing( iconType: $0 )
+                    WitnessPuzzlesDocument.Icon.image( size: 25, info: infoCopy ).tag( $0 )
                 }
             }.pickerStyle( .segmented )
             if info.iconType == .triangles {
                 VStack {
                     Picker( "Triangles Count", selection: $info.trianglesCount ) {
-                        ForEach( WitnessPuzzlesDocument.TrianglesCount.allCases ) { count in
-                            let infoCopy = { () -> WitnessPuzzlesDocument.IconInfo in
-                                var copy = info; copy.trianglesCount = count; return copy
-                            }()
-                            WitnessPuzzlesDocument.Icon.image( size: 25, info: infoCopy ).tag( count )
+                        ForEach( WitnessPuzzlesDocument.TrianglesCount.allCases ) {
+                            let infoCopy = info.replacing( trianglesCount: $0 )
+                            WitnessPuzzlesDocument.Icon.image( size: 25, info: infoCopy ).tag( $0 )
                         }
                     }.pickerStyle( .segmented )
                 }
