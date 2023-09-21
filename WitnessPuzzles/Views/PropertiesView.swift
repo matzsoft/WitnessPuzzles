@@ -11,27 +11,11 @@ import SwiftUI
 struct PropertiesView: View {
     @Environment( \.presentationMode ) var presentationMode
     @Binding var document: WitnessPuzzlesDocument
-    @State var type: WitnessPuzzlesDocument.PuzzleType
-    @State var width: Double
-    @State var height: Double
-    @State var background: Color
-    @State var foreground: Color
-    @State var scaleFactor: Double
-    @State var lineWidth: Double
-    @State var blockWidth: Double
-    @State var padding: Double
+    @State var working: WitnessPuzzlesDocument
 
     init( document: Binding<WitnessPuzzlesDocument> ) {
         self._document = document
-        _type = State( initialValue: document.wrappedValue.type )
-        _width = State( initialValue: Double( document.wrappedValue.width ) )
-        _height = State( initialValue: Double( document.wrappedValue.height ) )
-        _background = State( initialValue: document.wrappedValue.background )
-        _foreground = State( initialValue: document.wrappedValue.foreground )
-        _scaleFactor = State( initialValue: document.wrappedValue.scaleFactor )
-        _lineWidth = State( initialValue: Double( document.wrappedValue.lineWidth ) )
-        _blockWidth = State( initialValue: Double( document.wrappedValue.blockWidth ) )
-        _padding = State( initialValue: Double( document.wrappedValue.padding ) )
+        self._working = State( initialValue: document.wrappedValue )
     }
     
     var body: some View {
@@ -40,83 +24,25 @@ struct PropertiesView: View {
             Divider()
             Group {
                 Spacer( minLength: 10 )
-                Picker( "Puzzle Type", selection: $type ) {
+                Picker( "Puzzle Type", selection: $working.type ) {
                     ForEach( WitnessPuzzlesDocument.PuzzleType.allCases, id: \.self ) {
                         Text( $0.rawValue )
                     }
                 }.pickerStyle( .menu )
-                VStack {
-                    Slider( value: $width, in: 1 ... 20, step: 1 ) {
-                        Text( "Width" )
-                    } minimumValueLabel: {
-                        Text( "1" )
-                    } maximumValueLabel: {
-                        Text( "20" )
-                    }
-                    .tint( .black )
-                    Text( String( format: "%.0f", width ) )
-                }
-                VStack {
-                    Slider( value: $height, in: 1 ... 20, step: 1 ) {
-                        Text( "Height" )
-                    } minimumValueLabel: {
-                        Text( "1" )
-                    } maximumValueLabel: {
-                        Text( "20" )
-                    }
-                    .tint( .black )
-                    Text( String( format: "%.0f", height ) )
-                }
+                IntSlider( value: $working.width, range: 1 ... 20, step: 1, label: "Width" )
+                IntSlider( value: $working.height, range: 1 ... 20, step: 1, label: "Height" )
                 HStack {
-                    ColorPicker( "Background", selection: $background )
-                    ColorPicker( "Foreground", selection: $foreground )
+                    ColorPicker( "Background", selection: $working.background )
+                    ColorPicker( "Foreground", selection: $working.foreground )
                 }
-                VStack {
-                    Slider( value: $scaleFactor, in: 1 ... 50, step: 0.5 ) {
-                        Text( "Scale Factor" )
-                    } minimumValueLabel: {
-                        Text( "1" )
-                    } maximumValueLabel: {
-                        Text( "50" )
-                    }
-                    .tint( .black )
-                    Text( String( format: "%.1f", scaleFactor ) )
-                }
-                VStack {
-                    Slider( value: $padding, in: 0 ... 10, step: 1 ) {
-                        Text( "Padding" )
-                    } minimumValueLabel: {
-                        Text( "0" )
-                    } maximumValueLabel: {
-                        Text( "10" )
-                    }
-                    .tint( .black )
-                    Text( String( format: "%.0f", lineWidth ) )
-                }
+                DoubleSlider(
+                    value: $working.scaleFactor, range: 1 ... 50, step: 0.5, label: "Scale Factor"
+                )
+                IntSlider( value: $working.padding, range: 0 ... 10, step: 1, label: "Padding" )
             }
             Divider()
-            VStack {
-                Slider( value: $lineWidth, in: 1 ... 10, step: 1 ) {
-                    Text( "Line Width" )
-                } minimumValueLabel: {
-                    Text( "1" )
-                } maximumValueLabel: {
-                    Text( "10" )
-                }
-                .tint( .black )
-                Text( String( format: "%.0f", lineWidth ) )
-            }
-            VStack {
-                Slider( value: $blockWidth, in: 4 ... 20, step: 1 ) {
-                    Text( "Block Width" )
-                } minimumValueLabel: {
-                    Text( "4" )
-                } maximumValueLabel: {
-                    Text( "20" )
-                }
-                .tint( .black )
-                Text( String( format: "%.0f", blockWidth ) )
-            }
+            IntSlider( value: $working.lineWidth, range: 1 ... 10, step: 1, label: "Line Width" )
+            IntSlider( value: $working.blockWidth, range: 4 ... 20, step: 1, label: "Block Width" )
             Divider()
             HStack {
                 Button( "Cancel", role: .cancel ) {
@@ -126,13 +52,8 @@ struct PropertiesView: View {
                 .keyboardShortcut( .cancelAction )
                 Spacer()
                 Button( "Done", role: .destructive ) {
-                    document.adjustDimensions( type: type, width: Int( width ), height: Int( height ) )
-                    document.background = background
-                    document.foreground = foreground
-                    document.scaleFactor = scaleFactor
-                    document.lineWidth = Int( lineWidth )
-                    document.blockWidth = Int( blockWidth )
-                    document.padding = Int( padding )
+                    working.adjustDimensions()
+                    document = working
                     if NSColorPanel.shared.isVisible { NSColorPanel.shared.orderOut( nil ) }
                     presentationMode.wrappedValue.dismiss()
                 }

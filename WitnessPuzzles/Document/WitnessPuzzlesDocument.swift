@@ -115,11 +115,7 @@ struct WitnessPuzzlesDocument: FileDocument, Codable {
         return context.makeImage()!
     }
     
-    mutating func adjustDimensions( type: PuzzleType, width: Int, height: Int ) -> Void {
-        self.type = type
-        self.width = width
-        self.height = height
-        
+    mutating func adjustDimensions() -> Void {
         starts = starts.filter { $0.isValid( puzzle: self ) }
         finishes = finishes.filter { $0.isValid( puzzle: self ) }
         hexagons = hexagons.filter { $0.isValid( puzzle: self ) }
