@@ -29,31 +29,31 @@ extension WitnessPuzzlesDocument {
         static func isValid( position: Point, puzzle: WitnessPuzzlesDocument ) -> Bool {
             position.isPuzzleSpace( puzzle: puzzle ) && position.isPath
         }
-    }
-
-    func drawHexagons( context: CGContext ) -> Void {
-        let hexHeight = CGFloat( sqrt( 3 ) / 2 )
-        let hexPoints = [
-            CGPoint( x:  1, y: 0 ), CGPoint( x:  0.5, y:  hexHeight ), CGPoint( x: -0.5, y:  hexHeight ),
-            CGPoint( x: -1, y: 0 ), CGPoint( x: -0.5, y: -hexHeight ), CGPoint( x:  0.5, y: -hexHeight )
+        
+        static let hexPoints = [
+            CGPoint( x:  1, y: 0 ), CGPoint( x:  0.5, y:  sqrt( 3 ) / 2 ),
+            CGPoint( x: -0.5, y:  sqrt( 3 ) / 2 ), CGPoint( x: -1, y: 0 ),
+            CGPoint( x: -0.5, y: -sqrt( 3 ) / 2 ), CGPoint( x:  0.5, y: -sqrt( 3 ) / 2 )
         ]
         
-        func draw( hexagon: Hexagon ) {
-            let extent = hexagon.extent( puzzle: self )
+        static func draw( extent: CGRect, context: CGContext, color: Color ) -> Void {
             context.saveGState()
             context.beginPath()
             context.translateBy( x: extent.midX, y: extent.midY )
-            context.scaleBy( x: extent.width / 2, y: extent.height / 2 )
+            context.scaleBy( x: 0.4 * extent.width, y: 0.4 * extent.height )
             context.addLines( between: hexPoints )
-            context.setFillColor( hexagon.color.cgColor! )
+            context.setFillColor( color.cgColor! )
             context.fillPath()
             context.restoreGState()
         }
-        
+    }
+
+    func drawHexagons( context: CGContext ) -> Void {
         for hexagon in hexagons {
-            draw( hexagon: hexagon )
+            Hexagon.draw( extent: hexagon.extent( puzzle: self ), context: context, color: hexagon.color )
             if let wrapped = type.wrap( point: hexagon.position, puzzle: self ) {
-                draw( hexagon: Hexagon( position: wrapped, color: hexagon.color ) )
+                let new = Hexagon( position: wrapped, color: hexagon.color )
+                Hexagon.draw( extent: new.extent( puzzle: self ), context: context, color: new.color )
             }
         }
     }
