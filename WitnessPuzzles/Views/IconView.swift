@@ -13,31 +13,42 @@ struct IconView: View {
     @Binding var document: WitnessPuzzlesDocument
     let location: WitnessPuzzlesDocument.Point
     @Binding var info: WitnessPuzzlesDocument.IconInfo
+    @State var working: WitnessPuzzlesDocument.IconInfo
 
+    init(
+        document: Binding<WitnessPuzzlesDocument>, location: WitnessPuzzlesDocument.Point,
+        info: Binding<WitnessPuzzlesDocument.IconInfo>
+    ) {
+        self._document = document
+        self.location = location
+        self._info = info
+        self._working = State( initialValue: info.wrappedValue )
+    }
+    
     var body: some View {
         VStack {
 //            Text( "Select a color for the new hexagon" )
 //            Divider()
-            ColorPicker( "Color", selection: $info.color )
+            ColorPicker( "Color", selection: $working.color )
             Divider()
-            Picker( "Icon Type", selection: $info.iconType ) {
+            Picker( "Icon Type", selection: $working.iconType ) {
                 ForEach( WitnessPuzzlesDocument.IconType.allCases ) {
-                    let infoCopy = info.replacing( iconType: $0 )
+                    let infoCopy = working.replacing( iconType: $0 )
                     WitnessPuzzlesDocument.Icon.image( size: 25, info: infoCopy ).tag( $0 )
                 }
             }.pickerStyle( .segmented )
-            if info.iconType == .triangles {
+            if working.iconType == .triangles {
                 VStack {
-                    Picker( "Triangles Count", selection: $info.trianglesCount ) {
+                    Picker( "Triangles Count", selection: $working.trianglesCount ) {
                         ForEach( WitnessPuzzlesDocument.TrianglesCount.allCases ) {
-                            let infoCopy = info.replacing( trianglesCount: $0 )
+                            let infoCopy = working.replacing( trianglesCount: $0 )
                             WitnessPuzzlesDocument.Icon.image( size: 25, info: infoCopy ).tag( $0 )
                         }
                     }.pickerStyle( .segmented )
                 }
             }
-            if info.iconType == .tetris {
-                TetrisView( info: $info )
+            if working.iconType == .tetris {
+                TetrisView( info: $working )
             }
             Divider()
             HStack {
@@ -48,6 +59,7 @@ struct IconView: View {
                 .keyboardShortcut( .cancelAction )
                 Spacer()
                 Button( "Done", role: .destructive ) {
+                    info = working
                     switch info.iconType {
                     case .square:
                         document.addSquareIcon( point: location, color: info.color )

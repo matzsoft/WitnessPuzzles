@@ -3,7 +3,6 @@
 ## Bugs
 
 1. Finishes in cylinder puzzles are not correctly computing valid directions.
-1. Cancel on the IconView doesn't create the icon, but it also doesn't reset the settings.
 
 ## TODO
 
