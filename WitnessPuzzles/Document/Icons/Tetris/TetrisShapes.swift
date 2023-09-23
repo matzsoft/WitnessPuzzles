@@ -10,11 +10,17 @@ import Foundation
 import SwiftUI
 
 extension WitnessPuzzlesDocument {
+    enum TetrisRotationsCount: Int {
+        case zero = 1, one, three = 4
+    }
+    
+    /// This enum represents multiples of 90 degrees.
     enum TetrisRotations: Int, CaseIterable, Identifiable, Codable {
         case zero, one, two, three
         var id: Int { rawValue }
     }
     
+    /// This enum represents multiples of 30 degrees.
     enum TetrisRotationAllowed: Int, CaseIterable, Identifiable, Codable {
         case two = 2, ten = 10
         var id: Int { rawValue }
@@ -28,36 +34,44 @@ extension WitnessPuzzlesDocument {
         var id: UUID { UUID() }
         
         init(
-            blocks: [ ( Int,Int ) ], rotatable: TetrisRotationAllowed?, allowedRotations: TetrisRotations...
+            blocks: [ (Int,Int) ], rotations: TetrisRotationsCount, display: TetrisRotationAllowed? = nil
         ) {
+            if rotations == .zero && display != nil { fatalError( "Invalid TetrisShape setup." ) }
+            if rotations != .zero && display == nil { fatalError( "Invalid TetrisShape setup." ) }
+            
             self.blocks = blocks.map { Point( $0.0, $0.1 ) }
-            self.allowedRotations = allowedRotations
-            self.rotatable = rotatable
+            switch rotations {
+            case .zero:
+                self.allowedRotations = [ .zero ]
+            case .one:
+                self.allowedRotations = [ .zero, .one ]
+            case .three:
+                self.allowedRotations = [ .zero, .one, .two, .three ]
+            }
+            self.rotatable = display
         }
     }
     
     static let tetrisShapes = [
         // ▉
-        TetrisShape( blocks: [ (4,4) ], rotatable: nil, allowedRotations: .zero ),
+        TetrisShape( blocks: [ (4,4) ], rotations: .zero ),
         // ▉▉
-        TetrisShape( blocks: [ (3,4), (5,4) ], rotatable: .two, allowedRotations: .one ),
+        TetrisShape( blocks: [ (3,4), (5,4) ], rotations: .one, display: .two ),
         //  ▉
         // ▉
-        TetrisShape( blocks: [ (3,3), (5,5) ], rotatable: .two, allowedRotations: .one ),
+        TetrisShape( blocks: [ (3,3), (5,5) ], rotations: .one, display: .two ),
         // ▉▉▉
-        TetrisShape( blocks: [ (2,4), (4,4), (6,4) ], rotatable: .two, allowedRotations: .one ),
+        TetrisShape( blocks: [ (2,4), (4,4), (6,4) ], rotations: .one, display: .two ),
         // ▉
         // ▉▉
         TetrisShape(
-            blocks: [ (4,4), (6,4), (4,6) ], rotatable: .two, allowedRotations: .one, .two, .three
-        ),
+            blocks: [ (4,4), (6,4), (4,6) ], rotations: .three, display: .two ),
         //  ▉
         // ▉ ▉
         TetrisShape(
-            blocks: [ (2,3), (6,3), (4,5) ], rotatable: .two, allowedRotations: .one, .two, .three
-        ),
+            blocks: [ (2,3), (6,3), (4,5) ], rotations: .three, display: .two ),
         // ▉▉
         // ▉▉
-        TetrisShape( blocks: [ (3,3), (5,3), (3,5), (5,5) ], rotatable: nil, allowedRotations: .zero ),
+        TetrisShape( blocks: [ (3,3), (5,3), (3,5), (5,5) ], rotations: .zero ),
     ]
 }
