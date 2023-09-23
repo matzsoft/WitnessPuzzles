@@ -9,6 +9,10 @@
 import Foundation
 import SwiftUI
 
+extension Array: Identifiable where Element: Hashable {
+   public var id: Self { self }
+}
+
 extension WitnessPuzzlesDocument {
     enum TetrisRotationsCount: Int {
         case zero = 1, one, three = 4
@@ -50,8 +54,18 @@ extension WitnessPuzzlesDocument {
             }
             self.rotatable = display
         }
+        
+        static func classes() -> [[TetrisShape]] {
+            tetrisShapes
+                .reduce( into: [ Int : [TetrisShape] ]() ) {
+                    $0[ $1.blocks.count, default: [] ].append( $1 )
+                }
+                .sorted( by: { $0.key < $1.key } )
+                .map { $0.value }
+        }
     }
     
+    static let tetrisClasses = TetrisShape.classes()
     static let tetrisShapes = [
         // ▉
         TetrisShape( blocks: [ (4,4) ], rotations: .zero ),

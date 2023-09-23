@@ -15,7 +15,7 @@ None known at this time.
 
 ### Functional
 
-1. Complete the implementation of the tetris icon type.
+1. Add more tetris shapes.
 1. Make an icon for the app.
 1. Can the IconType enum be eliminated by type introspection?
 
