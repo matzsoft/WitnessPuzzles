@@ -29,12 +29,12 @@ extension WitnessPuzzlesDocument {
         }
         
         func isValid( puzzle: WitnessPuzzlesDocument ) -> Bool {
-            guard position.isPuzzleSpace( puzzle: puzzle ) else { return false }
+            guard puzzle.isConnected( point: position ) else { return false }
             return Finish.validDirection( from: position, direction: direction, in: puzzle )
         }
         
         static func isValid( position: Point, puzzle: WitnessPuzzlesDocument ) -> Bool {
-            guard position.isPuzzleSpace( puzzle: puzzle ) else { return false }
+            guard puzzle.isConnected( point: position ) else { return false }
             return Finish.validDirections( for: position, in: puzzle ) != nil
         }
 
@@ -68,18 +68,21 @@ extension WitnessPuzzlesDocument {
 
             switch true {
             case from.isLine:
-                if !destination.isPuzzleSpace( puzzle: puzzle ) { return true }
-                return puzzle.conflictsWithMissings( point: destination )
+                guard destination.isBlock else { return false }
+                guard destination.isPuzzleSpace( puzzle: puzzle ) else { return true }
+                return !puzzle.isConnected( point: destination )
             case from.isIntersection:
-                if direction.isOrthogonal {
-                    if !destination.isPuzzleSpace( puzzle: puzzle ) { return true }
-                    return puzzle.conflictsWithMissings( point: destination )
+                if destination.isLine {
+                    guard destination.isPuzzleSpace( puzzle: puzzle ) else { return true }
+                    return puzzle.missings.contains { destination == $0.position }
                 }
-                return direction.components.allSatisfy {
+                if puzzle.isConnected( point: destination ) { return false }
+                let components = direction.components.filter {
                     let component = from + $0.vector
                     if !component.isPuzzleSpace( puzzle: puzzle ) { return true }
-                    return puzzle.conflictsWithMissings( point: component )
+                    return puzzle.missings.contains { component == $0.position }
                 }
+                return components.count != 1
             default:
                 return false
             }
@@ -87,7 +90,7 @@ extension WitnessPuzzlesDocument {
         
         static func validDirections( for point: Point, in puzzle: WitnessPuzzlesDocument ) -> [Direction]? {
             guard point.isPuzzleSpace( puzzle: puzzle ) else { return nil }
-            guard !puzzle.conflictsWithMissings( point: point ) else { return nil }
+            if puzzle.missings.contains( where: { point == $0.position } ) { return nil }
             
             let acceptable = {
                 switch true {
@@ -140,14 +143,14 @@ extension WitnessPuzzlesDocument {
     }
     
     func finishExists( point: Point ) -> Bool {
-        return conflictsWithFinishes( point: point )
+        return finishes.contains { point == $0.position }
     }
     
     func isFinishPositionOK( point: Point ) -> Bool {
         return Finish.isValid( position: point, puzzle: self ) &&
-              !conflictsWithStarts( point: point ) &&
-              !conflictsWithGaps( point: point ) &&
-              !conflictsWithMissings( point: point )
+                !starts.contains { point == $0.position } &&
+                !gaps.contains { point == $0.position } &&
+                !missings.contains { point == $0.position }
     }
     
     mutating func removeFinish( point: Point ) -> Void {

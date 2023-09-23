@@ -28,7 +28,7 @@ extension WitnessPuzzlesDocument {
         }
         
         static func isValid( position: Point, puzzle: WitnessPuzzlesDocument ) -> Bool {
-            position.isPuzzleSpace( puzzle: puzzle ) && position.isLine
+            position.isLine && puzzle.isConnected( point: position )
         }
     }
 
@@ -45,15 +45,15 @@ extension WitnessPuzzlesDocument {
     }
     
     func gapExists( point: Point ) -> Bool {
-        return conflictsWithGaps( point: point )
+        return gaps.contains { point == $0.position }
     }
     
     func isGapPositionOK( point: Point ) -> Bool {
         return Gap.isValid( position: point, puzzle: self ) &&
-              !conflictsWithStarts( point: point ) &&
-              !conflictsWithFinishes( point: point ) &&
-              !conflictsWithMissings( point: point ) &&
-              !conflictsWithHexagons( point: point )
+                !starts.contains { point == $0.position } &&
+                !finishes.contains { point == $0.position } &&
+                !missings.contains { point == $0.position } &&
+                !hexagons.contains { point == $0.position }
     }
     
     mutating func removeGap( point: Point ) -> Void {

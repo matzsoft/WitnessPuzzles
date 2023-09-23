@@ -27,7 +27,7 @@ extension WitnessPuzzlesDocument {
         }
         
         static func isValid( position: Point, puzzle: WitnessPuzzlesDocument ) -> Bool {
-            position.isPuzzleSpace( puzzle: puzzle ) && position.isPath
+            position.isPath && puzzle.isConnected( point: position )
         }
         
         static let hexPoints = [
@@ -59,14 +59,14 @@ extension WitnessPuzzlesDocument {
     }
 
     func hexagonExists( point: Point ) -> Bool {
-        return conflictsWithHexagons( point: point )
+        return hexagons.contains { point == $0.position }
     }
     
     func isHexagonPositionOK( point: Point ) -> Bool {
         return Hexagon.isValid( position: point, puzzle: self ) &&
-              !conflictsWithGaps( point: point ) &&
-              !conflictsWithMissings( point: point ) &&
-              !conflictsWithHexagons( point: point )
+                !gaps.contains { point == $0.position } &&
+                !missings.contains { point == $0.position } &&
+                !hexagons.contains { point == $0.position }
     }
     
     mutating func removeHexagon( point: Point ) -> Void {

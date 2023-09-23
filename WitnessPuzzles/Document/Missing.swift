@@ -33,15 +33,15 @@ extension WitnessPuzzlesDocument {
     }
     
     func missingExists( point: Point ) -> Bool {
-        return conflictsWithMissings( point: point )
+        return missings.contains { point == $0.position }
     }
     
     func isMissingPositionOK( point: Point ) -> Bool {
         return Missing.isValid( position: point, puzzle: self ) &&
-              !conflictsWithStarts( point: point ) &&
-              !conflictsWithFinishes( point: point ) &&
-              !conflictsWithGaps( point: point ) &&
-              !conflictsWithHexagons( point: point )
+                !starts.contains { point == $0.position } &&
+                !finishes.contains { point == $0.position } &&
+                !gaps.contains { point == $0.position } &&
+                !hexagons.contains { point == $0.position }
     }
     
     mutating func removeMissing( point: Point ) -> Void {

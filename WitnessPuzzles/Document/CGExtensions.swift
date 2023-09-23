@@ -43,6 +43,23 @@ extension WitnessPuzzlesDocument {
         }
     }
     
+    func isConnected( point: Point ) -> Bool {
+        guard point.isPuzzleSpace( puzzle: self ) else { return false }
+        if missings.contains( where: { point == $0.position } ) { return false }
+        if point.isLine { return true }
+        
+        let lines = [
+            point + Direction.north.vector, point + Direction.east.vector,
+            point + Direction.south.vector, point + Direction.west.vector
+        ].filter { line in
+            !line.isPuzzleSpace( puzzle: self ) || missings.contains { line == $0.position }
+        }
+        
+        if point.isBlock && !lines.isEmpty { return false }
+        if point.isIntersection && lines.count == 4 { return false }
+        return true
+    }
+    
     func toPuzzleSpace( from view: CGPoint ) -> Point {
         let context = getContext()
         let user = context.convertToUserSpace( view )
@@ -83,15 +100,6 @@ extension WitnessPuzzlesDocument {
             case .southwest: return Image( systemName: "arrow.down.left" )
             case .west:      return Image( systemName: "arrow.left" )
             case .northwest: return Image( systemName: "arrow.up.left" )
-            }
-        }
-        
-        var isOrthogonal: Bool {
-            switch self {
-            case .north, .east, .south, .west:
-                return true
-            default:
-                return false
             }
         }
         

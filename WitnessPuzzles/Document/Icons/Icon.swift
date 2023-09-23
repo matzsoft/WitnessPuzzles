@@ -115,7 +115,7 @@ extension WitnessPuzzlesDocument {
         }
         
         static func isValid( position: Point, puzzle: WitnessPuzzlesDocument ) -> Bool {
-            position.isPuzzleSpace( puzzle: puzzle ) && position.isBlock
+            position.isBlock && puzzle.isConnected( point: position )
         }
 
         static func ==( lhs: Icon, rhs: Icon ) -> Bool {
@@ -172,7 +172,7 @@ extension WitnessPuzzlesDocument {
     }
     
     func iconExists( point: Point ) -> Bool {
-        return conflictsWithIcons( point: point )
+        return icons.contains { point == $0.position }
     }
     
     func isIconPositionOK( point: Point ) -> Bool {

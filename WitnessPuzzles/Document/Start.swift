@@ -26,7 +26,7 @@ extension WitnessPuzzlesDocument {
         }
         
         static func isValid( position: Point, puzzle: WitnessPuzzlesDocument ) -> Bool {
-            position.isPuzzleSpace( puzzle: puzzle ) && position.isPath
+            position.isPath && puzzle.isConnected( point: position )
         }
     }
 
@@ -47,14 +47,14 @@ extension WitnessPuzzlesDocument {
     }
     
     func startExists( point: Point ) -> Bool {
-        return conflictsWithStarts( point: point )
+        return starts.contains { point == $0.position }
     }
     
     func isStartPositionOK( point: Point ) -> Bool {
         return Start.isValid( position: point, puzzle: self ) &&
-              !conflictsWithFinishes( point: point ) &&
-              !conflictsWithGaps( point: point ) &&
-              !conflictsWithMissings( point: point )
+                !finishes.contains { point == $0.position } &&
+                !gaps.contains { point == $0.position } &&
+                !missings.contains { point == $0.position }
     }
     
     mutating func removeStart( point: Point ) -> Void {
