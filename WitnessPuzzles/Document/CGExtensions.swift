@@ -43,14 +43,27 @@ extension WitnessPuzzlesDocument {
         }
     }
     
+    func neighbor( of point: Point, in direction: Direction ) -> Point {
+        let normal = point + direction.vector
+        
+        switch type {
+        case .rectangle:
+            return normal
+        case .cylinder:
+            if normal.x == validSymbolX.lowerBound - 1 { return Point( validSymbolX.upperBound, normal.y ) }
+            if normal.x == validSymbolX.upperBound + 1 { return Point( validSymbolX.lowerBound, normal.y ) }
+            return normal
+        }
+    }
+    
     func isConnected( point: Point ) -> Bool {
         guard point.isPuzzleSpace( puzzle: self ) else { return false }
         if missings.contains( where: { point == $0.position } ) { return false }
         if point.isLine { return true }
         
         let lines = [
-            point + Direction.north.vector, point + Direction.east.vector,
-            point + Direction.south.vector, point + Direction.west.vector
+            neighbor( of: point, in: .north ), neighbor( of: point, in: .east ),
+            neighbor( of: point, in: .south ), neighbor( of: point, in: .west )
         ].filter { line in
             !line.isPuzzleSpace( puzzle: self ) || missings.contains { line == $0.position }
         }

@@ -64,7 +64,7 @@ extension WitnessPuzzlesDocument {
         static func validDirection(
             from: Point, direction: Direction, in puzzle: WitnessPuzzlesDocument
         ) -> Bool {
-            let destination = from + direction.vector
+            let destination = puzzle.neighbor( of: from, in: direction )
 
             switch true {
             case from.isLine:
@@ -77,10 +77,10 @@ extension WitnessPuzzlesDocument {
                     return puzzle.missings.contains { destination == $0.position }
                 }
                 if puzzle.isConnected( point: destination ) { return false }
-                let components = direction.components.filter {
-                    let component = from + $0.vector
-                    if !component.isPuzzleSpace( puzzle: puzzle ) { return true }
-                    return puzzle.missings.contains { component == $0.position }
+                let components = direction.components.filter { componentDirection in
+                    let line = puzzle.neighbor( of: from, in: componentDirection )
+                    if !line.isPuzzleSpace( puzzle: puzzle ) { return true }
+                    return puzzle.missings.contains { line == $0.position }
                 }
                 return components.count != 1
             default:

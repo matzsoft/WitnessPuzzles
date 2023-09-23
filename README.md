@@ -2,7 +2,7 @@
 
 ## Bugs
 
-1. Finishes in cylinder puzzles are not correctly computing valid directions.
+None known at this time.
 
 ## TODO
 
@@ -27,4 +27,3 @@
 
 - Counldn't get the cancel to work properly.
 - Changing the dimensions causes the sheet to move out from under the mouse making using the controls difficult.
-
