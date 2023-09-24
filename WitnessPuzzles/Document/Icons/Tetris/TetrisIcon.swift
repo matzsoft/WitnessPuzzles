@@ -24,10 +24,14 @@ extension WitnessPuzzlesDocument {
         }
         
         init( info: IconInfo ) {
+            let classIndex = info.tetrisClassIndex
+            let shapeIndex = info.tetrisShapeIndex[classIndex]
+            let shape = WitnessPuzzlesDocument.tetrisClasses[classIndex][shapeIndex]
+            
             color = info.color
-            blocks = info.tetrisShape.blocks
+            blocks = shape.blocks
             rotation = info.tetrisRotation
-            rotatable = info.tetrisShape.rotatable
+            rotatable = shape.rotatable
         }
         
         func draw( in rect: CGRect, context: CGContext ) {

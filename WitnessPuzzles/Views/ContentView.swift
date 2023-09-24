@@ -18,8 +18,8 @@ struct ContentView: View {
         color: Color( cgColor: CGColor( red: 1, green: 0.4, blue: 0.1, alpha: 1 ) ),
         iconType: WitnessPuzzlesDocument.IconType.square,
         trianglesCount: WitnessPuzzlesDocument.TrianglesCount.two,
-        tetrisClass: WitnessPuzzlesDocument.tetrisClasses[0],
-        tetrisShape: WitnessPuzzlesDocument.tetrisShapes[0],
+        tetrisClassIndex: 0,
+        tetrisShapeIndex: WitnessPuzzlesDocument.tetrisClasses.map { _ in 0 },
         tetrisRotation: WitnessPuzzlesDocument.TetrisRotations.zero
     )
 

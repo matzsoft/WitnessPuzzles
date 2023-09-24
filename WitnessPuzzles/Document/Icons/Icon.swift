@@ -29,13 +29,13 @@ extension WitnessPuzzlesDocument {
         var color: Color
         var iconType: IconType
         var trianglesCount: TrianglesCount
-        var tetrisClass: [TetrisShape]
-        var tetrisShape: TetrisShape
+        var tetrisClassIndex: Int
+        var tetrisShapeIndex: [Int]
         var tetrisRotation: TetrisRotations
         
         func replacing(
             color: Color? = nil, iconType: IconType? = nil, trianglesCount: TrianglesCount? = nil,
-            tetrisClass: [TetrisShape]? = nil, tetrisShape: TetrisShape? = nil,
+            tetrisClassIndex: Int? = nil, tetrisShapeIndex: Int? = nil,
             tetrisRotation: TetrisRotations? = nil
         ) -> IconInfo {
             var copy = self
@@ -43,8 +43,9 @@ extension WitnessPuzzlesDocument {
             if let color = color { copy.color = color }
             if let iconType = iconType { copy.iconType = iconType }
             if let trianglesCount = trianglesCount { copy.trianglesCount = trianglesCount }
-            if let tetrisClass = tetrisClass { copy.tetrisClass = tetrisClass}
-            if let tetrisShape = tetrisShape { copy.tetrisShape = tetrisShape }
+            if let tetrisClassIndex = tetrisClassIndex { copy.tetrisClassIndex = tetrisClassIndex}
+            if let tetrisShapeIndex = tetrisShapeIndex {
+                copy.tetrisShapeIndex[copy.tetrisClassIndex] = tetrisShapeIndex }
             if let tetrisRotation = tetrisRotation { copy.tetrisRotation = tetrisRotation }
             
             return copy
