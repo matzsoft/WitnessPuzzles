@@ -15,12 +15,14 @@ extension WitnessPuzzlesDocument {
         let blocks: [Point]
         let rotation: TetrisRotations
         let rotatable: TetrisRotationAllowed?
+        let negated: Bool
         
-        init( color: Color, shape: TetrisShape, rotation: TetrisRotations ) {
+        init( color: Color, shape: TetrisShape, rotation: TetrisRotations, negated: Bool ) {
             self.color = color
             self.blocks = shape.blocks
             self.rotation = rotation
             self.rotatable = shape.rotatable
+            self.negated = negated
         }
         
         init( info: IconInfo ) {
@@ -32,6 +34,7 @@ extension WitnessPuzzlesDocument {
             blocks = shape.blocks
             rotation = info.tetrisRotation
             rotatable = shape.rotatable
+            negated = info.tetrisNegated
         }
         
         func draw( in rect: CGRect, context: CGContext ) {
@@ -48,13 +51,21 @@ extension WitnessPuzzlesDocument {
             context.saveGState()
             context.translateBy( x: rect.midX, y: rect.midY )
             context.scaleBy( x: rect.width / scaleFactor, y: rect.height / scaleFactor )
-            context.setFillColor( color.cgColor! )
+            if negated {
+                context.setStrokeColor( color.cgColor! )
+            } else {
+                context.setFillColor( color.cgColor! )
+            }
 
             func drawOne( block: Point ) {
                 let centerX = origin + stepSize * Double( block.x )
                 let centerY = origin + stepSize * Double( block.y )
                 context.translateBy( x: centerX, y: centerY )
-                context.fill( blockRect )
+                if negated {
+                    context.stroke( blockRect )
+                } else {
+                    context.fill( blockRect )
+                }
                 context.translateBy( x: -centerX, y: -centerY )
             }
             

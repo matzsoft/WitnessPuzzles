@@ -19,11 +19,19 @@ struct TetrisView: View {
                     WitnessPuzzlesDocument.Icon.image( size: 25, info: infoCopy ).tag( $0 )
                 }
             }.pickerStyle( .segmented )
-            Picker( "Tetris Shape", selection: $info.tetrisShapeIndex[info.tetrisClassIndex] ) {
-                ForEach( WitnessPuzzlesDocument.tetrisClasses[info.tetrisClassIndex].indices, id: \.self ) {
-                    let infoCopy = info.replacing( tetrisShapeIndex: $0 )
-                    WitnessPuzzlesDocument.Icon.image( size: 25, info: infoCopy ).tag( $0 )
-                }
+            if WitnessPuzzlesDocument.tetrisClasses[info.tetrisClassIndex].count > 1 {
+                Picker( "Tetris Shape", selection: $info.tetrisShapeIndex[info.tetrisClassIndex] ) {
+                    ForEach( WitnessPuzzlesDocument.tetrisClasses[info.tetrisClassIndex].indices, id: \.self ) {
+                        let infoCopy = info.replacing( tetrisShapeIndex: $0 )
+                        WitnessPuzzlesDocument.Icon.image( size: 25, info: infoCopy ).tag( $0 )
+                    }
+                }.pickerStyle( .segmented )
+            }
+            Picker( "Solid/Hollow", selection: $info.tetrisNegated ) {
+                let solid = info.replacing( tetrisNegated: false )
+                let hollow = info.replacing( tetrisNegated: true )
+                WitnessPuzzlesDocument.Icon.image(size: 25, info: solid ).tag( false )
+                WitnessPuzzlesDocument.Icon.image(size: 25, info: hollow ).tag( true )
             }.pickerStyle( .segmented )
         }
     }

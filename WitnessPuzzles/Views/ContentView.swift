@@ -20,7 +20,8 @@ struct ContentView: View {
         trianglesCount: WitnessPuzzlesDocument.TrianglesCount.two,
         tetrisClassIndex: 0,
         tetrisShapeIndex: WitnessPuzzlesDocument.tetrisClasses.map { _ in 0 },
-        tetrisRotation: WitnessPuzzlesDocument.TetrisRotations.zero
+        tetrisRotation: WitnessPuzzlesDocument.TetrisRotations.zero,
+        tetrisNegated: false
     )
 
     func toggleTool( _ tool: ToolType ) { selectedTool = selectedTool == tool ? nil : tool }
