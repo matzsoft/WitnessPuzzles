@@ -19,8 +19,9 @@ struct TetrisView: View {
                     WitnessPuzzlesDocument.Icon.image( size: 25, info: infoCopy ).tag( $0 )
                 }
             }.pickerStyle( .segmented )
-            if WitnessPuzzlesDocument.tetrisClasses[info.tetrisClassIndex].count > 1 {
-                let classIndex = info.tetrisClassIndex
+
+            let classIndex = info.tetrisClassIndex
+            if WitnessPuzzlesDocument.tetrisClasses[classIndex].count > 1 {
                 Picker( "Tetris Shape", selection: $info.tetrisClassInfo[classIndex].selected ) {
                     ForEach( WitnessPuzzlesDocument.tetrisClasses[classIndex].indices, id: \.self ) {
                         let infoCopy = info.replacing( tetrisShapeIndex: $0 )
@@ -28,6 +29,18 @@ struct TetrisView: View {
                     }
                 }.pickerStyle( .segmented )
             }
+            
+            let shapeIndex = info.tetrisClassInfo[classIndex].selected
+            let shape = WitnessPuzzlesDocument.tetrisClasses[classIndex][shapeIndex]
+            if shape.allowedRotations.count > 1 {
+                Picker( "Rotation", selection: $info.tetrisClassInfo[classIndex].rotations[shapeIndex] ) {
+                    ForEach( shape.allowedRotations ) {
+                        let infoCopy = info.replacing( tetrisRotation: $0 )
+                        WitnessPuzzlesDocument.Icon.image( size: 25, info: infoCopy ).tag( $0 )
+                    }
+                }.pickerStyle( .segmented )
+            }
+            
             Picker( "Solid/Hollow", selection: $info.tetrisNegated ) {
                 let solid = info.replacing( tetrisNegated: false )
                 let hollow = info.replacing( tetrisNegated: true )

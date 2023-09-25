@@ -51,6 +51,7 @@ extension WitnessPuzzlesDocument {
             context.saveGState()
             context.translateBy( x: rect.midX, y: rect.midY )
             context.scaleBy( x: rect.width / scaleFactor, y: rect.height / scaleFactor )
+            context.rotate( by: Double( rotation.rawValue ) * Double.pi / 2 )
             if negated {
                 context.setStrokeColor( color.cgColor! )
             } else {

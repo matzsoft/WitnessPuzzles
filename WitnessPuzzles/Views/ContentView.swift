@@ -20,7 +20,6 @@ struct ContentView: View {
         trianglesCount: WitnessPuzzlesDocument.TrianglesCount.two,
         tetrisClassIndex: 0,
         tetrisClassInfo: WitnessPuzzlesDocument.TetrisClassInfo.setupAll(),
-        tetrisRotation: WitnessPuzzlesDocument.TetrisRotations.zero,
         tetrisNegated: false
     )
 
