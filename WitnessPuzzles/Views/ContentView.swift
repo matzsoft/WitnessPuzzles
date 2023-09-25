@@ -19,7 +19,7 @@ struct ContentView: View {
         iconType: WitnessPuzzlesDocument.IconType.square,
         trianglesCount: WitnessPuzzlesDocument.TrianglesCount.two,
         tetrisClassIndex: 0,
-        tetrisShapeIndex: WitnessPuzzlesDocument.tetrisClasses.map { _ in 0 },
+        tetrisClassInfo: WitnessPuzzlesDocument.TetrisClassInfo.setupAll(),
         tetrisRotation: WitnessPuzzlesDocument.TetrisRotations.zero,
         tetrisNegated: false
     )

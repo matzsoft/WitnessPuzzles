@@ -20,8 +20,9 @@ struct TetrisView: View {
                 }
             }.pickerStyle( .segmented )
             if WitnessPuzzlesDocument.tetrisClasses[info.tetrisClassIndex].count > 1 {
-                Picker( "Tetris Shape", selection: $info.tetrisShapeIndex[info.tetrisClassIndex] ) {
-                    ForEach( WitnessPuzzlesDocument.tetrisClasses[info.tetrisClassIndex].indices, id: \.self ) {
+                let classIndex = info.tetrisClassIndex
+                Picker( "Tetris Shape", selection: $info.tetrisClassInfo[classIndex].selected ) {
+                    ForEach( WitnessPuzzlesDocument.tetrisClasses[classIndex].indices, id: \.self ) {
                         let infoCopy = info.replacing( tetrisShapeIndex: $0 )
                         WitnessPuzzlesDocument.Icon.image( size: 25, info: infoCopy ).tag( $0 )
                     }

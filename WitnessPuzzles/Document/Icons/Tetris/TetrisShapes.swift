@@ -30,6 +30,17 @@ extension WitnessPuzzlesDocument {
         var id: Int { rawValue }
     }
     
+    struct TetrisClassInfo {
+        var selected: Int
+        var rotations: [TetrisRotations]
+        
+        static func setupAll() -> [TetrisClassInfo] {
+            WitnessPuzzlesDocument.tetrisClasses.map {
+                TetrisClassInfo( selected: 0, rotations: $0.map { _ in .zero } )
+            }
+        }
+    }
+    
     struct TetrisShape: Hashable, Identifiable, Codable {
         let blocks: [Point]
         let allowedRotations: [TetrisRotations]

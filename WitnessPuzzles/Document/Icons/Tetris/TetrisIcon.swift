@@ -27,12 +27,12 @@ extension WitnessPuzzlesDocument {
         
         init( info: IconInfo ) {
             let classIndex = info.tetrisClassIndex
-            let shapeIndex = info.tetrisShapeIndex[classIndex]
+            let shapeIndex = info.tetrisClassInfo[classIndex].selected
             let shape = WitnessPuzzlesDocument.tetrisClasses[classIndex][shapeIndex]
             
             color = info.color
             blocks = shape.blocks
-            rotation = info.tetrisRotation
+            rotation = info.tetrisClassInfo[classIndex].rotations[shapeIndex]
             rotatable = shape.rotatable
             negated = info.tetrisNegated
         }
