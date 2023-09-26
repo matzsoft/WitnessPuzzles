@@ -26,16 +26,16 @@ extension WitnessPuzzlesDocument {
         }
         
         init( info: IconInfo ) {
-            let classIndex = info.tetrisClassIndex
-            let shapeIndex = info.tetrisClassInfo[classIndex].selected
-            let shape = WitnessPuzzlesDocument.tetrisClasses[classIndex][shapeIndex]
-            let shapeInfo = info.tetrisClassInfo[classIndex].shapesInfo[shapeIndex]
+            let group = info.tetris.group
+            let shapeIndex = info.tetris.groups[group].shape
+            let shapeInfo = info.tetris.groups[group].shapes[shapeIndex]
+            let shape = WitnessPuzzlesDocument.tetrisShapes[shapeInfo.shape]
             
             color = info.color
             blocks = shape.blocks
             rotation = shapeInfo.rotation
             rotatable = shapeInfo.rotatable ? shape.rotatable : nil
-            negated = info.tetrisNegated
+            negated = info.tetris.negated
         }
         
         func draw( in rect: CGRect, context: CGContext ) {

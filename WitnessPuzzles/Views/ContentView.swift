@@ -18,9 +18,7 @@ struct ContentView: View {
         color: Color( cgColor: CGColor( red: 1, green: 0.4, blue: 0.1, alpha: 1 ) ),
         iconType: WitnessPuzzlesDocument.IconType.square,
         trianglesCount: WitnessPuzzlesDocument.TrianglesCount.two,
-        tetrisClassIndex: 0,
-        tetrisClassInfo: WitnessPuzzlesDocument.TetrisClassInfo.setupAll(),
-        tetrisNegated: false
+        tetris: WitnessPuzzlesDocument.TetrisInfo()
     )
 
     func toggleTool( _ tool: ToolType ) { selectedTool = selectedTool == tool ? nil : tool }

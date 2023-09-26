@@ -29,13 +29,11 @@ extension WitnessPuzzlesDocument {
         var color: Color
         var iconType: IconType
         var trianglesCount: TrianglesCount
-        var tetrisClassIndex: Int
-        var tetrisClassInfo: [TetrisClassInfo]
-        var tetrisNegated: Bool
+        var tetris: TetrisInfo
         
         func replacing(
             color: Color? = nil, iconType: IconType? = nil, trianglesCount: TrianglesCount? = nil,
-            tetrisClassIndex: Int? = nil, tetrisShapeIndex: Int? = nil,
+            tetrisGroup: Int? = nil, tetrisShapeIndex: Int? = nil,
             tetrisRotation: TetrisRotations? = nil, tetrisRotatable: Bool? = nil, tetrisNegated: Bool? = nil
         ) -> IconInfo {
             var copy = self
@@ -43,20 +41,21 @@ extension WitnessPuzzlesDocument {
             if let color = color { copy.color = color }
             if let iconType = iconType { copy.iconType = iconType }
             if let trianglesCount = trianglesCount { copy.trianglesCount = trianglesCount }
-            if let tetrisClassIndex = tetrisClassIndex { copy.tetrisClassIndex = tetrisClassIndex}
+            if let tetrisGroup = tetrisGroup { copy.tetris.group = tetrisGroup }
             if let tetrisShapeIndex = tetrisShapeIndex {
-                copy.tetrisClassInfo[copy.tetrisClassIndex].selected = tetrisShapeIndex }
+                copy.tetris.groups[copy.tetris.group].shape = tetrisShapeIndex
+            }
             if let tetrisRotation = tetrisRotation {
-                let classIndex = copy.tetrisClassIndex
-                let shapeIndex = copy.tetrisClassInfo[classIndex].selected
-                copy.tetrisClassInfo[classIndex].shapesInfo[shapeIndex].rotation = tetrisRotation
+                let group = copy.tetris.group
+                let shape = copy.tetris.groups[group].shape
+                copy.tetris.groups[group].shapes[shape].rotation = tetrisRotation
             }
             if let tetrisRotatable = tetrisRotatable {
-                let classIndex = copy.tetrisClassIndex
-                let shapeIndex = copy.tetrisClassInfo[classIndex].selected
-                copy.tetrisClassInfo[classIndex].shapesInfo[shapeIndex].rotatable = tetrisRotatable
+                let group = copy.tetris.group
+                let shape = copy.tetris.groups[group].shape
+                copy.tetris.groups[group].shapes[shape].rotatable = tetrisRotatable
             }
-            if let tetrisNegated = tetrisNegated { copy.tetrisNegated = tetrisNegated }
+            if let tetrisNegated = tetrisNegated { copy.tetris.negated = tetrisNegated }
             
             return copy
         }

@@ -13,28 +13,29 @@ struct TetrisView: View {
 
     var body: some View {
         VStack {
-            Picker( "Tetris Class", selection: $info.tetrisClassIndex ) {
-                ForEach( WitnessPuzzlesDocument.tetrisClasses.indices, id: \.self ) {
-                    let infoCopy = info.replacing( tetrisClassIndex: $0 )
+            Picker( "Tetris Group", selection: $info.tetris.group ) {
+                ForEach( info.tetris.groups.indices, id: \.self ) {
+                    let infoCopy = info.replacing( tetrisGroup: $0 )
                     WitnessPuzzlesDocument.Icon.image( size: 25, info: infoCopy ).tag( $0 )
                 }
             }.pickerStyle( .segmented )
 
-            let classIndex = info.tetrisClassIndex
-            if WitnessPuzzlesDocument.tetrisClasses[classIndex].count > 1 {
-                Picker( "Tetris Shape", selection: $info.tetrisClassInfo[classIndex].selected ) {
-                    ForEach( WitnessPuzzlesDocument.tetrisClasses[classIndex].indices, id: \.self ) {
+            let group = info.tetris.group
+            if info.tetris.groups[group].shapes.count > 1 {
+                Picker( "Tetris Shape", selection: $info.tetris.groups[group].shape ) {
+                    ForEach( info.tetris.groups[group].shapes.indices, id: \.self ) {
                         let infoCopy = info.replacing( tetrisShapeIndex: $0 )
                         WitnessPuzzlesDocument.Icon.image( size: 25, info: infoCopy ).tag( $0 )
                     }
                 }.pickerStyle( .segmented )
             }
             
-            let shapeIndex = info.tetrisClassInfo[classIndex].selected
-            let shape = WitnessPuzzlesDocument.tetrisClasses[classIndex][shapeIndex]
+            let shapeIndex = info.tetris.groups[group].shape
+            let shapeInfo = info.tetris.groups[group].shapes[shapeIndex]
+            let shape = WitnessPuzzlesDocument.tetrisShapes[shapeInfo.shape]
             if shape.allowedRotations.count > 1 {
-                let rotationBinding = $info.tetrisClassInfo[classIndex].shapesInfo[shapeIndex].rotation
-                let rotatableBinding = $info.tetrisClassInfo[classIndex].shapesInfo[shapeIndex].rotatable
+                let rotationBinding = $info.tetris.groups[group].shapes[shapeIndex].rotation
+                let rotatableBinding = $info.tetris.groups[group].shapes[shapeIndex].rotatable
                 Picker( "Rotation", selection: rotationBinding ) {
                     ForEach( shape.allowedRotations ) {
                         let infoCopy = info.replacing( tetrisRotation: $0 )
@@ -51,7 +52,7 @@ struct TetrisView: View {
 
             }
             
-            Picker( "Solid/Hollow", selection: $info.tetrisNegated ) {
+            Picker( "Solid/Hollow", selection: $info.tetris.negated ) {
                 let solid = info.replacing( tetrisNegated: false )
                 let hollow = info.replacing( tetrisNegated: true )
                 WitnessPuzzlesDocument.Icon.image( size: 25, info: solid ).tag( false )

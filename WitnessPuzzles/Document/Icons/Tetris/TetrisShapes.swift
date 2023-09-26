@@ -30,21 +30,33 @@ extension WitnessPuzzlesDocument {
         var id: Int { rawValue }
     }
     
-    struct TetrisClassInfo {
+    struct TetrisInfo {
+        struct TetrisGroupInfo {
+            var shape: Int
+            var shapes: [TetrisShapeInfo]
+        }
+        
         struct TetrisShapeInfo {
+            let shape: Int
             var rotation: TetrisRotations
             var rotatable: Bool
         }
         
-        var selected: Int
-        var shapesInfo: [TetrisShapeInfo]
+        var group: Int
+        var groups: [TetrisGroupInfo]
+        var negated: Bool
         
-        static func setupAll() -> [TetrisClassInfo] {
-            WitnessPuzzlesDocument.tetrisClasses.map {
-                TetrisClassInfo( selected: 0, shapesInfo: $0.map { _ in
-                    TetrisShapeInfo( rotation: .zero, rotatable: false )
-                } )
-            }
+        init() {
+            group = 0
+            groups = WitnessPuzzlesDocument.tetrisShapes.enumerated()
+                .reduce( into: [ Int : [Int] ]() ) {
+                    $0[ $1.element.blocks.count, default: [] ].append( $1.offset )
+                }
+                .sorted( by: { $0.key < $1.key } )
+                .map { TetrisGroupInfo( shape: 0, shapes: $0.value.map {
+                    TetrisShapeInfo( shape: $0, rotation: .zero, rotatable: false )
+                } ) }
+            negated = false
         }
     }
     
@@ -72,18 +84,8 @@ extension WitnessPuzzlesDocument {
             }
             self.rotatable = display
         }
-        
-        static func classes() -> [[TetrisShape]] {
-            tetrisShapes
-                .reduce( into: [ Int : [TetrisShape] ]() ) {
-                    $0[ $1.blocks.count, default: [] ].append( $1 )
-                }
-                .sorted( by: { $0.key < $1.key } )
-                .map { $0.value }
-        }
     }
     
-    static let tetrisClasses = TetrisShape.classes()
     static let tetrisShapes = [
         // ▉
         TetrisShape( blocks: [ (4,4) ], rotations: .zero ),
