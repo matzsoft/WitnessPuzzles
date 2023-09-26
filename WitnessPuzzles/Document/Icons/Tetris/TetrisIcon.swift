@@ -26,10 +26,8 @@ extension WitnessPuzzlesDocument {
         }
         
         init( info: IconInfo ) {
-            let group = info.tetris.group
-            let shapeIndex = info.tetris.groups[group].shape
-            let shapeInfo = info.tetris.groups[group].shapes[shapeIndex]
-            let shape = WitnessPuzzlesDocument.tetrisShapes[shapeInfo.shape]
+            let shapeInfo = info.tetris.shapeInfo
+            let shape = info.tetris.shape
             
             color = info.color
             blocks = shape.blocks

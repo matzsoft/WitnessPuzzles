@@ -30,9 +30,8 @@ struct TetrisView: View {
                 }.pickerStyle( .segmented )
             }
             
-            let shapeIndex = info.tetris.groups[group].shape
-            let shapeInfo = info.tetris.groups[group].shapes[shapeIndex]
-            let shape = WitnessPuzzlesDocument.tetrisShapes[shapeInfo.shape]
+            let shapeIndex = info.tetris.shapeIndex
+            let shape = info.tetris.shape
             if shape.allowedRotations.count > 1 {
                 let rotationBinding = $info.tetris.groups[group].shapes[shapeIndex].rotation
                 let rotatableBinding = $info.tetris.groups[group].shapes[shapeIndex].rotatable
