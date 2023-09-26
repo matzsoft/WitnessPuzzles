@@ -62,6 +62,23 @@ extension WitnessPuzzlesDocument {
                 } ) }
             negated = false
         }
+        
+        func replacing(
+            group: Int? = nil, shape: Int? = nil, rotation: TetrisRotations? = nil,
+            rotatable: Bool? = nil, negated: Bool? = nil
+        ) -> TetrisInfo {
+            var copy = self
+            
+            if let group = group { copy.group = group }
+            if let shape = shape { copy.groups[copy.group].shape = shape }
+            if let rotation = rotation {
+                copy.groups[copy.group].shapes[copy.shapeIndex].rotation = rotation }
+            if let rotatable = rotatable {
+                copy.groups[copy.group].shapes[copy.shapeIndex].rotatable = rotatable }
+            if let negated = negated { copy.negated = negated }
+
+            return copy
+        }
     }
     
     struct TetrisShape: Hashable, Identifiable, Codable {

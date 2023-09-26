@@ -15,7 +15,7 @@ struct TetrisView: View {
         VStack {
             Picker( "Tetris Group", selection: $info.tetris.group ) {
                 ForEach( info.tetris.groups.indices, id: \.self ) {
-                    let infoCopy = info.replacing( tetrisGroup: $0 )
+                    let infoCopy = info.replacing( tetris: info.tetris.replacing( group: $0 ) )
                     WitnessPuzzlesDocument.Icon.image( size: 25, info: infoCopy ).tag( $0 )
                 }
             }.pickerStyle( .segmented )
@@ -24,7 +24,7 @@ struct TetrisView: View {
             if info.tetris.groups[group].shapes.count > 1 {
                 Picker( "Tetris Shape", selection: $info.tetris.groups[group].shape ) {
                     ForEach( info.tetris.groups[group].shapes.indices, id: \.self ) {
-                        let infoCopy = info.replacing( tetrisShapeIndex: $0 )
+                        let infoCopy = info.replacing( tetris: info.tetris.replacing( shape: $0 ) )
                         WitnessPuzzlesDocument.Icon.image( size: 25, info: infoCopy ).tag( $0 )
                     }
                 }.pickerStyle( .segmented )
@@ -37,14 +37,14 @@ struct TetrisView: View {
                 let rotatableBinding = $info.tetris.groups[group].shapes[shapeIndex].rotatable
                 Picker( "Rotation", selection: rotationBinding ) {
                     ForEach( shape.allowedRotations ) {
-                        let infoCopy = info.replacing( tetrisRotation: $0 )
+                        let infoCopy = info.replacing( tetris: info.tetris.replacing( rotation: $0 ) )
                         WitnessPuzzlesDocument.Icon.image( size: 25, info: infoCopy ).tag( $0 )
                     }
                 }.pickerStyle( .segmented )
                 
                 Picker( "Plain/Skewed", selection: rotatableBinding ) {
-                    let plain = info.replacing( tetrisRotatable: false )
-                    let skewed = info.replacing( tetrisRotatable: true )
+                    let plain = info.replacing( tetris: info.tetris.replacing( rotatable: false ) )
+                    let skewed = info.replacing( tetris: info.tetris.replacing( rotatable: true ) )
                     WitnessPuzzlesDocument.Icon.image( size: 25, info: plain ).tag( false )
                     WitnessPuzzlesDocument.Icon.image( size: 25, info: skewed ).tag( true )
                 }.pickerStyle( .segmented )
@@ -52,8 +52,8 @@ struct TetrisView: View {
             }
             
             Picker( "Solid/Hollow", selection: $info.tetris.negated ) {
-                let solid = info.replacing( tetrisNegated: false )
-                let hollow = info.replacing( tetrisNegated: true )
+                let solid = info.replacing( tetris: info.tetris.replacing( rotatable: false ) )
+                let hollow = info.replacing( tetris: info.tetris.replacing( rotatable: true ) )
                 WitnessPuzzlesDocument.Icon.image( size: 25, info: solid ).tag( false )
                 WitnessPuzzlesDocument.Icon.image( size: 25, info: hollow ).tag( true )
             }.pickerStyle( .segmented )

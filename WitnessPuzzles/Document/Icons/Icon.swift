@@ -33,29 +33,14 @@ extension WitnessPuzzlesDocument {
         
         func replacing(
             color: Color? = nil, iconType: IconType? = nil, trianglesCount: TrianglesCount? = nil,
-            tetrisGroup: Int? = nil, tetrisShapeIndex: Int? = nil,
-            tetrisRotation: TetrisRotations? = nil, tetrisRotatable: Bool? = nil, tetrisNegated: Bool? = nil
+            tetris: TetrisInfo? = nil
         ) -> IconInfo {
             var copy = self
             
             if let color = color { copy.color = color }
             if let iconType = iconType { copy.iconType = iconType }
             if let trianglesCount = trianglesCount { copy.trianglesCount = trianglesCount }
-            if let tetrisGroup = tetrisGroup { copy.tetris.group = tetrisGroup }
-            if let tetrisShapeIndex = tetrisShapeIndex {
-                copy.tetris.groups[copy.tetris.group].shape = tetrisShapeIndex
-            }
-            if let tetrisRotation = tetrisRotation {
-                let group = copy.tetris.group
-                let shape = copy.tetris.groups[group].shape
-                copy.tetris.groups[group].shapes[shape].rotation = tetrisRotation
-            }
-            if let tetrisRotatable = tetrisRotatable {
-                let group = copy.tetris.group
-                let shape = copy.tetris.groups[group].shape
-                copy.tetris.groups[group].shapes[shape].rotatable = tetrisRotatable
-            }
-            if let tetrisNegated = tetrisNegated { copy.tetris.negated = tetrisNegated }
+            if let tetris = tetris { copy.tetris = tetris }
             
             return copy
         }
