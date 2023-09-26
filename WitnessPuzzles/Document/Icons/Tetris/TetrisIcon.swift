@@ -29,11 +29,12 @@ extension WitnessPuzzlesDocument {
             let classIndex = info.tetrisClassIndex
             let shapeIndex = info.tetrisClassInfo[classIndex].selected
             let shape = WitnessPuzzlesDocument.tetrisClasses[classIndex][shapeIndex]
+            let shapeInfo = info.tetrisClassInfo[classIndex].shapesInfo[shapeIndex]
             
             color = info.color
             blocks = shape.blocks
-            rotation = info.tetrisClassInfo[classIndex].rotations[shapeIndex]
-            rotatable = shape.rotatable
+            rotation = shapeInfo.rotation
+            rotatable = shapeInfo.rotatable ? shape.rotatable : nil
             negated = info.tetrisNegated
         }
         
@@ -51,7 +52,11 @@ extension WitnessPuzzlesDocument {
             context.saveGState()
             context.translateBy( x: rect.midX, y: rect.midY )
             context.scaleBy( x: rect.width / scaleFactor, y: rect.height / scaleFactor )
-            context.rotate( by: Double( rotation.rawValue ) * Double.pi / 2 )
+            if let rotatable = rotatable {
+                context.rotate( by: Double( rotatable.rawValue ) * Double.pi / 6 )
+            } else {
+                context.rotate( by: Double( rotation.rawValue ) * Double.pi / 2 )
+            }
             if negated {
                 context.setStrokeColor( color.cgColor! )
             } else {

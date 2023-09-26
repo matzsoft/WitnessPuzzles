@@ -33,19 +33,29 @@ struct TetrisView: View {
             let shapeIndex = info.tetrisClassInfo[classIndex].selected
             let shape = WitnessPuzzlesDocument.tetrisClasses[classIndex][shapeIndex]
             if shape.allowedRotations.count > 1 {
-                Picker( "Rotation", selection: $info.tetrisClassInfo[classIndex].rotations[shapeIndex] ) {
+                let rotationBinding = $info.tetrisClassInfo[classIndex].shapesInfo[shapeIndex].rotation
+                let rotatableBinding = $info.tetrisClassInfo[classIndex].shapesInfo[shapeIndex].rotatable
+                Picker( "Rotation", selection: rotationBinding ) {
                     ForEach( shape.allowedRotations ) {
                         let infoCopy = info.replacing( tetrisRotation: $0 )
                         WitnessPuzzlesDocument.Icon.image( size: 25, info: infoCopy ).tag( $0 )
                     }
                 }.pickerStyle( .segmented )
+                
+                Picker( "Plain/Skewed", selection: rotatableBinding ) {
+                    let plain = info.replacing( tetrisRotatable: false )
+                    let skewed = info.replacing( tetrisRotatable: true )
+                    WitnessPuzzlesDocument.Icon.image( size: 25, info: plain ).tag( false )
+                    WitnessPuzzlesDocument.Icon.image( size: 25, info: skewed ).tag( true )
+                }.pickerStyle( .segmented )
+
             }
             
             Picker( "Solid/Hollow", selection: $info.tetrisNegated ) {
                 let solid = info.replacing( tetrisNegated: false )
                 let hollow = info.replacing( tetrisNegated: true )
-                WitnessPuzzlesDocument.Icon.image(size: 25, info: solid ).tag( false )
-                WitnessPuzzlesDocument.Icon.image(size: 25, info: hollow ).tag( true )
+                WitnessPuzzlesDocument.Icon.image( size: 25, info: solid ).tag( false )
+                WitnessPuzzlesDocument.Icon.image( size: 25, info: hollow ).tag( true )
             }.pickerStyle( .segmented )
         }
     }

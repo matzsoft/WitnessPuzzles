@@ -31,12 +31,19 @@ extension WitnessPuzzlesDocument {
     }
     
     struct TetrisClassInfo {
+        struct TetrisShapeInfo {
+            var rotation: TetrisRotations
+            var rotatable: Bool
+        }
+        
         var selected: Int
-        var rotations: [TetrisRotations]
+        var shapesInfo: [TetrisShapeInfo]
         
         static func setupAll() -> [TetrisClassInfo] {
             WitnessPuzzlesDocument.tetrisClasses.map {
-                TetrisClassInfo( selected: 0, rotations: $0.map { _ in .zero } )
+                TetrisClassInfo( selected: 0, shapesInfo: $0.map { _ in
+                    TetrisShapeInfo( rotation: .zero, rotatable: false )
+                } )
             }
         }
     }
