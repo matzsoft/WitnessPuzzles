@@ -46,10 +46,15 @@ extension WitnessPuzzlesDocument {
         var groups: [TetrisGroupInfo]
         var negated: Bool
         
-        var shapeIndex: Int { groups[group].shape }
-        var shapeInfo: TetrisShapeInfo { groups[group].shapes[shapeIndex] }
+        var shapeIndex: Int { get { groups[group].shape } set { groups[group].shape = newValue } }
+        var shapes: [TetrisShapeInfo] {
+            get { groups[group].shapes } set { groups[group].shapes = newValue }
+        }
+        var shapeInfo: TetrisShapeInfo { get { shapes[shapeIndex] } set { shapes[shapeIndex] = newValue } }
         var shape: TetrisShape { WitnessPuzzlesDocument.tetrisShapes[shapeInfo.shape] }
-        
+        var rotation: TetrisRotations { get { shapeInfo.rotation } set { shapeInfo.rotation = newValue } }
+        var rotatable: Bool { get { shapeInfo.rotatable } set { shapeInfo.rotatable = newValue } }
+
         init() {
             group = 0
             groups = WitnessPuzzlesDocument.tetrisShapes.enumerated()
