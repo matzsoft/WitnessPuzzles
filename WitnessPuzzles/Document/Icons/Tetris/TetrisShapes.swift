@@ -47,13 +47,17 @@ extension WitnessPuzzlesDocument {
         var negated: Bool
         
         var shapeIndex: Int { get { groups[group].shape } set { groups[group].shape = newValue } }
-        var shapes: [TetrisShapeInfo] {
-            get { groups[group].shapes } set { groups[group].shapes = newValue }
-        }
-        var shapeInfo: TetrisShapeInfo { get { shapes[shapeIndex] } set { shapes[shapeIndex] = newValue } }
+        var shapes: [TetrisShapeInfo] { groups[group].shapes }
+        var shapeInfo: TetrisShapeInfo { groups[group].shapes[shapeIndex] }
         var shape: TetrisShape { WitnessPuzzlesDocument.tetrisShapes[shapeInfo.shape] }
-        var rotation: TetrisRotations { get { shapeInfo.rotation } set { shapeInfo.rotation = newValue } }
-        var rotatable: Bool { get { shapeInfo.rotatable } set { shapeInfo.rotatable = newValue } }
+        var rotation: TetrisRotations {
+            get { groups[group].shapes[shapeIndex].rotation }
+            set { groups[group].shapes[shapeIndex].rotation = newValue }
+        }
+        var rotatable: Bool {
+            get { groups[group].shapes[shapeIndex].rotatable }
+            set { groups[group].shapes[shapeIndex].rotatable = newValue }
+        }
 
         init() {
             group = 0
