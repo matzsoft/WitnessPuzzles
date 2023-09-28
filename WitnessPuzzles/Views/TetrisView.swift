@@ -20,29 +20,24 @@ struct TetrisView: View {
                 }
             }.pickerStyle( .segmented )
 
-            let group = info.tetris.group
-            if info.tetris.groups[group].shapes.count > 1 {
-                Picker( "Tetris Shape", selection: $info.tetris.groups[group].shape ) {
-                    ForEach( info.tetris.groups[group].shapes.indices, id: \.self ) {
+            if info.tetris.shapes.count > 1 {
+                Picker( "Tetris Shape", selection: $info.tetris.shapeIndex ) {
+                    ForEach( info.tetris.shapes.indices, id: \.self ) {
                         let infoCopy = info.replacing( tetris: info.tetris.replacing( shape: $0 ) )
                         WitnessPuzzlesDocument.Icon.image( size: 25, info: infoCopy ).tag( $0 )
                     }
                 }.pickerStyle( .segmented )
             }
             
-            let shapeIndex = info.tetris.shapeIndex
-            let shape = info.tetris.shape
-            if shape.allowedRotations.count > 1 {
-                let rotationBinding = $info.tetris.groups[group].shapes[shapeIndex].rotation
-                let rotatableBinding = $info.tetris.groups[group].shapes[shapeIndex].rotatable
-                Picker( "Rotation", selection: rotationBinding ) {
-                    ForEach( shape.allowedRotations ) {
+            if info.tetris.shape.allowedRotations.count > 1 {
+                Picker( "Rotation", selection: $info.tetris.rotation ) {
+                    ForEach( info.tetris.shape.allowedRotations ) {
                         let infoCopy = info.replacing( tetris: info.tetris.replacing( rotation: $0 ) )
                         WitnessPuzzlesDocument.Icon.image( size: 25, info: infoCopy ).tag( $0 )
                     }
                 }.pickerStyle( .segmented )
                 
-                Picker( "Plain/Skewed", selection: rotatableBinding ) {
+                Picker( "Plain/Skewed", selection: $info.tetris.rotatable ) {
                     let plain = info.replacing( tetris: info.tetris.replacing( rotatable: false ) )
                     let skewed = info.replacing( tetris: info.tetris.replacing( rotatable: true ) )
                     WitnessPuzzlesDocument.Icon.image( size: 25, info: plain ).tag( false )

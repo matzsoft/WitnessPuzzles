@@ -26,13 +26,10 @@ extension WitnessPuzzlesDocument {
         }
         
         init( info: IconInfo ) {
-            let shapeInfo = info.tetris.shapeInfo
-            let shape = info.tetris.shape
-            
             color = info.color
-            blocks = shape.blocks
-            rotation = shapeInfo.rotation
-            rotatable = shapeInfo.rotatable ? shape.rotatable : nil
+            blocks = info.tetris.shape.blocks
+            rotation = info.tetris.rotation
+            rotatable = info.tetris.rotatable ? info.tetris.shape.rotatable : nil
             negated = info.tetris.negated
         }
         
