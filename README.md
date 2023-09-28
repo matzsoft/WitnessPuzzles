@@ -22,7 +22,6 @@ None known at this time.
 ### GUI
 
 1. The sliders on the properties sheet are horrible.  They are difficult to see and hence use.  There must be a way to make them better.
-1. Need a better way to highlight the active tool in the tool bar.
 1. Tried to make the properties sheet do a live update of the document window.  It sort of worked but there were problems:
 
 - Counldn't get the cancel to work properly.

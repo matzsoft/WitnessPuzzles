@@ -162,7 +162,6 @@ struct VerticalLabelStyle: LabelStyle {
         }
         .frame( alignment: .top )
         .padding( 5 )
-        .scaleEffect( isSelected ? 1.2 : 1 )
-        .background( isSelected ? .green : .white )
+        .background( isSelected ? Color( nsColor: .selectedControlColor ) : Color( nsColor: .controlColor ) )
     }
 }
