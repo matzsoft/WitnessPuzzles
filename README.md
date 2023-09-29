@@ -39,5 +39,4 @@
 #### Miscellaneous
 
 1. The sliders on the properties sheet are horrible.  They are difficult to see and hence use.  There must be a way to make them better.
-1. Move the solid/hollow choice to the top since it is always visible.
 1. Make the picker buttons for tetris all the same size. Probably will require a custom picker.

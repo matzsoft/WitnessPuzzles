@@ -13,6 +13,13 @@ struct TetrisView: View {
 
     var body: some View {
         VStack {
+            Picker( "Solid/Hollow", selection: $info.tetris.negated ) {
+                let solid = info.replacing( tetris: info.tetris.replacing( negated: false ) )
+                let hollow = info.replacing( tetris: info.tetris.replacing( negated: true ) )
+                WitnessPuzzlesDocument.Icon.image( size: 25, info: solid ).tag( false )
+                WitnessPuzzlesDocument.Icon.image( size: 25, info: hollow ).tag( true )
+            }.pickerStyle( .segmented )
+
             Picker( "Tetris Group", selection: $info.tetris.group ) {
                 ForEach( info.tetris.groups.indices, id: \.self ) {
                     let infoCopy = info.replacing( tetris: info.tetris.replacing( group: $0 ) )
@@ -45,13 +52,6 @@ struct TetrisView: View {
                 }.pickerStyle( .segmented )
 
             }
-            
-            Picker( "Solid/Hollow", selection: $info.tetris.negated ) {
-                let solid = info.replacing( tetris: info.tetris.replacing( negated: false ) )
-                let hollow = info.replacing( tetris: info.tetris.replacing( negated: true ) )
-                WitnessPuzzlesDocument.Icon.image( size: 25, info: solid ).tag( false )
-                WitnessPuzzlesDocument.Icon.image( size: 25, info: hollow ).tag( true )
-            }.pickerStyle( .segmented )
         }
     }
 }
