@@ -47,8 +47,8 @@ struct TetrisView: View {
             }
             
             Picker( "Solid/Hollow", selection: $info.tetris.negated ) {
-                let solid = info.replacing( tetris: info.tetris.replacing( rotatable: false ) )
-                let hollow = info.replacing( tetris: info.tetris.replacing( rotatable: true ) )
+                let solid = info.replacing( tetris: info.tetris.replacing( negated: false ) )
+                let hollow = info.replacing( tetris: info.tetris.replacing( negated: true ) )
                 WitnessPuzzlesDocument.Icon.image( size: 25, info: solid ).tag( false )
                 WitnessPuzzlesDocument.Icon.image( size: 25, info: hollow ).tag( true )
             }.pickerStyle( .segmented )
