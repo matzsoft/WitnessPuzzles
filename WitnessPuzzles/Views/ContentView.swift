@@ -162,6 +162,6 @@ struct VerticalLabelStyle: LabelStyle {
         }
         .frame( alignment: .top )
         .padding( 5 )
-        .background( isSelected ? Color( nsColor: .selectedControlColor ) : Color( nsColor: .controlColor ) )
+        .background( isSelected ? Color( nsColor: .selectedControlColor ) : Color( nsColor: .clear ) )
     }
 }
