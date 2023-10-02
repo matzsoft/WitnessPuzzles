@@ -9,7 +9,9 @@
 import SwiftUI
 
 struct ContentView: View {
+    @Environment( \.openWindow ) private var openWindow
     @Binding var document: WitnessPuzzlesDocument
+    let windowID: Int
     @State var selectedTool: ToolType?
     @State var currentConfiguration: ToolType?
     @State var lastLocation = WitnessPuzzlesDocument.Point( 0, 0 )
@@ -92,7 +94,7 @@ struct ContentView: View {
             }
             .toolbar {
                 ToolbarItemGroup( placement: .automatic ) {
-                    Button( action: { toggleTool( .properties ); currentConfiguration = .properties } ) {
+                    Button( action: { openWindow( id: "properties", value: windowID ) } ) {
                         Label( "Properties", systemImage: "ruler" )
                     }.labelStyle( VerticalLabelStyle( isSelected: selectedTool == .properties ) )
                     Button( action: { toggleTool( .starts ) } ) {
@@ -138,7 +140,10 @@ struct ContentView: View {
 
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
-        ContentView( document: .constant( WitnessPuzzlesDocument() ) )
+        let documentBinding = Binding.constant( WitnessPuzzlesDocument() )
+        ContentView(
+            document: documentBinding,
+            windowID: WindowsList.shared.add( binding: documentBinding ) )
     }
 }
 

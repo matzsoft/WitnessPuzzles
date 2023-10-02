@@ -15,8 +15,11 @@ struct WitnessPuzzlesApp: App {
 
     var body: some Scene {
         DocumentGroup( newDocument: WitnessPuzzlesDocument() ) { file in
-            ContentView( document: file.$document )
-                .focusedSceneValue( \.document, file.$document )
+            ContentView(
+                document: file.$document,
+                windowID: WindowsList.shared.add( binding: file.$document )
+            )
+            .focusedSceneValue( \.document, file.$document )
         }
         .commands {
             CommandGroup( replacing: .importExport ) {
@@ -38,6 +41,9 @@ struct WitnessPuzzlesApp: App {
                 }
             }
         }
+        WindowGroup( "Properties", id: "properties", for: Int.self ) { $id in
+            PropertiesView( document: WindowsList.shared.binding( id: id ) )
+        } defaultValue: { 0 }
     }
 }
 
