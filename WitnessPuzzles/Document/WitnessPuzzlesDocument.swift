@@ -19,9 +19,9 @@ extension UTType {
 }
 
 struct WitnessPuzzlesDocument: FileDocument, Codable {
-    var width = 5
-    var height = 5
-    var type = PuzzleType.rectangle
+    var width  = 5 { didSet { adjustDimensions() } }
+    var height = 5 { didSet { adjustDimensions() } }
+    var type = PuzzleType.rectangle { didSet { adjustDimensions() } }
     var background = Color( hex: "#23180A" )
     var foreground = Color( red: 1, green: 1, blue: 1, opacity: 1 )
     var starts = Set<Start>( [ Start( position: Point(0,0) ) ] )

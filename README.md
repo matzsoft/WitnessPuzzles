@@ -6,8 +6,7 @@
 1. The hover on the tool bar buttons looks bad. The label is not part of the button highlight.
 1. Sometimes when changing the puzzle size, the window size does not properly adjust. This leaves an undesired white border around the image.
 1. The properties window does not close when the document window is closed.
-1. The height slider on the properties window does not update its label.
-1. Changes to width, height, or puzzle type can leave puzzle items that are no longer valid in place.
+1. The sliders on the properties window do not update their labels.
 
 ## TODO
 

@@ -16,7 +16,7 @@ struct IntSlider: View {
     
     var intProxy: Binding<Double> {
         Binding<Double>(
-            get: { return Double(value) },
+            get: { return Double( value ) },
             set: { value = Int($0) }
         )
     }
@@ -53,7 +53,7 @@ struct DoubleSlider: View {
                 Text( String( format: "%.0f", range.upperBound ) )
             }
             .tint( .black )
-            Text( String( String( format: "%.1f", value ) ) )
+            Text( String( format: "%.1f", value ) )
         }
     }
 }

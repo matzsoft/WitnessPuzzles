@@ -53,7 +53,6 @@ struct PropertiesView: View {
                 .keyboardShortcut( .cancelAction )
                 Spacer()
                 Button( "Done", role: .destructive ) {
-                    document.adjustDimensions()
                     if NSColorPanel.shared.isVisible { NSColorPanel.shared.orderOut( nil ) }
                     presentationMode.wrappedValue.dismiss()
                 }
