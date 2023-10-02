@@ -22,7 +22,7 @@ struct IntSlider: View {
     }
     
     var body: some View {
-        VStack{
+        VStack {
             Slider( value: intProxy, in: range, step: step ) {
                 Text( label )
             } minimumValueLabel: {
@@ -44,7 +44,7 @@ struct DoubleSlider: View {
     let label: String
     
     var body: some View {
-        VStack{
+        VStack {
             Slider( value: $value, in: range, step: step ) {
                 Text( label )
             } minimumValueLabel: {

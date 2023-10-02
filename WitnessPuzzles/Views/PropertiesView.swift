@@ -20,8 +20,6 @@ struct PropertiesView: View {
     
     var body: some View {
         VStack {
-            Text( "Properties" )
-            Divider()
             Group {
                 Spacer( minLength: 10 )
                 Picker( "Puzzle Type", selection: $document.type ) {
