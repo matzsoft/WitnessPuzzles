@@ -29,13 +29,4 @@ extension WitnessPuzzlesDocument {
             context.restoreGState()
         }
     }
-    
-    mutating func addEliminationIcon( point: Point, color: Color ) -> Void {
-        guard isIconPositionOK( point: point ) else { return }
-        
-        if Icon.isValid( position: point, puzzle: self ) {
-            let newIcon = EliminationIcon( color: color )
-            icons.insert( Icon( position: point, type: .elimination, icon: newIcon ) )
-        }
-    }
 }

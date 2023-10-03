@@ -63,13 +63,4 @@ extension WitnessPuzzlesDocument {
             context.restoreGState()
         }
     }
-    
-    mutating func addTrianglesIcon( point: Point, info: IconInfo ) -> Void {
-        guard isIconPositionOK( point: point ) else { return }
-        
-        if Icon.isValid( position: point, puzzle: self ) {
-            let newIcon = TrianglesIcon( info: info )
-            icons.insert( Icon( position: point, type: .triangles, icon: newIcon ) )
-        }
-    }
 }

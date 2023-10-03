@@ -48,7 +48,7 @@ struct ContentView: View {
             case .hexagons:
                 HexagonView( info: $iconInfo )
             case .icons:
-                IconView( document: $document, location: lastLocation, info: $iconInfo )
+                IconView( info: $iconInfo )
             }
         } detail: {
             Image( document.image, scale: 1.0, label: Text(verbatim: "" ) )
@@ -100,7 +100,6 @@ struct ContentView: View {
                         if document.hexagonExists( point: point ) {
                             document.removeHexagon( point: point )
                         } else if document.isHexagonPositionOK( point: point ) {
-                            lastLocation = point
                             document.addHexagon( point: point, info: iconInfo )
                         } else {
                             NSSound.beep()
@@ -109,8 +108,7 @@ struct ContentView: View {
                         if document.iconExists( point: point ) {
                             document.removeIcon( point: point )
                         } else if document.isIconPositionOK( point: point ) {
-                            currentConfiguration = .icons
-                            lastLocation = point
+                            document.addIcon( point: point, info: iconInfo )
                         } else {
                             NSSound.beep()
                         }
@@ -141,17 +139,13 @@ struct ContentView: View {
                         }.labelStyle( VerticalLabelStyle( isSelected: selectedTool == .icons ) )
                     }
                 }
-                .sheet( item: $currentConfiguration, onDismiss: { deselectTool( .properties ) } ) { sheet in
+                .sheet( item: $currentConfiguration ) { sheet in
                     switch sheet {
-                    case .properties:
-                        PropertiesView( document: $document )
                     case .finishes:
                         FinishView(
                             document: $document, location: lastLocation,
                             directions: lastDirections, direction: lastDirections.first!
                         )
-                    case .icons:
-                        IconView( document: $document, location: lastLocation, info: $iconInfo )
                     default:
                         Text( verbatim: "No configuration for \(sheet.rawValue.capitalized)." )
                     }

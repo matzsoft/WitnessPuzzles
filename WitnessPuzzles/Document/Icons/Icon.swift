@@ -180,4 +180,25 @@ extension WitnessPuzzlesDocument {
     mutating func removeIcon( point: Point ) -> Void {
         icons = icons.filter { $0.position != point }
     }
+    
+    mutating func addIcon( point: Point, info: IconInfo ) -> Void {
+        if isIconPositionOK( point: point ) {
+            let newIcon = { () -> (any IconItem) in
+                switch info.iconType {
+                case .square:
+                    return SquareIcon( color: info.color )
+                case .star:
+                    return StarIcon( color: info.color )
+                case .triangles:
+                    return TrianglesIcon( info: info )
+                case .elimination:
+                    return EliminationIcon( color: info.color )
+                case .tetris:
+                    return TetrisIcon( info: info )
+                }
+            }()
+            
+            icons.insert( Icon( position: point, type: info.iconType, icon: newIcon ) )
+        }
+    }
 }

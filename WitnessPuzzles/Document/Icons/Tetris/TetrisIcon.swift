@@ -77,13 +77,4 @@ extension WitnessPuzzlesDocument {
             context.restoreGState()
         }
     }
-    
-    mutating func addTetrisIcon( point: Point, info: IconInfo ) -> Void {
-        guard isIconPositionOK( point: point ) else { return }
-        
-        if Icon.isValid( position: point, puzzle: self ) {
-            let newIcon = TetrisIcon( info: info )
-            icons.insert( Icon( position: point, type: .tetris, icon: newIcon ) )
-        }
-    }
 }

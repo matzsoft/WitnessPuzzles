@@ -32,12 +32,4 @@ extension WitnessPuzzlesDocument {
             context.restoreGState()
         }
     }
-    
-    mutating func addSquareIcon( point: Point, color: Color ) -> Void {
-        guard isIconPositionOK( point: point ) else { return }
-        
-        if Icon.isValid( position: point, puzzle: self ) {
-            icons.insert( Icon( position: point, type: .square, icon: SquareIcon( color: color ) ) )
-        }
-    }
 }
