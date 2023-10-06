@@ -8,14 +8,18 @@
 
 import SwiftUI
 
+struct GuiState {
+    var selectedTool: ContentView.ToolType?
+    var location = WitnessPuzzlesDocument.Point( 0, 0 )
+}
+
 struct ContentView: View {
     @Environment( \.openWindow ) private var openWindow
     @Binding var document: WitnessPuzzlesDocument
     let windowID: Int
-    @State var selectedTool: ToolType?
     @State var currentConfiguration: ToolType?
-    @State var lastLocation = WitnessPuzzlesDocument.Point( 0, 0 )
     @State var lastDirections = [WitnessPuzzlesDocument.Direction]()
+    @State var guiState = GuiState()
     @State var iconInfo = WitnessPuzzlesDocument.IconInfo(
         color: Color( cgColor: CGColor( red: 1, green: 0.4, blue: 0.1, alpha: 1 ) ),
         iconType: WitnessPuzzlesDocument.IconType.square,
@@ -25,12 +29,12 @@ struct ContentView: View {
     @State var columnVisibility = NavigationSplitViewVisibility.detailOnly
 
     func toggleTool( _ tool: ToolType ) {
-        if selectedTool == tool {
-            selectedTool = nil
+        if guiState.selectedTool == tool {
+            guiState.selectedTool = nil
             columnVisibility = .detailOnly
         } else {
-            selectedTool = tool
-            switch selectedTool {
+            guiState.selectedTool = tool
+            switch guiState.selectedTool {
             case .none, .properties, .starts, .finishes, .gaps, .missings:
                 columnVisibility = .detailOnly
             case .hexagons, .icons:
@@ -38,11 +42,13 @@ struct ContentView: View {
             }
         }
     }
-    func deselectTool( _ tool: ToolType ) { if selectedTool == tool { selectedTool = nil } }
+    func deselectTool( _ tool: ToolType ) {
+        if guiState.selectedTool == tool { guiState.selectedTool = nil }
+    }
 
     var body: some View {
         NavigationSplitView( columnVisibility: $columnVisibility ) {
-            switch selectedTool {
+            switch guiState.selectedTool {
             case .none, .properties, .starts, .finishes, .gaps, .missings:
                 Text( "No settings to display." )
             case .hexagons:
@@ -54,7 +60,7 @@ struct ContentView: View {
             Image( document.image, scale: 1.0, label: Text(verbatim: "" ) )
                 .onTapGesture { location in
                     let point = document.toPuzzleSpace( from: location )
-                    switch selectedTool {
+                    switch guiState.selectedTool {
                     case nil, .properties:
                         break
                     case .starts:
@@ -74,7 +80,7 @@ struct ContentView: View {
                                 document.addFinish( point: point, direction: directions.first! )
                             } else {
                                 currentConfiguration = .finishes
-                                lastLocation = point
+                                guiState.location = point
                                 lastDirections = directions
                             }
                         } else {
@@ -118,32 +124,32 @@ struct ContentView: View {
                     ToolbarItemGroup( placement: .automatic ) {
                         Button( action: { openWindow( id: "properties", value: windowID ) } ) {
                             Label( "Properties", systemImage: "ruler" )
-                        }.labelStyle( VerticalLabelStyle( isSelected: selectedTool == .properties ) )
+                        }.labelStyle( VerticalLabelStyle( isSelected: guiState.selectedTool == .properties ) )
                         Button( action: { toggleTool( .starts ) } ) {
                             Label( "Starts", systemImage: "play" )
-                        }.labelStyle( VerticalLabelStyle( isSelected: selectedTool == .starts ) )
+                        }.labelStyle( VerticalLabelStyle( isSelected: guiState.selectedTool == .starts ) )
                         Button( action: { toggleTool( .finishes ) } ) {
                             Label( "Finishes", systemImage: "stop" )
-                        }.labelStyle( VerticalLabelStyle( isSelected: selectedTool == .finishes ) )
+                        }.labelStyle( VerticalLabelStyle( isSelected: guiState.selectedTool == .finishes ) )
                         Button( action: { toggleTool( .gaps ) } ) {
                             Label( "Gaps", systemImage: "pause" )
-                        }.labelStyle( VerticalLabelStyle( isSelected: selectedTool == .gaps ) )
+                        }.labelStyle( VerticalLabelStyle( isSelected: guiState.selectedTool == .gaps ) )
                         Button( action: { toggleTool( .missings ) } ) {
                             Label( "Missing", systemImage: "cloud" )
-                        }.labelStyle( VerticalLabelStyle( isSelected: selectedTool == .missings ) )
+                        }.labelStyle( VerticalLabelStyle( isSelected: guiState.selectedTool == .missings ) )
                         Button( action: { toggleTool( .hexagons ) } ) {
                             Label( "Hexagons", systemImage: "hexagon.fill" )
-                        }.labelStyle( VerticalLabelStyle( isSelected: selectedTool == .hexagons ) )
+                        }.labelStyle( VerticalLabelStyle( isSelected: guiState.selectedTool == .hexagons ) )
                         Button( action: { toggleTool( .icons ) } ) {
                             Label( "Icons", systemImage: "seal" )
-                        }.labelStyle( VerticalLabelStyle( isSelected: selectedTool == .icons ) )
+                        }.labelStyle( VerticalLabelStyle( isSelected: guiState.selectedTool == .icons ) )
                     }
                 }
                 .sheet( item: $currentConfiguration ) { sheet in
                     switch sheet {
                     case .finishes:
                         FinishView(
-                            document: $document, location: lastLocation,
+                            document: $document, location: guiState.location,
                             directions: lastDirections, direction: lastDirections.first!
                         )
                     default:
