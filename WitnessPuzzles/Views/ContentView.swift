@@ -35,7 +35,7 @@ struct ContentView: View {
         } else {
             guiState.selectedTool = tool
             switch guiState.selectedTool {
-            case .none, .properties, .starts, .finishes, .gaps, .missings:
+            case .none, .starts, .finishes, .gaps, .missings:
                 columnVisibility = .detailOnly
             case .hexagons, .icons:
                 columnVisibility = .all
@@ -49,7 +49,7 @@ struct ContentView: View {
     var body: some View {
         NavigationSplitView( columnVisibility: $columnVisibility ) {
             switch guiState.selectedTool {
-            case .none, .properties, .starts, .finishes, .gaps, .missings:
+            case .none, .starts, .finishes, .gaps, .missings:
                 Text( "No settings to display." )
             case .hexagons:
                 HexagonView( info: $iconInfo )
@@ -59,63 +59,24 @@ struct ContentView: View {
         } detail: {
             Image( document.image, scale: 1.0, label: Text(verbatim: "" ) )
                 .onTapGesture { location in
-                    let point = document.toPuzzleSpace( from: location )
+                    guiState.location = document.toPuzzleSpace( from: location )
                     switch guiState.selectedTool {
-                    case nil, .properties:
-                        break
-                    case .starts:
-                        if document.startExists( point: point ) {
-                            document.removeStart( point: point )
-                        } else if document.isStartPositionOK( point: point ) {
-                            document.addStart( point: point )
-                        } else {
-                            NSSound.beep()
-                        }
                     case .finishes:
-                        if document.finishExists( point: point ) {
-                            document.removeFinish( point: point )
+                        if document.finishExists( point: guiState.location ) {
+                            document.removeFinish( point: guiState.location )
                         } else if let directions =
-                                    WitnessPuzzlesDocument.Finish.validDirections( for: point, in: document ) {
+                                    WitnessPuzzlesDocument.Finish.validDirections( for: guiState.location, in: document ) {
                             if directions.count == 1 {
-                                document.addFinish( point: point, direction: directions.first! )
+                                document.addFinish( point: guiState.location, direction: directions.first! )
                             } else {
                                 currentConfiguration = .finishes
-                                guiState.location = point
                                 lastDirections = directions
                             }
                         } else {
                             NSSound.beep()
                         }
-                    case .gaps:
-                        if document.gapExists( point: point ) {
-                            document.removeGap( point: point )
-                        } else if document.isGapPositionOK( point: point ) {
-                            document.addGap( point: point )
-                        } else {
-                            NSSound.beep()
-                        }
-                    case .missings:
-                        if document.missingExists( point: point ) {
-                            document.removeMissing( point: point )
-                        } else if document.isMissingPositionOK( point: point ) {
-                            document.addMissing( point: point )
-                        } else {
-                            NSSound.beep()
-                        }
-                    case .hexagons:
-                        if document.hexagonExists( point: point ) {
-                            document.removeHexagon( point: point )
-                        } else if document.isHexagonPositionOK( point: point ) {
-                            document.addHexagon( point: point, info: iconInfo )
-                        } else {
-                            NSSound.beep()
-                        }
-                    case .icons:
-                        if document.iconExists( point: point ) {
-                            document.removeIcon( point: point )
-                        } else if document.isIconPositionOK( point: point ) {
-                            document.addIcon( point: point, info: iconInfo )
-                        } else {
+                    default:
+                        if !document.processTap( state: guiState, iconInfo: iconInfo ) {
                             NSSound.beep()
                         }
                     }
@@ -124,7 +85,7 @@ struct ContentView: View {
                     ToolbarItemGroup( placement: .automatic ) {
                         Button( action: { openWindow( id: "properties", value: windowID ) } ) {
                             Label( "Properties", systemImage: "ruler" )
-                        }.labelStyle( VerticalLabelStyle( isSelected: guiState.selectedTool == .properties ) )
+                        }.labelStyle( VerticalLabelStyle( isSelected: false ) )
                         Button( action: { toggleTool( .starts ) } ) {
                             Label( "Starts", systemImage: "play" )
                         }.labelStyle( VerticalLabelStyle( isSelected: guiState.selectedTool == .starts ) )
@@ -173,7 +134,7 @@ struct ContentView_Previews: PreviewProvider {
 
 extension ContentView {
     enum ToolType: String, Identifiable {
-        case properties, starts, finishes, gaps, missings, hexagons, icons
+        case starts, finishes, gaps, missings, hexagons, icons
         
         var id: String { rawValue }
     }

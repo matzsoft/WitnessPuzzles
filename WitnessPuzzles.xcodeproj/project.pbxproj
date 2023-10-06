@@ -18,6 +18,7 @@
 		DD29DD012ABBF53A0031F8CD /* TetrisView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD29DCFF2ABBF53A0031F8CD /* TetrisView.swift */; };
 		DD29DD052ABCD3E10031F8CD /* SliderViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD29DD032ABCD3E10031F8CD /* SliderViews.swift */; };
 		DD29DD092ACA3C060031F8CD /* WindowsList.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD29DD072ACA3C060031F8CD /* WindowsList.swift */; };
+		DD29DD0D2AD0B4170031F8CD /* TapHandling.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD29DD0B2AD0B4170031F8CD /* TapHandling.swift */; };
 		DDBECF3A2A955AE0005313E7 /* WitnessPuzzlesApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDBECF392A955AE0005313E7 /* WitnessPuzzlesApp.swift */; };
 		DDBECF3C2A955AE0005313E7 /* WitnessPuzzlesDocument.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDBECF3B2A955AE0005313E7 /* WitnessPuzzlesDocument.swift */; };
 		DDBECF3E2A955AE0005313E7 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDBECF3D2A955AE0005313E7 /* ContentView.swift */; };
@@ -69,6 +70,7 @@
 		DD29DCFF2ABBF53A0031F8CD /* TetrisView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TetrisView.swift; sourceTree = "<group>"; };
 		DD29DD032ABCD3E10031F8CD /* SliderViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SliderViews.swift; sourceTree = "<group>"; };
 		DD29DD072ACA3C060031F8CD /* WindowsList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WindowsList.swift; sourceTree = "<group>"; };
+		DD29DD0B2AD0B4170031F8CD /* TapHandling.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TapHandling.swift; sourceTree = "<group>"; };
 		DDBECF362A955AE0005313E7 /* WitnessPuzzles.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = WitnessPuzzles.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		DDBECF392A955AE0005313E7 /* WitnessPuzzlesApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WitnessPuzzlesApp.swift; sourceTree = "<group>"; };
 		DDBECF3B2A955AE0005313E7 /* WitnessPuzzlesDocument.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WitnessPuzzlesDocument.swift; sourceTree = "<group>"; };
@@ -230,6 +232,7 @@
 				DDBECF902AAA484B005313E7 /* PuzzleItem.swift */,
 				DDBECF8C2AA97372005313E7 /* PuzzleType.swift */,
 				DDBECF882AA68CA6005313E7 /* Start.swift */,
+				DD29DD0B2AD0B4170031F8CD /* TapHandling.swift */,
 				DDBECF3B2A955AE0005313E7 /* WitnessPuzzlesDocument.swift */,
 			);
 			path = Document;
@@ -366,6 +369,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				DD29DCE82AB4E5B20031F8CD /* SquareIcon.swift in Sources */,
+				DD29DD0D2AD0B4170031F8CD /* TapHandling.swift in Sources */,
 				DDBECF862AA65A74005313E7 /* Missing.swift in Sources */,
 				DD29DD052ABCD3E10031F8CD /* SliderViews.swift in Sources */,
 				DDBECF3C2A955AE0005313E7 /* WitnessPuzzlesDocument.swift in Sources */,

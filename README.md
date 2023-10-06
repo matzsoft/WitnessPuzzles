@@ -2,6 +2,7 @@
 
 ## Bugs
 
+1. Adding finish thinks a corner outside the puzzle is OK.
 1. The bottom of the tool bar buttons gets cut off.
 1. The hover on the tool bar buttons looks bad. The label is not part of the button highlight.
 1. Sometimes when changing the puzzle size, the window size does not properly adjust. This leaves an undesired white border around the image.
