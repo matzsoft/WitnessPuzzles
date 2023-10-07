@@ -33,7 +33,7 @@ extension WitnessPuzzlesDocument {
             negated = info.tetris.negated
         }
         
-        func draw( in rect: CGRect, context: CGContext ) {
+        func draw( in rect: CGRect, context: CGContext, alpha: CGFloat ) {
             let scaleFactor = 66.0
             let blockSize = 10.0
             let gapSize = 2.0
@@ -53,9 +53,9 @@ extension WitnessPuzzlesDocument {
                 context.rotate( by: Double( rotation.rawValue ) * Double.pi / 2 )
             }
             if negated {
-                context.setStrokeColor( color.cgColor! )
+                context.setStrokeColor( color.cgColor!.copy( alpha: alpha )! )
             } else {
-                context.setFillColor( color.cgColor! )
+                context.setFillColor( color.cgColor!.copy( alpha: alpha )! )
             }
 
             func drawOne( block: Point ) {

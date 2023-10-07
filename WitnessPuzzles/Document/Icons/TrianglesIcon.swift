@@ -29,7 +29,7 @@ extension WitnessPuzzlesDocument {
             count = info.trianglesCount
         }
         
-        func draw( in rect: CGRect, context: CGContext ) {
+        func draw( in rect: CGRect, context: CGContext, alpha: CGFloat ) {
             let stepSize = rect.width / 10
             let iconTop = CGPoint( x: 0, y: 2 * sqrt( 3 ) / 3 )
             let iconLeft = CGPoint( x: -1, y: -2 * sqrt( 3 ) / 6 )
@@ -38,7 +38,7 @@ extension WitnessPuzzlesDocument {
             context.saveGState()
             context.translateBy( x: rect.midX, y: rect.midY )
             context.scaleBy( x: stepSize, y: stepSize )
-            context.setFillColor( color.cgColor! )
+            context.setFillColor( color.cgColor!.copy( alpha: alpha )! )
             context.beginPath()
 
             func drawOne( xOffset: CGFloat ) {

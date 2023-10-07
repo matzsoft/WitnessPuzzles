@@ -13,14 +13,14 @@ extension WitnessPuzzlesDocument {
     struct SquareIcon: IconItem, Codable, Equatable, Hashable {
         let color: Color
         
-        func draw( in rect: CGRect, context: CGContext ) {
+        func draw( in rect: CGRect, context: CGContext, alpha: CGFloat ) {
             let cornerRadius = 0.125
             let iconRect = CGRect( x: -0.25, y: -0.25, width: 0.5, height: 0.5 )
 
             context.saveGState()
             context.translateBy( x: rect.midX, y: rect.midY )
             context.scaleBy( x: rect.width, y: rect.height )
-            context.setFillColor( color.cgColor! )
+            context.setFillColor( color.cgColor!.copy( alpha: alpha )! )
             context.beginPath()
             context.addPath(
                 CGPath(

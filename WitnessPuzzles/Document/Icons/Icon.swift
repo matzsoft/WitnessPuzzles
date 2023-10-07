@@ -11,7 +11,7 @@ import SwiftUI
 
 protocol IconItem: Hashable, Codable {
     var color: Color { get }
-    func draw( in rect: CGRect, context: CGContext )
+    func draw( in rect: CGRect, context: CGContext, alpha: CGFloat )
 }
 
 
@@ -57,6 +57,12 @@ extension WitnessPuzzlesDocument {
             self.position = position
             self.type = type
             self.icon = icon
+        }
+        
+        init( position: Point, info: IconInfo ) {
+            self.position = position
+            self.type = info.iconType
+            self.icon = Icon.makeIcon( from: info )
         }
         
         enum CodingKeys: CodingKey {
@@ -125,6 +131,29 @@ extension WitnessPuzzlesDocument {
             hasher.combine( icon )
         }
         
+        func draw( context: CGContext, puzzle: WitnessPuzzlesDocument, alpha: CGFloat ) -> Void {
+            let extent = extent( puzzle: puzzle )
+            icon.draw( in: extent, context: context, alpha: alpha )
+            if let wrapped = puzzle.type.wrap( point: position, puzzle: puzzle )?.cgPoint {
+                icon.draw( in: extent.move( to: wrapped ), context: context, alpha: alpha )
+            }
+        }
+        
+        static func makeIcon( from info: IconInfo ) -> any IconItem {
+            switch info.iconType {
+            case .square:
+                return SquareIcon( color: info.color )
+            case .star:
+                return StarIcon( color: info.color )
+            case .triangles:
+                return TrianglesIcon( info: info )
+            case .elimination:
+                return EliminationIcon( color: info.color )
+            case .tetris:
+                return TetrisIcon( info: info )
+            }
+        }
+        
         static func image( size: CGFloat, info: IconInfo ) -> Image {
             let extent = CGRect( x: 0, y: 0, width: size, height: size )
             let context = CGContext(
@@ -134,39 +163,27 @@ extension WitnessPuzzlesDocument {
             )!
             
             context.clear( extent )
-            switch info.iconType {
-            case .square:
-                let icon = SquareIcon( color: info.color )
-                icon.draw( in: extent, context: context )
-            case .star:
-                let icon = StarIcon( color: info.color )
-                icon.draw( in: extent, context: context )
-            case .triangles:
-                let icon = TrianglesIcon( info: info )
-                icon.draw( in: extent, context: context )
-            case .elimination:
-                let icon = EliminationIcon( color: info.color )
-                icon.draw( in: extent, context: context )
-            case .tetris:
-                let icon = TetrisIcon( info: info )
-                icon.draw( in: extent, context: context )
-            }
+            makeIcon( from: info ).draw( in: extent, context: context, alpha: 1 )
             
             return Image( context.makeImage()!, scale: 1, label: Text( verbatim: "" ) )
         }
     }
 
-    func drawIcons( context: CGContext ) -> Void {
+    func drawIcons( context: CGContext, guiState: GuiState?, info: IconInfo? ) -> Void {
+        let guiState = guiState?.selectedTool == .icons ? guiState : nil
+        
         for icon in icons {
-            let extent = icon.extent( puzzle: self )
-            icon.icon.draw( in: extent, context: context )
-            if let wrapped = type.wrap( point: icon.position, puzzle: self )?.cgPoint {
-                icon.icon.draw( in: extent.move( to: wrapped ), context: context )
+            if guiState?.location == icon.position {
+                icon.draw( context: context, puzzle: self, alpha: 0.5 )
+            } else {
+                icon.draw( context: context, puzzle: self, alpha: 1.0 )
             }
         }
         
-        context.fillPath()
-        context.restoreGState()
+        if let location = guiState?.location, isIconPositionOK( point: location ) {
+            let new = Icon( position: location, info: info! )
+            new.draw( context: context, puzzle: self, alpha: 0.75 )
+        }
     }
     
     func iconExists( point: Point ) -> Bool {
@@ -174,7 +191,8 @@ extension WitnessPuzzlesDocument {
     }
     
     func isIconPositionOK( point: Point ) -> Bool {
-        return Icon.isValid( position: point, puzzle: self )
+        return Icon.isValid( position: point, puzzle: self ) &&
+                !icons.contains( where: { $0.position == point } )
     }
     
     mutating func removeIcon( point: Point ) -> Void {

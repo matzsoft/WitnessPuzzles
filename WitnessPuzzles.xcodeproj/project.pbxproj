@@ -126,10 +126,10 @@
 		DD29DCE02AB4E4D00031F8CD /* Icons */ = {
 			isa = PBXGroup;
 			children = (
+				DD29DCEE2AB67C220031F8CD /* EliminationIcon.swift */,
 				DD29DCD92AB13A1C0031F8CD /* Icon.swift */,
 				DD29DCE62AB4E5B20031F8CD /* SquareIcon.swift */,
 				DD29DCEA2AB522FF0031F8CD /* StarIcon.swift */,
-				DD29DCEE2AB67C220031F8CD /* EliminationIcon.swift */,
 				DD29DCF52ABBA2A60031F8CD /* Tetris */,
 				DD29DCF22AB80C0E0031F8CD /* TrianglesIcon.swift */,
 			);
@@ -170,9 +170,9 @@
 			children = (
 				DDBECF6B2A9ABCE4005313E7 /* Color+Codable.swift */,
 				DDBECF722AA261A5005313E7 /* Document */,
+				DDBECF6D2A9EFA2D005313E7 /* Views */,
 				DD29DD072ACA3C060031F8CD /* WindowsList.swift */,
 				DDBECF392A955AE0005313E7 /* WitnessPuzzlesApp.swift */,
-				DDBECF6D2A9EFA2D005313E7 /* Views */,
 				DDBECF3F2A955AE0005313E7 /* Assets.xcassets */,
 				DDBECF442A955AE0005313E7 /* Info.plist */,
 				DDBECF452A955AE0005313E7 /* WitnessPuzzles.entitlements */,
