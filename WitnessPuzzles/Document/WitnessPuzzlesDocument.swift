@@ -108,7 +108,7 @@ struct WitnessPuzzlesDocument: FileDocument, Codable {
         type.draw( puzzle: self, context: context )
         drawStarts( context: context, guiState: guiState )
         drawFinishes( context: context )
-        drawGaps( context: context )
+        drawGaps( context: context, guiState: guiState )
         drawHexagons( context: context )
         drawIcons( context: context )
 

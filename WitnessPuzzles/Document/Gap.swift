@@ -30,17 +30,34 @@ extension WitnessPuzzlesDocument {
         static func isValid( position: Point, puzzle: WitnessPuzzlesDocument ) -> Bool {
             position.isLine && puzzle.isConnected( point: position )
         }
-    }
-
-    func drawGaps( context: CGContext ) -> Void {
-        context.saveGState()
-        context.setFillColor( background.cgColor! )
-        for gap in gaps {
-            context.fill( [ gap.extent( puzzle: self ) ] )
-            if let wrapped = type.wrap( point: gap.position, puzzle: self ) {
-                context.fill( [ Gap( position: wrapped ).extent( puzzle: self ) ] )
+        
+        func draw( context: CGContext, puzzle: WitnessPuzzlesDocument ) -> Void {
+            context.fill( extent( puzzle: puzzle ) )
+            if let wrapped = puzzle.type.wrap( point: position, puzzle: puzzle ) {
+                context.fill( Gap( position: wrapped ).extent( puzzle: puzzle ) )
             }
         }
+    }
+
+    func drawGaps( context: CGContext, guiState: GuiState? ) -> Void {
+        let guiState = guiState?.selectedTool == .gaps ? guiState : nil
+        context.saveGState()
+
+        context.setFillColor( background.cgColor! )
+        for gap in gaps {
+            if guiState?.location == gap.position {
+                context.setFillColor( background.cgColor!.copy( alpha: 0.5 )! )
+            } else {
+                context.setFillColor( background.cgColor! )
+            }
+            gap.draw( context: context, puzzle: self )
+        }
+        
+        if let location = guiState?.location, isGapPositionOK( point: location ) {
+            context.setFillColor( background.cgColor!.copy( alpha: 0.75 )! )
+            Gap( position: location ).draw( context: context, puzzle: self )
+        }
+    
         context.restoreGState()
     }
     
@@ -50,6 +67,7 @@ extension WitnessPuzzlesDocument {
     
     func isGapPositionOK( point: Point ) -> Bool {
         return Gap.isValid( position: point, puzzle: self ) &&
+                !gaps.contains { point == $0.position } &&
                 !starts.contains { point == $0.position } &&
                 !finishes.contains { point == $0.position } &&
                 !missings.contains { point == $0.position } &&
