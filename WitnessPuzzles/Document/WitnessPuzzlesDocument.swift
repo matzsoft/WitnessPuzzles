@@ -67,7 +67,7 @@ struct WitnessPuzzlesDocument: FileDocument, Codable {
             return .init( regularFileWithContents: data )
         case .png:
             let cicontext = CIContext()
-            let ciimage = CIImage( cgImage: image )
+            let ciimage = CIImage( cgImage: image() )
             guard let data = cicontext.pngRepresentation(
                 of: ciimage,
                 format: .RGBA16,
@@ -102,11 +102,11 @@ struct WitnessPuzzlesDocument: FileDocument, Codable {
         return context
     }
     
-    var image: CGImage {
+    func image( guiState: GuiState? = nil ) -> CGImage {
         let context = getContext( fill: background )
 
         type.draw( puzzle: self, context: context )
-        drawStarts( context: context )
+        drawStarts( context: context, guiState: guiState )
         drawFinishes( context: context )
         drawGaps( context: context )
         drawHexagons( context: context )

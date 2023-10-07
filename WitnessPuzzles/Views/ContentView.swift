@@ -57,7 +57,7 @@ struct ContentView: View {
                 IconView( info: $iconInfo )
             }
         } detail: {
-            Image( document.image, scale: 1.0, label: Text(verbatim: "" ) )
+            Image( document.image( guiState: guiState ), scale: 1.0, label: Text( verbatim: "" ) )
                 .onTapGesture { location in
                     guiState.location = document.toPuzzleSpace( from: location )
                     switch guiState.selectedTool {
@@ -79,6 +79,14 @@ struct ContentView: View {
                         if !document.processTap( state: guiState, iconInfo: iconInfo ) {
                             NSSound.beep()
                         }
+                    }
+                }
+                .onContinuousHover { phase in
+                    switch phase {
+                    case .active( let location ):
+                        guiState.location = document.toPuzzleSpace( from: location )
+                    case .ended:
+                        break
                     }
                 }
                 .toolbar {

@@ -28,21 +28,33 @@ extension WitnessPuzzlesDocument {
         static func isValid( position: Point, puzzle: WitnessPuzzlesDocument ) -> Bool {
             position.isPath && puzzle.isConnected( point: position )
         }
-    }
-
-    func drawStarts( context: CGContext ) -> Void {
-        context.saveGState()
-        context.setFillColor( foreground.cgColor! )
-        context.beginPath()
         
-        for start in starts {
-            context.addEllipse( in: start.extent( puzzle: self ) )
-            if let wrapped = type.wrap( point: start.position, puzzle: self ) {
-                context.addEllipse( in: Start( position: wrapped ).extent( puzzle: self ) )
+        func draw( context: CGContext, puzzle: WitnessPuzzlesDocument ) -> Void {
+            context.fillEllipse( in: extent( puzzle: puzzle ) )
+            if let wrapped = puzzle.type.wrap( point: position, puzzle: puzzle ) {
+                context.fillEllipse( in: Start( position: wrapped ).extent( puzzle: puzzle ) )
             }
         }
+    }
+
+    func drawStarts( context: CGContext, guiState: GuiState? ) -> Void {
+        let guiState = guiState?.selectedTool == .starts ? guiState : nil
+        context.saveGState()
         
-        context.fillPath()
+        for start in starts {
+            if guiState?.location == start.position {
+                context.setFillColor( foreground.cgColor!.copy( alpha: 0.5 )! )
+            } else {
+                context.setFillColor( foreground.cgColor! )
+            }
+            start.draw( context: context, puzzle: self )
+        }
+        
+        if let location = guiState?.location, isStartPositionOK( point: location ) {
+            context.setFillColor( foreground.cgColor!.copy( alpha: 0.75 )! )
+            Start( position: location ).draw( context: context, puzzle: self )
+        }
+    
         context.restoreGState()
     }
     
@@ -52,6 +64,7 @@ extension WitnessPuzzlesDocument {
     
     func isStartPositionOK( point: Point ) -> Bool {
         return Start.isValid( position: point, puzzle: self ) &&
+                !starts.contains { point == $0.position } &&
                 !finishes.contains { point == $0.position } &&
                 !gaps.contains { point == $0.position } &&
                 !missings.contains { point == $0.position }
