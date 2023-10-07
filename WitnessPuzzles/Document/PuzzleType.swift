@@ -63,18 +63,6 @@ extension WitnessPuzzlesDocument {
                 return nil
             }
         }
-        
-        func draw( puzzle: WitnessPuzzlesDocument, context: CGContext ) -> Void {
-            context.saveGState()
-            context.setFillColor( puzzle.foreground.cgColor! )
-            context.beginPath()
-            switch self {
-            case .rectangle: puzzle.drawPuzzle( context: context )
-            case .cylinder:  puzzle.drawPuzzle( context: context )
-            }
-            context.fillPath()
-            context.restoreGState()
-        }
     }
 
     var lineGeometry: ( CGRect, CGFloat ) {
@@ -91,10 +79,26 @@ extension WitnessPuzzlesDocument {
         return ( rect, cornerRadius )
     }
     
-    func drawPuzzle( context: CGContext ) -> Void {
+    func drawPuzzle( context: CGContext, guiState: GuiState? ) -> Void {
+        let guiState = guiState?.selectedTool == .missings ? guiState : nil
         let ( lineRect, cornerRadius ) = lineGeometry
+        let lines = lines
 
-        func draw( line: Point ) {
+        func draw( line: Point, alpha: CGFloat ) {
+            context.saveGState()
+            context.beginPath()
+            
+            drawOne( line: line )
+            if let wrapped = type.wrap( point: line, puzzle: self ) {
+                drawOne( line: wrapped )
+            }
+            
+            context.setFillColor( foreground.cgColor!.copy( alpha: alpha )! )
+            context.fillPath()
+            context.restoreGState()
+        }
+        
+        func drawOne( line: Point ) {
             let user = line.puzzle2user( puzzle: self )
             
             context.saveGState()
@@ -113,11 +117,11 @@ extension WitnessPuzzlesDocument {
             context.restoreGState()
         }
         
-        for line in lines {
-            draw( line: line )
-            if let wrapped = type.wrap( point: line, puzzle: self ) {
-                draw( line: wrapped )
-            }
+        lines.filter { $0 != guiState?.location }.forEach { draw( line: $0, alpha: 1.0 ) }
+        if let hovered = lines.first( where: { $0 == guiState?.location } ) {
+            draw( line: hovered, alpha: 0.5 )
+        } else if let missing = missings.first( where: { $0.position == guiState?.location } ) {
+            draw( line: missing.position, alpha: 0.75 )
         }
     }
 }
