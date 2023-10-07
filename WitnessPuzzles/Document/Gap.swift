@@ -43,7 +43,6 @@ extension WitnessPuzzlesDocument {
         let guiState = guiState?.selectedTool == .gaps ? guiState : nil
         context.saveGState()
 
-        context.setFillColor( background.cgColor! )
         for gap in gaps {
             if guiState?.location == gap.position {
                 context.setFillColor( background.cgColor!.copy( alpha: 0.5 )! )

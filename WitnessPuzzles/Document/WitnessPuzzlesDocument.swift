@@ -102,14 +102,14 @@ struct WitnessPuzzlesDocument: FileDocument, Codable {
         return context
     }
     
-    func image( guiState: GuiState? = nil ) -> CGImage {
+    func image( guiState: GuiState? = nil, info: IconInfo? = nil ) -> CGImage {
         let context = getContext( fill: background )
 
         type.draw( puzzle: self, context: context )
         drawStarts( context: context, guiState: guiState )
         drawFinishes( context: context )
         drawGaps( context: context, guiState: guiState )
-        drawHexagons( context: context )
+        drawHexagons( context: context, guiState: guiState, info: info )
         drawIcons( context: context )
 
         return context.makeImage()!

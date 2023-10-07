@@ -57,7 +57,7 @@ struct ContentView: View {
                 IconView( info: $iconInfo )
             }
         } detail: {
-            Image( document.image( guiState: guiState ), scale: 1.0, label: Text( verbatim: "" ) )
+            Image( document.image( guiState: guiState, info: iconInfo ), scale: 1.0, label: Text( "" ) )
                 .onTapGesture { location in
                     guiState.location = document.toPuzzleSpace( from: location )
                     switch guiState.selectedTool {

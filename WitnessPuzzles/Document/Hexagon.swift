@@ -36,25 +36,42 @@ extension WitnessPuzzlesDocument {
             CGPoint( x: -0.5, y: -sqrt( 3 ) / 2 ), CGPoint( x:  0.5, y: -sqrt( 3 ) / 2 )
         ]
         
-        static func draw( extent: CGRect, context: CGContext, color: Color ) -> Void {
+        func draw( context: CGContext, puzzle: WitnessPuzzlesDocument, alpha: CGFloat ) -> Void {
+            drawOne( context: context, puzzle: puzzle, alpha: alpha )
+            if let wrapped = puzzle.type.wrap( point: position, puzzle: puzzle ) {
+                let new = Hexagon( position: wrapped, color: color )
+                new.drawOne( context: context, puzzle: puzzle, alpha: alpha )
+            }
+        }
+        
+        func drawOne( context: CGContext, puzzle: WitnessPuzzlesDocument, alpha: CGFloat ) -> Void {
+            let extent = extent( puzzle: puzzle )
+            
             context.saveGState()
             context.beginPath()
             context.translateBy( x: extent.midX, y: extent.midY )
             context.scaleBy( x: 0.4 * extent.width, y: 0.4 * extent.height )
-            context.addLines( between: hexPoints )
-            context.setFillColor( color.cgColor! )
+            context.addLines( between: Hexagon.hexPoints )
+            context.setFillColor( color.cgColor!.copy( alpha: alpha )! )
             context.fillPath()
             context.restoreGState()
         }
     }
 
-    func drawHexagons( context: CGContext ) -> Void {
+    func drawHexagons( context: CGContext, guiState: GuiState?, info: IconInfo? ) -> Void {
+        let guiState = guiState?.selectedTool == .hexagons ? guiState : nil
+        
         for hexagon in hexagons {
-            Hexagon.draw( extent: hexagon.extent( puzzle: self ), context: context, color: hexagon.color )
-            if let wrapped = type.wrap( point: hexagon.position, puzzle: self ) {
-                let new = Hexagon( position: wrapped, color: hexagon.color )
-                Hexagon.draw( extent: new.extent( puzzle: self ), context: context, color: new.color )
+            if guiState?.location == hexagon.position {
+                hexagon.draw( context: context, puzzle: self, alpha: 0.5 )
+            } else {
+                hexagon.draw( context: context, puzzle: self, alpha: 1.0 )
             }
+        }
+        
+        if let location = guiState?.location, isHexagonPositionOK( point: location ) {
+            let new = Hexagon( position: location, color: info?.color ?? .black )
+            new.draw( context: context, puzzle: self, alpha: 0.75 )
         }
     }
 
