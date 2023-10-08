@@ -31,7 +31,8 @@ extension WitnessPuzzlesDocument {
             position.isLine && puzzle.isConnected( point: position )
         }
         
-        func draw( context: CGContext, puzzle: WitnessPuzzlesDocument ) -> Void {
+        func draw( context: CGContext, puzzle: WitnessPuzzlesDocument, alpha: CGFloat ) -> Void {
+            context.setFillColor( puzzle.background.cgColor!.copy( alpha: alpha )! )
             context.fill( extent( puzzle: puzzle ) )
             if let wrapped = puzzle.type.wrap( point: position, puzzle: puzzle ) {
                 context.fill( Gap( position: wrapped ).extent( puzzle: puzzle ) )
@@ -43,18 +44,13 @@ extension WitnessPuzzlesDocument {
         let guiState = guiState?.selectedTool == .gaps ? guiState : nil
         context.saveGState()
 
-        for gap in gaps {
-            if guiState?.location == gap.position {
-                context.setFillColor( background.cgColor!.copy( alpha: 0.5 )! )
-            } else {
-                context.setFillColor( background.cgColor! )
-            }
-            gap.draw( context: context, puzzle: self )
+        gaps.filter { $0.position != guiState?.location }.forEach {
+            $0.draw( context: context, puzzle: self, alpha: 1.0 )
         }
-        
-        if let location = guiState?.location, isGapPositionOK( point: location ) {
-            context.setFillColor( background.cgColor!.copy( alpha: 0.75 )! )
-            Gap( position: location ).draw( context: context, puzzle: self )
+        if let hovered = gaps.first(where: { $0.position == guiState?.location } ) {
+            hovered.draw(context: context, puzzle: self, alpha: 0.5 )
+        } else if let location = guiState?.location, isGapPositionOK( point: location ) {
+            Gap( position: location ).draw( context: context, puzzle: self, alpha: 0.75 )
         }
     
         context.restoreGState()

@@ -29,7 +29,8 @@ extension WitnessPuzzlesDocument {
             position.isPath && puzzle.isConnected( point: position )
         }
         
-        func draw( context: CGContext, puzzle: WitnessPuzzlesDocument ) -> Void {
+        func draw( context: CGContext, puzzle: WitnessPuzzlesDocument, alpha: CGFloat ) -> Void {
+            context.setFillColor( puzzle.foreground.cgColor!.copy( alpha: alpha )! )
             context.fillEllipse( in: extent( puzzle: puzzle ) )
             if let wrapped = puzzle.type.wrap( point: position, puzzle: puzzle ) {
                 context.fillEllipse( in: Start( position: wrapped ).extent( puzzle: puzzle ) )
@@ -41,18 +42,13 @@ extension WitnessPuzzlesDocument {
         let guiState = guiState?.selectedTool == .starts ? guiState : nil
         context.saveGState()
         
-        for start in starts {
-            if guiState?.location == start.position {
-                context.setFillColor( foreground.cgColor!.copy( alpha: 0.5 )! )
-            } else {
-                context.setFillColor( foreground.cgColor! )
-            }
-            start.draw( context: context, puzzle: self )
+        starts.filter { $0.position != guiState?.location }.forEach {
+            $0.draw( context: context, puzzle: self, alpha: 1.0 )
         }
-        
-        if let location = guiState?.location, isStartPositionOK( point: location ) {
-            context.setFillColor( foreground.cgColor!.copy( alpha: 0.75 )! )
-            Start( position: location ).draw( context: context, puzzle: self )
+        if let hovered = starts.first( where: { $0.position == guiState?.location } ) {
+            hovered.draw( context: context, puzzle: self, alpha: 0.5 )
+        } else if let location = guiState?.location, isStartPositionOK( point: location ) {
+            Start( position: location ).draw( context: context, puzzle: self, alpha: 0.75 )
         }
     
         context.restoreGState()

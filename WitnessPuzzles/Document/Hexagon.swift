@@ -61,15 +61,12 @@ extension WitnessPuzzlesDocument {
     func drawHexagons( context: CGContext, guiState: GuiState?, info: IconInfo? ) -> Void {
         let guiState = guiState?.selectedTool == .hexagons ? guiState : nil
         
-        for hexagon in hexagons {
-            if guiState?.location == hexagon.position {
-                hexagon.draw( context: context, puzzle: self, alpha: 0.5 )
-            } else {
-                hexagon.draw( context: context, puzzle: self, alpha: 1.0 )
-            }
+        hexagons.filter { $0.position != guiState?.location }.forEach {
+            $0.draw( context: context, puzzle: self, alpha: 1.0 )
         }
-        
-        if let location = guiState?.location, isHexagonPositionOK( point: location ) {
+        if let hovered = hexagons.first( where: { $0.position == guiState?.location } ) {
+            hovered.draw( context: context, puzzle: self, alpha: 0.5 )
+        } else if let location = guiState?.location, isHexagonPositionOK( point: location ) {
             let new = Hexagon( position: location, color: info?.color ?? .black )
             new.draw( context: context, puzzle: self, alpha: 0.75 )
         }

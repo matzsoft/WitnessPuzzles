@@ -172,17 +172,13 @@ extension WitnessPuzzlesDocument {
     func drawIcons( context: CGContext, guiState: GuiState?, info: IconInfo? ) -> Void {
         let guiState = guiState?.selectedTool == .icons ? guiState : nil
         
-        for icon in icons {
-            if guiState?.location == icon.position {
-                icon.draw( context: context, puzzle: self, alpha: 0.5 )
-            } else {
-                icon.draw( context: context, puzzle: self, alpha: 1.0 )
-            }
+        icons.filter { $0.position != guiState?.location }.forEach {
+            $0.draw( context: context, puzzle: self, alpha: 1.0 )
         }
-        
-        if let location = guiState?.location, isIconPositionOK( point: location ) {
-            let new = Icon( position: location, info: info! )
-            new.draw( context: context, puzzle: self, alpha: 0.75 )
+        if let hovered = icons.first(where: { $0.position == guiState?.location } ) {
+            hovered.draw( context: context, puzzle: self, alpha: 0.5 )
+        } else if let location = guiState?.location, isIconPositionOK( point: location ) {
+            Icon( position: location, info: info! ).draw( context: context, puzzle: self, alpha: 0.75 )
         }
     }
     
