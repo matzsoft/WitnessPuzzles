@@ -38,8 +38,6 @@ struct ContentView: View {
     @Environment( \.openWindow ) private var openWindow
     @Binding var document: WitnessPuzzlesDocument
     let windowID: Int
-    @State var currentConfiguration: ToolType?
-    @State var lastDirections = [WitnessPuzzlesDocument.Direction]()
     @State var guiState = GuiState()
     @State var iconInfo = WitnessPuzzlesDocument.IconInfo(
         color: Color( cgColor: CGColor( red: 1, green: 0.4, blue: 0.1, alpha: 1 ) ),
@@ -117,17 +115,6 @@ struct ContentView: View {
                         Button( action: { toggleTool( .icons ) } ) {
                             Label( "Icons", systemImage: "seal" )
                         }.labelStyle( VerticalLabelStyle( isSelected: guiState.selectedTool == .icons ) )
-                    }
-                }
-                .sheet( item: $currentConfiguration ) { sheet in
-                    switch sheet {
-                    case .finishes:
-                        FinishView(
-                            document: $document, location: guiState.location,
-                            directions: lastDirections, direction: lastDirections.first!
-                        )
-                    default:
-                        Text( verbatim: "No configuration for \(sheet.rawValue.capitalized)." )
                     }
                 }
         }

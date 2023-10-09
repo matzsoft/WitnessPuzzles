@@ -130,19 +130,6 @@ extension WitnessPuzzlesDocument {
             }
         }
         
-        var label: Image {
-            switch self {
-            case .north:     return Image( systemName: "arrow.up" )
-            case .northeast: return Image( systemName: "arrow.up.right" )
-            case .east:      return Image( systemName: "arrow.right" )
-            case .southeast: return Image( systemName: "arrow.down.right" )
-            case .south:     return Image( systemName: "arrow.down" )
-            case .southwest: return Image( systemName: "arrow.down.left" )
-            case .west:      return Image( systemName: "arrow.left" )
-            case .northwest: return Image( systemName: "arrow.up.left" )
-            }
-        }
-        
         var components: [Direction] {
             switch self {
             case .north, .east, .south, .west:
