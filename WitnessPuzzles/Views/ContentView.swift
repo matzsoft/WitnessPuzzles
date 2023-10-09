@@ -11,6 +11,27 @@ import SwiftUI
 struct GuiState {
     var selectedTool: ContentView.ToolType?
     var location = WitnessPuzzlesDocument.Point( 0, 0 )
+    var findingDirection = false
+    var origin = WitnessPuzzlesDocument.Point( 0, 0 )
+    var directions = Set<WitnessPuzzlesDocument.Point>()
+    
+    func replacing(
+        selectedTool: ContentView.ToolType? = nil,
+        location: WitnessPuzzlesDocument.Point? = nil,
+        findingDirection: Bool? = nil,
+        origin: WitnessPuzzlesDocument.Point? = nil,
+        directions: Set<WitnessPuzzlesDocument.Point>? = nil
+    ) -> GuiState {
+        var copy = self
+        
+        if let selectedTool = selectedTool { copy.selectedTool = selectedTool }
+        if let location = location { copy.location = location }
+        if let findingDirection = findingDirection { copy.findingDirection = findingDirection }
+        if let origin = origin { copy.origin = origin }
+        if let directions = directions { copy.directions = directions }
+        
+        return copy
+    }
 }
 
 struct ContentView: View {
@@ -60,31 +81,15 @@ struct ContentView: View {
             Image( document.image( guiState: guiState, info: iconInfo ), scale: 1.0, label: Text( "" ) )
                 .onTapGesture { location in
                     guiState.location = document.toPuzzleSpace( from: location )
-                    switch guiState.selectedTool {
-                    case .finishes:
-                        if document.finishExists( point: guiState.location ) {
-                            document.removeFinish( point: guiState.location )
-                        } else if let directions =
-                                    WitnessPuzzlesDocument.Finish.validDirections( for: guiState.location, in: document ) {
-                            if directions.count == 1 {
-                                document.addFinish( point: guiState.location, direction: directions.first! )
-                            } else {
-                                currentConfiguration = .finishes
-                                lastDirections = directions
-                            }
-                        } else {
-                            NSSound.beep()
-                        }
-                    default:
-                        if !document.processTap( state: guiState, iconInfo: iconInfo ) {
-                            NSSound.beep()
-                        }
+                    if !document.processTap( guiState: guiState, iconInfo: iconInfo ) {
+                        NSSound.beep()
                     }
                 }
                 .onContinuousHover { phase in
                     switch phase {
                     case .active( let location ):
                         guiState.location = document.toPuzzleSpace( from: location )
+                        guiState = document.processHover( guiState: guiState )
                     case .ended:
                         break
                     }

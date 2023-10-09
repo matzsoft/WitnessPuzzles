@@ -115,31 +115,62 @@ extension WitnessPuzzlesDocument {
         }
     }
 
-    func drawFinishes( context: CGContext ) -> Void {
-        func draw( finish: Finish ) {
+    func drawFinishes( context: CGContext, guiState: GuiState? ) -> Void {
+        let guiState = guiState?.selectedTool == .finishes ? guiState : nil
+        
+        func draw( finish: Finish, alpha: CGFloat ) {
+            context.saveGState()
+            context.setFillColor( foreground.cgColor!.copy( alpha: alpha )! )
+            drawOne( finish: finish )
+            if let wrapped = type.wrap( point: finish.position, puzzle: self ) {
+                drawOne( finish: Finish( position: wrapped, direction: finish.direction ) )
+            }
+            context.restoreGState()
+        }
+        
+        func drawOne( finish: Finish ) {
             let extent = finish.extent( puzzle: self )
             context.saveGState()
             context.translateBy( x: extent.midX, y: extent.midY )
             context.scaleBy( x: extent.width / 2, y: extent.height / 2 )
+            context.beginPath()
             context.addEllipse( in: Finish.circleRect )
             
             context.rotate( by: finish.angle )
             context.addRect( Finish.stemRect )
+            context.fillPath()
             context.restoreGState()
         }
         
-        context.saveGState()
-        context.setFillColor( foreground.cgColor! )
-        context.beginPath()
-
-        for finish in finishes {
-            draw( finish: finish )
-            if let wrapped = type.wrap( point: finish.position, puzzle: self ) {
-                draw( finish: Finish( position: wrapped, direction: finish.direction ) )
+        finishes.filter { $0.position != guiState?.location }.forEach {
+            draw( finish: $0, alpha: 1 )
+        }
+        if let hovered = finishes.first( where: { $0.position == guiState?.location } ) {
+            draw( finish: hovered, alpha: 0.5 )
+        } else if let guiState = guiState, guiState.findingDirection {
+            if guiState.location == guiState.origin {
+                for point in guiState.directions {
+                    if let direction = Direction( from: guiState.origin, to: point ) {
+                        let candidate = Finish( position: guiState.location, direction: direction )
+                        draw( finish: candidate, alpha: 0.75 )
+                    }
+                }
+            } else {
+                guiState.directions
+                    .filter { $0 != guiState.location }
+                    .compactMap { Direction( from: guiState.origin, to: $0 ) }
+                    .forEach {
+                        let candidate = Finish( position: guiState.origin, direction: $0 )
+                        draw(finish: candidate, alpha: 0.25 )
+                    }
+                if let chosen = guiState.directions.first( where: { $0 == guiState.location } ) {
+                    if let direction = Direction( from: guiState.origin, to: chosen ) {
+                        let candidate = Finish( position: guiState.origin, direction: direction )
+                        draw( finish: candidate, alpha: 0.75 )
+                    }
+                }
             }
         }
-        context.fillPath()
-        context.restoreGState()
     }
     
     func finishExists( point: Point ) -> Bool {

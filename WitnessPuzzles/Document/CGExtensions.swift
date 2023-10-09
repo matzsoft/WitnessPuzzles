@@ -41,6 +41,10 @@ extension WitnessPuzzlesDocument {
         static func +( _ lhs: Point, _ rhs: Point ) -> Point {
             Point( lhs.x + rhs.x, lhs.y + rhs.y )
         }
+        
+        static func -( _ lhs: Point, _ rhs: Point ) -> Point {
+            Point( lhs.x - rhs.x, lhs.y - rhs.y )
+        }
     }
     
     func neighbor( of point: Point, in direction: Direction ) -> Point {
@@ -76,10 +80,16 @@ extension WitnessPuzzlesDocument {
     func toPuzzleSpace( from view: CGPoint ) -> Point {
         let context = getContext()
         let user = context.convertToUserSpace( view )
-        let resolution = Double( lineWidth + blockWidth ) / 2
-        let offset = Double( lineWidth ) / 2
-        let x = Int( ( ( user.x - offset ) / resolution ).rounded() )
-        let y = Int( ( ( user.y - offset ) / resolution ).rounded() )
+        let resolution = Double( lineWidth + blockWidth )
+        let offset = Double( lineWidth )
+        
+        let xBase = floor( user.x / resolution )
+        let yBase = floor( user.y / resolution )
+        let xUser = xBase * resolution
+        let yUser = yBase * resolution
+        
+        let x = Int( xUser + offset > user.x ? 2 * xBase : 2 * xBase + 1 )
+        let y = Int( yUser + offset > user.y ? 2 * yBase : 2 * yBase + 1 )
         
         return Point( x, y )
     }
@@ -87,6 +97,23 @@ extension WitnessPuzzlesDocument {
     
     enum Direction: String, CaseIterable, Identifiable, Codable {
         case north, northeast, east, southeast, south, southwest, west, northwest
+        
+        init?( from: Point, to: Point ) {
+            let vector = to - from
+            switch ( vector.x, vector.y ) {
+            case ( let x, let y ) where x == y  && x > 0: self = .northeast
+            case ( let x, let y ) where x == y  && x < 0: self = .southwest
+            case ( let x, let y ) where x == -y && x > 0: self = .southeast
+            case ( let x, let y ) where x == -y && x < 0: self = .northwest
+                
+            case ( 0, let y ) where y > 0: self = .north
+            case ( 0, let y ) where y < 0: self = .south
+            case ( let x, 0 ) where x > 0: self = .east
+            case ( let x, 0 ) where x < 0: self = .west
+                
+            default: return nil
+            }
+        }
         
         var id: String { rawValue }
         
