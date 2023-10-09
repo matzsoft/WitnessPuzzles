@@ -79,7 +79,9 @@ struct ContentView: View {
             Image( document.image( guiState: guiState, info: iconInfo ), scale: 1.0, label: Text( "" ) )
                 .onTapGesture { location in
                     guiState.location = document.toPuzzleSpace( from: location )
-                    if !document.processTap( guiState: guiState, iconInfo: iconInfo ) {
+                    if let newState = document.processTap( guiState: guiState, iconInfo: iconInfo ) {
+                        guiState = newState
+                    } else {
                         NSSound.beep()
                     }
                 }

@@ -10,7 +10,7 @@ import Foundation
 import SwiftUI
 
 extension WitnessPuzzlesDocument {
-    mutating func processTap( guiState: GuiState, iconInfo: IconInfo ) -> Bool {
+    mutating func processTap( guiState: GuiState, iconInfo: IconInfo ) -> GuiState? {
         switch guiState.selectedTool {
         case nil:
             break
@@ -20,7 +20,7 @@ extension WitnessPuzzlesDocument {
             } else if isStartPositionOK( point: guiState.location ) {
                 addStart( point: guiState.location )
             } else {
-                return false
+                return nil
             }
         case .finishes:
             if guiState.findingDirection {
@@ -29,24 +29,24 @@ extension WitnessPuzzlesDocument {
                 {
                     if let direction = Direction( from: guiState.origin, to: guiState.location ) {
                         addFinish( point: guiState.origin, direction: direction )
-                        return true
+                        return guiState.replacing( findingDirection: false )
                     }
                 }
-                return false
+                return nil
             }
             
             if finishExists( point: guiState.location ) {
                 removeFinish( point: guiState.location )
-                return true
+                return guiState
             }
-            return false
+            return nil
         case .gaps:
             if gapExists( point: guiState.location ) {
                 removeGap( point: guiState.location )
             } else if isGapPositionOK( point: guiState.location ) {
                 addGap( point: guiState.location )
             } else {
-                return false
+                return nil
             }
         case .missings:
             if missingExists( point: guiState.location ) {
@@ -54,7 +54,7 @@ extension WitnessPuzzlesDocument {
             } else if isMissingPositionOK( point: guiState.location ) {
                 addMissing( point: guiState.location )
             } else {
-                return false
+                return nil
             }
         case .hexagons:
             if hexagonExists( point: guiState.location ) {
@@ -62,7 +62,7 @@ extension WitnessPuzzlesDocument {
             } else if isHexagonPositionOK( point: guiState.location ) {
                 addHexagon( point: guiState.location, info: iconInfo )
             } else {
-                return false
+                return nil
             }
         case .icons:
             if iconExists( point: guiState.location ) {
@@ -70,11 +70,11 @@ extension WitnessPuzzlesDocument {
             } else if isIconPositionOK( point: guiState.location ) {
                 addIcon( point: guiState.location, info: iconInfo )
             } else {
-                return false
+                return nil
             }
         }
         
-        return true
+        return guiState
     }
     
     func processHover( guiState: GuiState ) -> GuiState {
