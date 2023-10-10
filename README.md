@@ -7,7 +7,6 @@
 1. Sometimes when changing the puzzle size, the window size does not properly adjust. This leaves an undesired white border around the image.
 1. The properties window does not close when the document window is closed.
 1. The sliders on the properties window do not update their labels.
-1. A finish in an interior corner creates an artifact on the adjacent line.
 1. A line width of 1 causes drawPuzzle and drawFinishes to misbehave.
 
 ## TODO
@@ -21,7 +20,6 @@
 
 ### Functional
 
-1. Make the default puzzle on File -> New more attractive.
 1. Add more tetris shapes.
 1. Make an icon for the app.
 1. Can the IconType enum be eliminated by type introspection?

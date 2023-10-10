@@ -22,8 +22,8 @@ struct WitnessPuzzlesDocument: FileDocument, Codable {
     var width  = 5 { didSet { adjustDimensions() } }
     var height = 5 { didSet { adjustDimensions() } }
     var type = PuzzleType.rectangle { didSet { adjustDimensions() } }
-    var background = Color( hex: "#23180A" )
-    var foreground = Color( red: 1, green: 1, blue: 1, opacity: 1 )
+    var background = Color( hex: "493C4D" )
+    var foreground = Color( hex: "E8BE65" )
     var starts = Set<Start>( [ Start( position: Point(0,0) ) ] )
     var finishes = Set( [ Finish( position: Point( 10, 10 ), direction: .northeast ) ] )
     var hexagons = Set<Hexagon>()

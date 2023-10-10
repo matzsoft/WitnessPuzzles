@@ -15,11 +15,11 @@ extension WitnessPuzzlesDocument {
         let direction: Direction
         
         static let circleRect = CGRect( x: -1, y: -1, width: 2, height: 2 )
-        static let stemRect = CGRect( x: -1, y: -2, width: 2, height: 2 )
+        static let stemRect = CGRect( x: -1, y: -1.8, width: 2, height: 1.8 )
         
         func extent( puzzle: WitnessPuzzlesDocument ) -> CGRect {
             let location = position.puzzle2user( puzzle: puzzle )
-            let offset = offset( distance: puzzle.lineWidth / 2, extra: 1 )
+            let offset = offset( distance: puzzle.lineWidth / 2, extra: puzzle.lineWidth / 4 )
             let center = ( location + offset ).cgPoint
             let radius = CGFloat( puzzle.finishRadius )
             
