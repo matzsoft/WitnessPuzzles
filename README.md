@@ -26,11 +26,6 @@
 
 ### GUI
 
-#### User feedback on editing
-
-1. Make the trigger point for finishes be the actual finish instead of the "origin".
-1. If done properly this would remove the need to choose the direction.
-
 #### Sidebar
 
 1. Top justify the controls for consistency.

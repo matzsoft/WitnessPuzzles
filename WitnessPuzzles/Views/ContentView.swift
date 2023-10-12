@@ -11,24 +11,18 @@ import SwiftUI
 struct GuiState {
     var selectedTool: ContentView.ToolType?
     var location = WitnessPuzzlesDocument.Point( 0, 0 )
-    var findingDirection = false
-    var origin = WitnessPuzzlesDocument.Point( 0, 0 )
-    var directions = Set<WitnessPuzzlesDocument.Point>()
+    var finish: WitnessPuzzlesDocument.Finish?
     
     func replacing(
         selectedTool: ContentView.ToolType? = nil,
         location: WitnessPuzzlesDocument.Point? = nil,
-        findingDirection: Bool? = nil,
-        origin: WitnessPuzzlesDocument.Point? = nil,
-        directions: Set<WitnessPuzzlesDocument.Point>? = nil
+        finish: WitnessPuzzlesDocument.Finish? = nil
     ) -> GuiState {
         var copy = self
         
         if let selectedTool = selectedTool { copy.selectedTool = selectedTool }
         if let location = location { copy.location = location }
-        if let findingDirection = findingDirection { copy.findingDirection = findingDirection }
-        if let origin = origin { copy.origin = origin }
-        if let directions = directions { copy.directions = directions }
+        if let finish = finish { copy.finish = finish }
         
         return copy
     }
@@ -78,7 +72,7 @@ struct ContentView: View {
         } detail: {
             Image( document.image( guiState: guiState, info: iconInfo ), scale: 1.0, label: Text( "" ) )
                 .onTapGesture { location in
-                    guiState.location = document.toPuzzleSpace( from: location )
+                    guiState = document.processHover( guiState: guiState, viewLocation: location )
                     if let newState = document.processTap( guiState: guiState, iconInfo: iconInfo ) {
                         guiState = newState
                     } else {
@@ -88,9 +82,10 @@ struct ContentView: View {
                 .onContinuousHover { phase in
                     switch phase {
                     case .active( let location ):
-                        guiState.location = document.toPuzzleSpace( from: location )
-                        guiState = document.processHover( guiState: guiState )
+                        guiState.finish = nil
+                        guiState = document.processHover( guiState: guiState, viewLocation: location )
                     case .ended:
+                        guiState.finish = nil
                         break
                     }
                 }

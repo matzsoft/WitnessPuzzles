@@ -23,23 +23,16 @@ extension WitnessPuzzlesDocument {
                 return nil
             }
         case .finishes:
-            if guiState.findingDirection {
-                if guiState.location != guiState.origin &&
-                    guiState.directions.contains( guiState.location )
-                {
-                    if let direction = Direction( from: guiState.origin, to: guiState.location ) {
-                        addFinish( point: guiState.origin, direction: direction )
-                        return guiState.replacing( findingDirection: false )
-                    }
-                }
+            guard let finish = guiState.finish else { break }
+            if finishes.contains( where: { $0 == finish } ) {
+                removeFinish( point: finish.position )
+                return guiState
+            } else if finish.isValid( puzzle: self ) {
+                addFinish( point: finish.position, direction: finish.direction )
+                return guiState
+            } else {
                 return nil
             }
-            
-            if finishExists( point: guiState.location ) {
-                removeFinish( point: guiState.location )
-                return guiState
-            }
-            return nil
         case .gaps:
             if gapExists( point: guiState.location ) {
                 removeGap( point: guiState.location )
@@ -77,29 +70,54 @@ extension WitnessPuzzlesDocument {
         return guiState
     }
     
-    func processHover( guiState: GuiState ) -> GuiState {
+    func processHover( guiState: GuiState, viewLocation: CGPoint ) -> GuiState {
+        let guiState = guiState.replacing( location: toPuzzleSpace( from: viewLocation ) )
+
         switch guiState.selectedTool {
         case .finishes:
-            if finishes.contains( where: { $0.position == guiState.location } ) {
-                return guiState.replacing( findingDirection: false )
-            }
-            if guiState.findingDirection {
-                if guiState.location == guiState.origin              { return guiState }
-                if guiState.directions.contains( guiState.location ) { return guiState }
-                return guiState.replacing( findingDirection: false )
-            }
-            if !isFinishPositionOK( point: guiState.location ) {
-                return guiState
-            }
-            if let directions = Finish.validDirections( for: guiState.location, in: self ) {
-                let positons = Set( directions.map { guiState.location + $0.vector } )
-                return guiState.replacing(
-                    findingDirection: true, origin: guiState.location, directions: positons
-                )
-            }
-            return guiState.replacing( findingDirection: false )
+            return adjustFinish( guiState: guiState, viewLocation: viewLocation )
         default:
-            return guiState
+            break
+        }
+        return guiState
+    }
+    
+    func adjustFinish( guiState: GuiState, viewLocation: CGPoint ) -> GuiState {
+        if isConnected( point: guiState.location ) { return guiState }
+        if let sector = originSector( guiState: guiState, viewLocation: viewLocation ) {
+            let origin = guiState.location + sector.vector
+            
+            if isConnected( point: origin ){
+                let direction = Direction( from: origin, to: guiState.location )!
+                
+                if Finish.validDirection( from: origin, direction: direction, in: self ) {
+                    return guiState.replacing( finish: Finish( position: origin, direction: direction ) )
+                }
+            }
+        }
+        
+        return guiState
+    }
+    
+    func originSector( guiState: GuiState, viewLocation: CGPoint ) -> Direction? {
+        let context = getContext()
+        let userLocation = context.convertToUserSpace( viewLocation )
+        let userCenter = guiState.location.puzzle2user( puzzle: self ).cgPoint
+
+        switch true {
+        case guiState.location.isVertical:
+            return userLocation.y > userCenter.y ? .north : .south
+        case guiState.location.isHorizontal:
+            return userLocation.x > userCenter.x ? .east : .west
+        case guiState.location.isBlock:
+            let xDelta = userLocation.x - userCenter.x
+            let yDelta = userLocation.y - userCenter.y
+            let x = ( abs( xDelta ) < CGFloat( blockWidth ) / 3 ) ? 0 : Int( xDelta ).signum()
+            let y = ( abs( yDelta ) < CGFloat( blockWidth ) / 3 ) ? 0 : Int( yDelta ).signum()
+            
+            return Direction( from: guiState.location, to: guiState.location + Point( x, y ) )
+        default:
+            return nil
         }
     }
 }

@@ -142,33 +142,20 @@ extension WitnessPuzzlesDocument {
             context.restoreGState()
         }
         
-        finishes.filter { $0.position != guiState?.location }.forEach {
+        guard let guiState = guiState, let finish = guiState.finish else {
+            finishes.forEach { draw( finish: $0, alpha: 1 ) }
+            return
+        }
+        
+        finishes.filter { $0 != guiState.finish }.forEach {
             draw( finish: $0, alpha: 1 )
         }
-        if let hovered = finishes.first( where: { $0.position == guiState?.location } ) {
+
+        if let hovered = finishes.first( where: { $0 == guiState.finish } ) {
             draw( finish: hovered, alpha: 0.5 )
-        } else if let guiState = guiState, guiState.findingDirection {
-            if guiState.location == guiState.origin {
-                for point in guiState.directions {
-                    if let direction = Direction( from: guiState.origin, to: point ) {
-                        let candidate = Finish( position: guiState.location, direction: direction )
-                        draw( finish: candidate, alpha: 0.75 )
-                    }
-                }
-            } else {
-                guiState.directions
-                    .filter { $0 != guiState.location }
-                    .compactMap { Direction( from: guiState.origin, to: $0 ) }
-                    .forEach {
-                        let candidate = Finish( position: guiState.origin, direction: $0 )
-                        draw(finish: candidate, alpha: 0.25 )
-                    }
-                if let chosen = guiState.directions.first( where: { $0 == guiState.location } ) {
-                    if let direction = Direction( from: guiState.origin, to: chosen ) {
-                        let candidate = Finish( position: guiState.origin, direction: direction )
-                        draw( finish: candidate, alpha: 0.75 )
-                    }
-                }
+        } else if finish.isValid( puzzle: self ) {
+            if !finishes.contains( where: { $0.position == finish.position } ) {
+                draw( finish: finish, alpha: 0.75 )
             }
         }
     }
