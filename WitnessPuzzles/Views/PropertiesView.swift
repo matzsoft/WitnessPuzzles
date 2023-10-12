@@ -27,8 +27,8 @@ struct PropertiesView: View {
                         Text( $0.rawValue )
                     }
                 }.pickerStyle( .menu )
-                IntSlider( value: $document.width, range: 1 ... 20, step: 1, label: "Width" )
-                IntSlider( value: $document.height, range: 1 ... 20, step: 1, label: "Height" )
+                DoubleSlider( value: $document.width, range: 1 ... 20, step: 1, label: "Width" )
+                DoubleSlider( value: $document.height, range: 1 ... 20, step: 1, label: "Height" )
                 HStack {
                     ColorPicker( "Background", selection: $document.background )
                     ColorPicker( "Foreground", selection: $document.foreground )

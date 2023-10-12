@@ -157,6 +157,6 @@ extension CGPoint {
 
 extension CGRect {
     func move( to point: CGPoint ) -> CGRect {
-        offsetBy(dx: point.x - minX, dy: point.y - minY )
+        offsetBy( dx: point.x - minX, dy: point.y - minY )
     }
 }

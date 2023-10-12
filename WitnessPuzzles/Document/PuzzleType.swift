@@ -14,13 +14,13 @@ extension WitnessPuzzlesDocument {
         case rectangle = "Rectangle", cylinder = "Cylinder"
         
         func baseRect( puzzle: WitnessPuzzlesDocument ) -> CGRect {
-            let baseHeight = CGFloat( puzzle.height + 1 ) * puzzle.lineWidth + CGFloat( puzzle.height ) * puzzle.blockWidth
+            let baseHeight = ( puzzle.height + 1 ) * puzzle.lineWidth + puzzle.height * puzzle.blockWidth
             switch self {
             case .rectangle:
-                let baseWidth = CGFloat( puzzle.width + 1 ) * puzzle.lineWidth + CGFloat( puzzle.width ) * puzzle.blockWidth
+                let baseWidth = ( puzzle.width + 1 ) * puzzle.lineWidth + puzzle.width * puzzle.blockWidth
                 return CGRect( x: 0, y: 0, width: baseWidth, height: baseHeight )
             case .cylinder:
-                let baseWidth = CGFloat( puzzle.width ) * ( puzzle.lineWidth + puzzle.blockWidth )
+                let baseWidth = puzzle.width * ( puzzle.lineWidth + puzzle.blockWidth )
                 return CGRect( x: 0, y: 0, width: baseWidth, height: baseHeight )
             }
         }
@@ -31,16 +31,14 @@ extension WitnessPuzzlesDocument {
             let finishesRects = puzzle.finishes.map { $0.extent( puzzle: puzzle ) }
             let itemRects = startsRects + finishesRects
             let overflowRect = itemRects.reduce( baseRect ) { $0.union( $1 ) }
-            let paddedRect = overflowRect.insetBy(
-                dx: -CGFloat( puzzle.padding ), dy: -CGFloat( puzzle.padding )
-            )
+            let paddedRect = overflowRect.insetBy( dx: -puzzle.padding, dy: -puzzle.padding )
             
             switch self {
             case .rectangle:
                 return paddedRect
             case .cylinder:
                 return CGRect(
-                    x: baseRect.minX + CGFloat( puzzle.lineWidth ) / 4, y: paddedRect.minY,
+                    x: baseRect.minX + puzzle.lineWidth / 4, y: paddedRect.minY,
                     width: baseRect.width, height: paddedRect.height
                 )
             }
@@ -48,8 +46,8 @@ extension WitnessPuzzlesDocument {
         
         func validPuzzleX( puzzle: WitnessPuzzlesDocument ) -> ClosedRange<Int> {
             switch self {
-            case .rectangle: return 0 ... ( 2 * puzzle.width )
-            case .cylinder:  return 0 ... ( 2 * puzzle.width - 1 )
+            case .rectangle: return 0 ... ( 2 * Int( puzzle.width ) )
+            case .cylinder:  return 0 ... ( 2 * Int( puzzle.width ) - 1 )
             }
         }
         
@@ -66,11 +64,11 @@ extension WitnessPuzzlesDocument {
     }
 
     var lineGeometry: ( CGRect, CGFloat ) {
-        let width = CGFloat( blockWidth + 2 * lineWidth )
-        let height = CGFloat( lineWidth )
+        let width = blockWidth + 2 * lineWidth
+        let height = lineWidth
         let originX = -width / 2
         let originY = -height / 2
-        let cornerRadius = CGFloat( lineWidth ) / 2
+        let cornerRadius = lineWidth / 2
         let rect = CGRect(
             origin: CGPoint( x: originX, y: originY ),
             size: CGSize( width: width, height: height )
@@ -102,7 +100,7 @@ extension WitnessPuzzlesDocument {
             let user = line.puzzle2user( puzzle: self )
             
             context.saveGState()
-            context.translateBy( x: CGFloat( user.x ), y: CGFloat( user.y ) )
+            context.translateBy( x: user.x, y: user.y )
             if line.isVertical {
                 // Rotate vertical lines info horizontal position
                 context.rotate( by:  Double.pi / 2 )

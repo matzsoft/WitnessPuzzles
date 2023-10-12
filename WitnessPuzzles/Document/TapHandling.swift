@@ -110,8 +110,8 @@ extension WitnessPuzzlesDocument {
         case guiState.location.isBlock:
             let xDelta = userLocation.x - userCenter.x
             let yDelta = userLocation.y - userCenter.y
-            let x = ( abs( xDelta ) < CGFloat( blockWidth ) / 3 ) ? 0 : Int( xDelta ).signum()
-            let y = ( abs( yDelta ) < CGFloat( blockWidth ) / 3 ) ? 0 : Int( yDelta ).signum()
+            let x = ( abs( xDelta ) < blockWidth / 3 ) ? 0 : Int( xDelta ).signum()
+            let y = ( abs( yDelta ) < blockWidth / 3 ) ? 0 : Int( yDelta ).signum()
             
             return Direction( from: guiState.location, to: guiState.location + Point( x, y ) )
         default:

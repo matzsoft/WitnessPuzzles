@@ -19,8 +19,8 @@ extension UTType {
 }
 
 struct WitnessPuzzlesDocument: FileDocument, Codable {
-    var width  = 5 { didSet { adjustDimensions() } }
-    var height = 5 { didSet { adjustDimensions() } }
+    var width  = CGFloat( 5 ) { didSet { adjustDimensions() } }
+    var height = CGFloat( 5 ) { didSet { adjustDimensions() } }
     var type = PuzzleType.rectangle { didSet { adjustDimensions() } }
     var background = Color( hex: "493C4D" )
     var foreground = Color( hex: "E8BE65" )
@@ -37,7 +37,7 @@ struct WitnessPuzzlesDocument: FileDocument, Codable {
     var scaleFactor = CGFloat( 12.5 )
     
     var validSymbolX: ClosedRange<Int> { type.validPuzzleX( puzzle: self ) }
-    var validSymbolY: ClosedRange<Int> { 0 ... ( 2 * height ) }
+    var validSymbolY: ClosedRange<Int> { 0 ... ( 2 * Int( height ) ) }
     var lines: Set<Point> {
         validSymbolX.reduce( into: Set<Point>() ) { set, x in
             validSymbolY.forEach { y in
@@ -88,7 +88,7 @@ struct WitnessPuzzlesDocument: FileDocument, Codable {
             bitmapInfo: CGBitmapInfo( rawValue: CGImageAlphaInfo.noneSkipLast.rawValue ).rawValue
         )!
 
-        context.scaleBy( x: CGFloat( scaleFactor ), y: CGFloat( scaleFactor ) )
+        context.scaleBy( x: scaleFactor, y: scaleFactor )
         
         if let fill = fill {
             let fillRect = userRect.offsetBy( dx: -userRect.minX, dy: -userRect.minY )
