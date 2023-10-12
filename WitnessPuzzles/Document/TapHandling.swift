@@ -23,13 +23,11 @@ extension WitnessPuzzlesDocument {
                 return nil
             }
         case .finishes:
-            guard let finish = guiState.finish else { break }
+            guard let finish = guiState.finish else { return nil }
             if finishes.contains( where: { $0 == finish } ) {
                 removeFinish( point: finish.position )
-                return guiState
             } else if finish.isValid( puzzle: self ) {
                 addFinish( point: finish.position, direction: finish.direction )
-                return guiState
             } else {
                 return nil
             }

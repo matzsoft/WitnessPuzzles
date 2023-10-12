@@ -72,6 +72,7 @@ struct ContentView: View {
         } detail: {
             Image( document.image( guiState: guiState, info: iconInfo ), scale: 1.0, label: Text( "" ) )
                 .onTapGesture { location in
+                    guiState.finish = nil
                     guiState = document.processHover( guiState: guiState, viewLocation: location )
                     if let newState = document.processTap( guiState: guiState, iconInfo: iconInfo ) {
                         guiState = newState
@@ -80,12 +81,11 @@ struct ContentView: View {
                     }
                 }
                 .onContinuousHover { phase in
+                    guiState.finish = nil
                     switch phase {
                     case .active( let location ):
-                        guiState.finish = nil
                         guiState = document.processHover( guiState: guiState, viewLocation: location )
                     case .ended:
-                        guiState.finish = nil
                         break
                     }
                 }
