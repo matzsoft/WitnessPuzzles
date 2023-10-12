@@ -7,7 +7,6 @@
 1. Sometimes when changing the puzzle size, the window size does not properly adjust. This leaves an undesired white border around the image.
 1. The properties window does not close when the document window is closed.
 1. The sliders on the properties window do not update their labels.
-1. A line width of 1 causes drawPuzzle and drawFinishes to misbehave.
 
 ## TODO
 
