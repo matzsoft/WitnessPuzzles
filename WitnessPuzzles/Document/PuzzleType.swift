@@ -14,13 +14,13 @@ extension WitnessPuzzlesDocument {
         case rectangle = "Rectangle", cylinder = "Cylinder"
         
         func baseRect( puzzle: WitnessPuzzlesDocument ) -> CGRect {
-            let baseHeight = ( puzzle.height + 1 ) * puzzle.lineWidth + puzzle.height * puzzle.blockWidth
+            let baseHeight = CGFloat( puzzle.height + 1 ) * puzzle.lineWidth + CGFloat( puzzle.height ) * puzzle.blockWidth
             switch self {
             case .rectangle:
-                let baseWidth = ( puzzle.width + 1 ) * puzzle.lineWidth + puzzle.width * puzzle.blockWidth
+                let baseWidth = CGFloat( puzzle.width + 1 ) * puzzle.lineWidth + CGFloat( puzzle.width ) * puzzle.blockWidth
                 return CGRect( x: 0, y: 0, width: baseWidth, height: baseHeight )
             case .cylinder:
-                let baseWidth = puzzle.width * ( puzzle.lineWidth + puzzle.blockWidth )
+                let baseWidth = CGFloat( puzzle.width ) * ( puzzle.lineWidth + puzzle.blockWidth )
                 return CGRect( x: 0, y: 0, width: baseWidth, height: baseHeight )
             }
         }

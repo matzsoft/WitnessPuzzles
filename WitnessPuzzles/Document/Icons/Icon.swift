@@ -109,7 +109,7 @@ extension WitnessPuzzlesDocument {
         }
         
         func extent( puzzle: WitnessPuzzlesDocument ) -> CGRect {
-            let center = position.puzzle2user( puzzle: puzzle ).cgPoint
+            let center = position.puzzle2user( puzzle: puzzle )
             let width = CGFloat( puzzle.blockWidth )
             return CGRect( x: center.x - width / 2, y: center.y - width / 2, width: width, height: width )
         }
@@ -134,8 +134,8 @@ extension WitnessPuzzlesDocument {
         func draw( context: CGContext, puzzle: WitnessPuzzlesDocument, alpha: CGFloat ) -> Void {
             let extent = extent( puzzle: puzzle )
             icon.draw( in: extent, context: context, alpha: alpha )
-            if let wrapped = puzzle.type.wrap( point: position, puzzle: puzzle )?.cgPoint {
-                icon.draw( in: extent.move( to: wrapped ), context: context, alpha: alpha )
+            if let wrapped = puzzle.type.wrap( point: position, puzzle: puzzle ) {
+                icon.draw( in: extent.move( to: wrapped.cgPoint ), context: context, alpha: alpha )
             }
         }
         

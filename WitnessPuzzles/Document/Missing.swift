@@ -14,7 +14,7 @@ extension WitnessPuzzlesDocument {
         let position: Point
         
         func extent( puzzle: WitnessPuzzlesDocument ) -> CGRect {
-            let center = position.puzzle2user( puzzle: puzzle ).cgPoint
+            let center = position.puzzle2user( puzzle: puzzle )
             let short = CGFloat( puzzle.lineWidth )
             let long = CGFloat( puzzle.lineWidth + puzzle.blockWidth )
             let width = position.isVertical ? short : long

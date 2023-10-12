@@ -15,7 +15,7 @@ extension WitnessPuzzlesDocument {
         let color: Color
         
         func extent( puzzle: WitnessPuzzlesDocument ) -> CGRect {
-            let center = position.puzzle2user( puzzle: puzzle ).cgPoint
+            let center = position.puzzle2user( puzzle: puzzle )
             let radius = CGFloat( puzzle.lineWidth ) / 2
             return CGRect(
                 x: center.x - radius, y: center.y - radius, width: 2 * radius, height: 2 * radius

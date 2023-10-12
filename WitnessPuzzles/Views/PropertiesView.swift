@@ -36,11 +36,11 @@ struct PropertiesView: View {
                 DoubleSlider(
                     value: $document.scaleFactor, range: 1 ... 50, step: 0.5, label: "Scale Factor"
                 )
-                IntSlider( value: $document.padding, range: 0 ... 10, step: 1, label: "Padding" )
+                DoubleSlider( value: $document.padding, range: 0 ... 10, step: 1, label: "Padding" )
             }
             Divider()
-            IntSlider( value: $document.lineWidth, range: 1 ... 10, step: 1, label: "Line Width" )
-            IntSlider( value: $document.blockWidth, range: 4 ... 20, step: 1, label: "Block Width" )
+            DoubleSlider( value: $document.lineWidth, range: 1 ... 10, step: 1, label: "Line Width" )
+            DoubleSlider( value: $document.blockWidth, range: 4 ... 20, step: 1, label: "Block Width" )
             Divider()
             HStack {
                 Button( "Cancel", role: .cancel ) {

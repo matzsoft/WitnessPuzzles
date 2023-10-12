@@ -20,10 +20,10 @@ extension WitnessPuzzlesDocument {
             self.y = y
         }
         
-        func puzzle2user( puzzle: WitnessPuzzlesDocument ) -> Point {
-            let x = x * ( puzzle.lineWidth + puzzle.blockWidth ) / 2 + puzzle.lineWidth / 2
-            let y = y * ( puzzle.lineWidth + puzzle.blockWidth ) / 2 + puzzle.lineWidth / 2
-            return Point( x, y )
+        func puzzle2user( puzzle: WitnessPuzzlesDocument ) -> CGPoint {
+            let x = CGFloat( x ) * ( puzzle.lineWidth + puzzle.blockWidth ) / 2 + puzzle.lineWidth / 2
+            let y = CGFloat( y ) * ( puzzle.lineWidth + puzzle.blockWidth ) / 2 + puzzle.lineWidth / 2
+            return CGPoint( x: x, y: y )
         }
         
         var isBlock:        Bool { ( x & y & 1 ) == 1 }
@@ -144,6 +144,13 @@ extension WitnessPuzzlesDocument {
                 return [ .north, .west ]
             }
         }
+    }
+}
+
+
+extension CGPoint {
+    static func +( _ lhs: CGPoint, _ rhs: CGPoint ) -> CGPoint {
+        CGPoint( x: lhs.x + rhs.x, y: lhs.y + rhs.y )
     }
 }
 

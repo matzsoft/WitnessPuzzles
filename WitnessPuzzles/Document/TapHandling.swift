@@ -100,7 +100,7 @@ extension WitnessPuzzlesDocument {
     func originSector( guiState: GuiState, viewLocation: CGPoint ) -> Direction? {
         let context = getContext()
         let userLocation = context.convertToUserSpace( viewLocation )
-        let userCenter = guiState.location.puzzle2user( puzzle: self ).cgPoint
+        let userCenter = guiState.location.puzzle2user( puzzle: self )
 
         switch true {
         case guiState.location.isVertical:

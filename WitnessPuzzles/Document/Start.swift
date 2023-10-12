@@ -15,9 +15,10 @@ extension WitnessPuzzlesDocument {
         
         func extent( puzzle: WitnessPuzzlesDocument ) -> CGRect {
             let center = position.puzzle2user( puzzle: puzzle )
+            let startRadius = puzzle.lineWidth
             return CGRect(
-                x: center.x - puzzle.startRadius, y: center.y - puzzle.startRadius,
-                width: 2 * puzzle.startRadius, height: 2 * puzzle.startRadius
+                x: center.x - startRadius, y: center.y - startRadius,
+                width: 2 * startRadius, height: 2 * startRadius
             )
         }
         

@@ -31,13 +31,11 @@ struct WitnessPuzzlesDocument: FileDocument, Codable {
     var missings = Set<Missing>()
     var icons = Set<Icon>()
 
-    var lineWidth = 4
-    var blockWidth = 8
-    var padding = 2
+    var lineWidth   = CGFloat( 4 )
+    var blockWidth  = CGFloat( 8 )
+    var padding     = CGFloat( 2 )
     var scaleFactor = CGFloat( 12.5 )
     
-    var startRadius: Int { lineWidth }
-    var finishRadius: Int { lineWidth / 2 }
     var validSymbolX: ClosedRange<Int> { type.validPuzzleX( puzzle: self ) }
     var validSymbolY: ClosedRange<Int> { 0 ... ( 2 * height ) }
     var lines: Set<Point> {

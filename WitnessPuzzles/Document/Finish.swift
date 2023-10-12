@@ -20,8 +20,8 @@ extension WitnessPuzzlesDocument {
         func extent( puzzle: WitnessPuzzlesDocument ) -> CGRect {
             let location = position.puzzle2user( puzzle: puzzle )
             let offset = offset( distance: puzzle.lineWidth / 2, extra: puzzle.lineWidth / 4 )
-            let center = ( location + offset ).cgPoint
-            let radius = CGFloat( puzzle.finishRadius )
+            let center = ( location + offset )
+            let radius = puzzle.lineWidth / 2
             
             return CGRect(
                 x: center.x - radius, y: center.y - radius, width: 2 * radius, height: 2 * radius
@@ -51,13 +51,13 @@ extension WitnessPuzzlesDocument {
             }
         }
         
-        func offset( distance: Int, extra: Int ) -> Point {
-            let vector = direction.vector
+        func offset( distance: CGFloat, extra: CGFloat ) -> CGPoint {
+            let vector = direction.vector.cgPoint
             switch direction {
             case .north, .east, .south, .west:
-                return Point( vector.x * ( distance + extra ), vector.y * ( distance + extra ) )
+                return CGPoint( x: vector.x * ( distance + extra ), y: vector.y * ( distance + extra ) )
             case .northeast, .southeast, .southwest, .northwest:
-                return Point( vector.x * distance, vector.y * distance )
+                return CGPoint( x: vector.x * distance, y: vector.y * distance )
             }
         }
         
