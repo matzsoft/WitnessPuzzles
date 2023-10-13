@@ -8,35 +8,6 @@
 
 import SwiftUI
 
-struct IntSlider: View {
-    @Binding var value: Int
-    let range: ClosedRange<Double>
-    let step: Double
-    let label: String
-    
-    var intProxy: Binding<Double> {
-        Binding<Double>(
-            get: { return Double( value ) },
-            set: { value = Int($0) }
-        )
-    }
-    
-    var body: some View {
-        VStack {
-            Slider( value: intProxy, in: range, step: step ) {
-                Text( label )
-            } minimumValueLabel: {
-                Text( String( format: "%.0f", range.lowerBound ) )
-            } maximumValueLabel: {
-                Text( String( format: "%.0f", range.upperBound ) )
-            }
-            .tint( .black )
-            Text( String( value ) )
-        }
-    }
-}
-
-
 struct DoubleSlider: View {
     @Binding var value: CGFloat
     @State var localValue: CGFloat
