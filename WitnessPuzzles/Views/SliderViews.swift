@@ -42,6 +42,18 @@ struct DoubleSlider: View {
     let range: ClosedRange<CGFloat>
     let step: Double
     let label: String
+    let format: String
+    
+    init(
+        value: Binding<CGFloat>, range: ClosedRange<CGFloat>, step: Double,
+        label: String, format: String = "%.0f"
+    ) {
+        self._value = value
+        self.range = range
+        self.step = step
+        self.label = label
+        self.format = format
+    }
     
     var body: some View {
         VStack {

@@ -34,7 +34,8 @@ struct PropertiesView: View {
                     ColorPicker( "Foreground", selection: $document.foreground )
                 }
                 DoubleSlider(
-                    value: $document.scaleFactor, range: 1 ... 50, step: 0.5, label: "Scale Factor"
+                    value: $document.scaleFactor, range: 1 ... 50, step: 0.5,
+                    label: "Scale Factor", format: "%0.1f"
                 )
                 DoubleSlider( value: $document.padding, range: 0 ... 10, step: 1, label: "Padding" )
             }
