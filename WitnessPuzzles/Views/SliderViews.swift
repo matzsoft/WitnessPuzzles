@@ -39,6 +39,7 @@ struct IntSlider: View {
 
 struct DoubleSlider: View {
     @Binding var value: CGFloat
+    @State var localValue: CGFloat
     let range: ClosedRange<CGFloat>
     let step: Double
     let label: String
@@ -49,6 +50,7 @@ struct DoubleSlider: View {
         label: String, format: String = "%.0f"
     ) {
         self._value = value
+        self._localValue = State( initialValue: value.wrappedValue )
         self.range = range
         self.step = step
         self.label = label
@@ -57,15 +59,17 @@ struct DoubleSlider: View {
     
     var body: some View {
         VStack {
-            Slider( value: $value, in: range, step: step ) {
+            Slider( value: $localValue, in: range, step: step ) {
                 Text( label )
             } minimumValueLabel: {
                 Text( String( format: "%.0f", range.lowerBound ) )
             } maximumValueLabel: {
                 Text( String( format: "%.0f", range.upperBound ) )
+            } onEditingChanged: { _ in
+                value = localValue
             }
             .tint( .black )
-            Text( "\(value, specifier: format)" )
+            Text( "\(localValue, specifier: format)" )
         }
     }
 }
