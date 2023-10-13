@@ -30,8 +30,8 @@ struct DoubleSlider: View {
     
     var body: some View {
         VStack {
+            Text( "\(label): \(localValue, specifier: format)" )
             Slider( value: $localValue, in: range, step: step ) {
-                Text( label )
             } minimumValueLabel: {
                 Text( String( format: "%.0f", range.lowerBound ) )
             } maximumValueLabel: {
@@ -40,7 +40,6 @@ struct DoubleSlider: View {
                 value = localValue
             }
             .tint( .black )
-            Text( "\(localValue, specifier: format)" )
         }
     }
 }
