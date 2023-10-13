@@ -65,7 +65,7 @@ struct DoubleSlider: View {
                 Text( String( format: "%.0f", range.upperBound ) )
             }
             .tint( .black )
-            Text( String( format: "%.1f", value ) )
+            Text( "\(value, specifier: format)" )
         }
     }
 }
