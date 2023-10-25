@@ -5,7 +5,6 @@
 1. The bottom of the tool bar buttons gets cut off.
 1. The hover on the tool bar buttons looks bad. The label is not part of the button highlight.
 1. Sometimes when changing the puzzle size, the window size does not properly adjust. This leaves an undesired white border around the image.
-1. The properties window does not close when the document window is closed.
 
 ## TODO
 
@@ -30,7 +29,5 @@
 
 #### Miscellaneous
 
-1. The sliders on the properties window are horrible.  They are difficult to see and hence use.  There must be a way to make them better.
+1. The sliders on the properties sheet are horrible.  They are difficult to see and hence use.  There must be a way to make them better.
 1. Make the picker buttons for tetris all the same size. Probably will require a custom picker.
-1. The properties window needs its size adjusted.
-1. Modify the title of the properties window to show which window it pertains to.

@@ -9,6 +9,7 @@
 import SwiftUI
 
 struct GuiState {
+    var showingProperties = false
     var selectedTool: ContentView.ToolType?
     var location = WitnessPuzzlesDocument.Point( 0, 0 )
     var finish: WitnessPuzzlesDocument.Finish?
@@ -31,7 +32,6 @@ struct GuiState {
 struct ContentView: View {
     @Environment( \.openWindow ) private var openWindow
     @Binding var document: WitnessPuzzlesDocument
-    let windowID: Int
     @State var guiState = GuiState()
     @State var iconInfo = WitnessPuzzlesDocument.IconInfo(
         color: Color( cgColor: CGColor( red: 1, green: 0.4, blue: 0.1, alpha: 1 ) ),
@@ -91,7 +91,7 @@ struct ContentView: View {
                 }
                 .toolbar {
                     ToolbarItemGroup( placement: .automatic ) {
-                        Button( action: { openWindow( id: "properties", value: windowID ) } ) {
+                        Button( action: { guiState.showingProperties = true } ) {
                             Label( "Properties", systemImage: "ruler" )
                         }.labelStyle( VerticalLabelStyle( isSelected: false ) )
                         Button( action: { toggleTool( .starts ) } ) {
@@ -114,6 +114,9 @@ struct ContentView: View {
                         }.labelStyle( VerticalLabelStyle( isSelected: guiState.selectedTool == .icons ) )
                     }
                 }
+                .sheet( isPresented: $guiState.showingProperties ) {
+                    PropertiesView( document: $document )
+                }
         }
     }
 }
@@ -122,9 +125,7 @@ struct ContentView: View {
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
         let documentBinding = Binding.constant( WitnessPuzzlesDocument() )
-        ContentView(
-            document: documentBinding,
-            windowID: WindowsList.shared.add( binding: documentBinding ) )
+        ContentView( document: documentBinding )
     }
 }
 
