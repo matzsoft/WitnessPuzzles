@@ -4,7 +4,7 @@
 
 This program is a tool to help with playing the game [The Witness](https://en.wikipedia.org/wiki/The_Witness_(2016_video_game)), an excellant game requiring exploration, discovery, and solving puzzles. The puzzles essentially consist of finding a valid path from a start point to an end point in a maze like structure.
 
-While all the puzzles can be solved in the game, the solution to some of the more difficult ones is easier to find when working with a drawing of the puzzle. Many times I would take a screenshot of a puzzle and work on it in a graphics editting program. Bur with some of the puzzles even that was impractical and I found myself creating replicas of the puzzles and working on the replicas.  The **Witness Puzzles** program is meant to simplify that process.
+While all the puzzles can be solved in the game, the solution to some of the more difficult ones is easier to find when working with a drawing of the puzzle. Many times I would take a screenshot of a puzzle and work on it in a graphics editting program. But with some of the puzzles even that was impractical and I found myself creating replicas of the puzzles and working on the replicas.  The **Witness Puzzles** program is meant to simplify that process.
 
 Even though I had completed the game, I thought that creating **Witness Puzzles** would be a fun way to learn how to use [SwiftUI](https://developer.apple.com/xcode/swiftui/) to create a Mac GUI application.
 
